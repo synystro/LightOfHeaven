@@ -1,0 +1,308 @@
+fileFormatVersion: 2
+guid: aa7bdf3b00f03b74eb6eb037ac2ae036
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -913275017168503041
+    second: dark_knight_0
+  - first:
+      213: 8915726133236522580
+    second: dark_knight_1
+  - first:
+      213: -8963665410922516756
+    second: dark_knight_2
+  - first:
+      213: -4452407874759453657
+    second: dark_knight_3
+  - first:
+      213: 2455123156765208722
+    second: dark_knight_4
+  - first:
+      213: 8697557348881730038
+    second: dark_knight_5
+  - first:
+      213: -2720315288853643750
+    second: dark_knight_6
+  - first:
+      213: -8983967438175572552
+    second: dark_knight_7
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: -1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 0
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 2
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 2
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 2
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: dark_knight_0
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 204
+        width: 119
+        height: 88
+      alignment: 9
+      pivot: {x: 0.50000006, y: 0.07796686}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ffebe6be5356353f0800000000000000
+      internalID: -913275017168503041
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dark_knight_1
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 142
+        width: 148
+        height: 158
+      alignment: 9
+      pivot: {x: 0.5371761, y: 0.15467004}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 45eda3e3ea50bbb70800000000000000
+      internalID: 8915726133236522580
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dark_knight_2
+      rect:
+        serializedVersion: 2
+        x: 274
+        y: 192
+        width: 138
+        height: 108
+      alignment: 9
+      pivot: {x: 0.20761994, y: 0.30895615}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ceee180ecc9aa9380800000000000000
+      internalID: -8963665410922516756
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dark_knight_3
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 71
+        width: 41
+        height: 40
+      alignment: 9
+      pivot: {x: 0.37698662, y: 0.69486505}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7249fc5b0aed532c0800000000000000
+      internalID: -4452407874759453657
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dark_knight_4
+      rect:
+        serializedVersion: 2
+        x: 122
+        y: 10
+        width: 141
+        height: 129
+      alignment: 9
+      pivot: {x: 0.4934964, y: 0.83410466}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 29073d6d089521220800000000000000
+      internalID: 2455123156765208722
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dark_knight_5
+      rect:
+        serializedVersion: 2
+        x: 325
+        y: 104
+        width: 81
+        height: 71
+      alignment: 9
+      pivot: {x: 0.63585335, y: 0.88101155}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6f90fa1c35ee3b870800000000000000
+      internalID: 8697557348881730038
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dark_knight_6
+      rect:
+        serializedVersion: 2
+        x: 273
+        y: 75
+        width: 49
+        height: 47
+      alignment: 9
+      pivot: {x: 0.7152168, y: 0.50975555}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a1e70da58af7f3ad0800000000000000
+      internalID: -2720315288853643750
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dark_knight_7
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 121
+        width: 74
+        height: 69
+      alignment: 9
+      pivot: {x: 0.76642877, y: 0.77244526}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8bd6eddc639825380800000000000000
+      internalID: -8983967438175572552
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

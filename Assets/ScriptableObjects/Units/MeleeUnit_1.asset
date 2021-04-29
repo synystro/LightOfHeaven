@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80a077b39602e3b42aff360e02dd57be, type: 3}
+  m_Name: MeleeUnit_1
+  m_EditorClassIdentifier: 
+  name: Melee Unit 1
+  icon: {fileID: 0}
+  charPrefabRight: {fileID: 2898409787636134312, guid: b4652fdc99cd2074dbca2713e84f7bbf,
+    type: 3}
+  charPrefabLeft: {fileID: 4491116610780015743, guid: 81bd55fdd4162304ca73cbfebac05c35,
+    type: 3}
+  MaxHp: 50
+  BaseHp: 50
+  BonusHp: 0
+  CurrentHp: 50
+  MaxMp: 100
+  BaseMp: 100
+  BonusMp: 0
+  CurrentMp: 100
+  MaxAp: 2
+  BaseAp: 2
+  BonusAp: 0
+  CurrentAp: 2
+  AtkDamage: 5
+  BaseAtkDamage: 5
+  BonusAtkDamage: 0
+  AtkRange: 1
+  BaseAtkRange: 1
+  BonusAtkRange: 0
+  MgcDamage: 10
+  BaseMgcDamage: 10
+  BonusMgcDamage: 0
+  Armor: 0
+  BaseArmor: 0
+  BonusArmor: 0
+  MagicResistance: 0
+  BaseMagicResistance: 0
+  BonusMagicResistance: 0
