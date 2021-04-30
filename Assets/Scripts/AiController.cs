@@ -110,7 +110,7 @@ namespace LUX {
             // if has already attacked (this turn), return
             if(hasAttackedThisTurn) { return; }
 
-            selectedUnitAi.Attack(randomPlayerTargetUnit.UnitData, randomPlayerTargetUnit.transform.position);
+            selectedUnitAi.DealAttack(randomPlayerTargetUnit, randomPlayerTargetUnit.transform.position);
 
             hasAttackedThisTurn = true;
         }     
