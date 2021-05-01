@@ -8,6 +8,8 @@ namespace LUX {
         public Image icon;
         public GameObject charPrefabRight;
         public GameObject charPrefabLeft;
+        [Header("FEATURES")]
+        public bool Flight;
         [Header("ATTRIBUTES")]
         public int strength; // damage, stun chance
         public int stamina; // aps, evade chance

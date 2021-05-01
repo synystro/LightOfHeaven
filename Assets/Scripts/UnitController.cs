@@ -60,22 +60,6 @@ namespace LUX {
             gameEventSystem.onTurnEnd -= TurnEndReset;
             gameEventSystem.onUnitAttack -= OnUnitAttacked;
         }
-        public void TurnEndReset() {
-            SetSelection(false);
-            hasMovedThisTurn = false;
-            hasAttackedThisTurn = false;
-            hasTargetInRange = false;
-            enemiesInRange.Clear();
-            DisplayAttackHighlight(false);
-            // RESET UNIT ! put somewhere else ?
-            ResetUnitStats();
-        }
-        public void OnUnitAttacked(bool isEnemyAttack) {
-            //RefreshDetails(); // already running inside receive damage function
-        }
-        private void ResetUnitStats() {
-            this.UnitData.CurrentAp = this.UnitData.MaxAp;
-        }
         public void Setup(Unit unit, GameObject tileToSpawnGO, bool isEnemy) {
             // set facing direction
             isFacingRight = true;
@@ -98,12 +82,30 @@ namespace LUX {
             unit.Reset();
             this.gameObject.name = unit.name;
 
-            // setup unit info display
-            RefreshDetails();
-
+            // can this unit fly? 
+            this.isFlying = unit.Flight;
             // enemy stuff
-            this.isEnemy = isEnemy;
+            this.isEnemy = isEnemy;           
+
+            // setup unit info display
+            RefreshDetails();            
+            }
+        public void TurnEndReset() {
+            SetSelection(false);
+            hasMovedThisTurn = false;
+            hasAttackedThisTurn = false;
+            hasTargetInRange = false;
+            enemiesInRange.Clear();
+            DisplayAttackHighlight(false);
+            // RESET UNIT ! put somewhere else ?
+            ResetUnitStats();
         }
+        public void OnUnitAttacked(bool isEnemyAttack) {
+            //RefreshDetails(); // already running inside receive damage function
+        }
+        private void ResetUnitStats() {
+            this.UnitData.CurrentAp = this.UnitData.MaxAp;
+        }        
         private void MouseClick() {
             // if clicked on an enemy unit
             if (isEnemy) {

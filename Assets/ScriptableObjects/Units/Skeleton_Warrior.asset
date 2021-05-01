@@ -18,6 +18,7 @@ MonoBehaviour:
     type: 3}
   charPrefabLeft: {fileID: 4491116610780015743, guid: 81bd55fdd4162304ca73cbfebac05c35,
     type: 3}
+  Flight: 0
   strength: 0
   stamina: 0
   vitality: 0
@@ -27,14 +28,14 @@ MonoBehaviour:
   BaseHp: 50
   BonusHp: 0
   CurrentHp: 50
-  MaxMp: 100
-  BaseMp: 100
+  MaxMp: 20
+  BaseMp: 20
   BonusMp: 0
-  CurrentMp: 100
-  MaxAp: 2
-  BaseAp: 2
+  CurrentMp: 20
+  MaxAp: 3
+  BaseAp: 3
   BonusAp: 0
-  CurrentAp: 2
+  CurrentAp: 3
   AtkDamage: 5
   BaseAtkDamage: 5
   BonusAtkDamage: 0

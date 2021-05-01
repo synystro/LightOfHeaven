@@ -38,7 +38,7 @@ namespace LUX {
                 // if tile has already been checked, skip to thee next one
                 if(t.IsReachable) { continue; }
                 // if tile is free
-                if(t.HasObstacle == false) {                                        
+                if(t.HasObstacle == false || unitController.IsFlying) {                                        
                     t.SetAsReachable();
                     t.SetApsLeft(tile.ApsLeft - 1);             
                     reachableTiles.Add(t.gameObject);                 
@@ -50,7 +50,7 @@ namespace LUX {
             if(reachableTiles.Count > 0) {
                 TileController tiletoSearch = reachableTiles[0].GetComponent<TileController>();
                 // only search the tile if the has no obstacle
-                if(tiletoSearch.HasObstacle == false)
+                if(tiletoSearch.HasObstacle == false || unitController.IsFlying)
                     Search(tiletoSearch); 
             }
 
@@ -99,7 +99,7 @@ namespace LUX {
             if(reachableTiles.Count > 0) {
                 TileController tiletoSearch = reachableTiles[0].GetComponent<TileController>();
                 // only search the tile if the has no obstacle
-                if(tiletoSearch.HasObstacle == false)
+                if(tiletoSearch.HasObstacle == false  || unitController.IsFlying)
                     ScanForEnemy(tiletoSearch); 
             }
 

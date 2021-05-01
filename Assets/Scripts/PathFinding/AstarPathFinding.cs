@@ -10,12 +10,12 @@ namespace LUX {
 
         [Inject] private PathFindingGrid grid;
 
-        private void Update() {
-            if (targetTransform != null) {
-                FindPath(this.transform.position, targetTransform.position);
-            }
-        }
-        public bool FindPath(Vector3 _startPosition, Vector3 _targetPosition) {
+        // private void Update() {
+        //     if (targetTransform != null) {
+        //         FindPath(this.transform.position, targetTransform.position);
+        //     }
+        // }
+        public bool FindPath(Vector3 _startPosition, Vector3 _targetPosition, bool ignoreObstacles) {
 
             // rount target position to int
             _targetPosition.x = Mathf.RoundToInt(_targetPosition.x);
@@ -43,7 +43,11 @@ namespace LUX {
                 }
 
                 foreach (Node neighbourNode in grid.GetNeighbourNodes(currentNode)) {
-                    if (!neighbourNode.isWalkable || ClosedList.Contains(neighbourNode)) {
+                    if (ignoreObstacles == false) {
+                        if (!neighbourNode.isWalkable || ClosedList.Contains(neighbourNode)) {
+                            continue;
+                        }
+                    } else if (ClosedList.Contains(neighbourNode)) {
                         continue;
                     }
 

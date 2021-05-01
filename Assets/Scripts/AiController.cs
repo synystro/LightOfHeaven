@@ -91,7 +91,7 @@ namespace LUX {
 
             // display path towards player
             AstarPathFinding selectedUnitPF = selectedUnitAi.GetComponent<AstarPathFinding>();
-            selectedUnitPF.FindPath(selectedUnitAi.transform.position, randomPlayerUnitGO.transform.position);
+            selectedUnitPF.FindPath(selectedUnitAi.transform.position, randomPlayerUnitGO.transform.position, selectedUnitAi.IsFlying);
             Vector2 targetNodePos = selectedUnitPF.FinalPath[0].position;
             // get the tile
             TileController tileToMove;
