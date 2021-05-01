@@ -21,9 +21,19 @@ namespace LUX {
 
         private void OnEnable() {
             gameEventSystem.onUnitMove += OnUnitMove;
+            gameEventSystem.onUnitDie += OnUnitDie;
         }
         private void OnUnitMove(bool isEnemy) {
             // do something about unit move depending on wether its player/friendly or enemy
+        }
+        private void OnUnitDie(GameObject unitToDie) {
+            if(EnemyUnits.Contains(unitToDie)) {
+                EnemyUnits.Remove(this.gameObject);
+            } else if(PlayerUnits.Contains(unitToDie)) {
+                PlayerUnits.Remove(this.gameObject);
+            }
+            print($"{unitToDie.name} just died.");
+            Destroy(unitToDie);            
         }
         private void Start() {
             SpawnPlayerUnits(); 

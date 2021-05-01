@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 80a077b39602e3b42aff360e02dd57be, type: 3}
-  m_Name: MeleeUnit_1
+  m_Name: Skeleton_Warrior
   m_EditorClassIdentifier: 
   name: Melee Unit 1
   icon: {fileID: 0}
@@ -18,6 +18,11 @@ MonoBehaviour:
     type: 3}
   charPrefabLeft: {fileID: 4491116610780015743, guid: 81bd55fdd4162304ca73cbfebac05c35,
     type: 3}
+  strength: 0
+  stamina: 0
+  vitality: 0
+  dexterity: 0
+  intelligence: 0
   MaxHp: 50
   BaseHp: 50
   BonusHp: 0
@@ -36,6 +41,9 @@ MonoBehaviour:
   AtkRange: 1
   BaseAtkRange: 1
   BonusAtkRange: 0
+  Accuracy: 0
+  BaseAccuracy: 0
+  BonusAccuracy: 0
   MgcDamage: 10
   BaseMgcDamage: 10
   BonusMgcDamage: 0
@@ -45,3 +53,18 @@ MonoBehaviour:
   MagicResistance: 0
   BaseMagicResistance: 0
   BonusMagicResistance: 0
+  Poise: 0
+  BasePoise: 0
+  BonusPoise: 0
+  Evasion: 0
+  BaseEvasion: 0
+  BonusEvasion: 0
+  CritChance: 0
+  BaseCritChance: 0
+  BonusCritChance: 0
+  StunChance: 0
+  BaseStunChance: 0
+  BonusStunChance: 0
+  LethalChance: 0
+  BaseLethalChance: 0
+  BonusLethalChance: 0

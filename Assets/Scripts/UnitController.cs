@@ -48,7 +48,6 @@ namespace LUX {
 
         private void Awake() {            
             enemiesInRange = new List<GameObject>();
-            //attackHighlights = new List<GameObject>();
             selectionSR = selectionHighlightGO.GetComponent<SpriteRenderer>();
             pathFinder = this.GetComponent<PathFinder>();
             unitDetails = this.GetComponent<UnitDetails>();
@@ -72,7 +71,7 @@ namespace LUX {
             ResetUnitStats();
         }
         public void OnUnitAttacked(bool isEnemyAttack) {
-            RefreshDetails();
+            //RefreshDetails(); // already running inside receive damage function
         }
         private void ResetUnitStats() {
             this.UnitData.CurrentAp = this.UnitData.MaxAp;
@@ -215,10 +214,6 @@ namespace LUX {
             // display locked selection
             LockSelection();
         }
-        public int CalculateDamageTakenFromAttack(int attackedUnitArmor) {
-            int finalAttackDamage = this.unit.AtkDamage - attackedUnitArmor;
-            return finalAttackDamage > 0 ? finalAttackDamage : 0;
-        }
         public void DealAttack(UnitController attackedUnitController, Vector3 attackedUnitPosition) { 
             // return if the player has already attacked an unit this turn
             if(playerController.HasAttackedThisTurn) { return; } 
@@ -228,23 +223,20 @@ namespace LUX {
             // change unit facing direction towards enemy
             SetFacingDirectionTowardsCoordX(Mathf.RoundToInt(attackedUnitPosition.x));
 
-            // attack formula
-            int finalAttackDamage = CalculateDamageTakenFromAttack(attackedUnit.Armor);
-            attackedUnit.CurrentHp -= finalAttackDamage;
-            if(attackedUnit.CurrentHp < 0) { attackedUnit.CurrentHp = 0; }
+            DamageData attackDamageData = new DamageData(this.unit, this.unit.AtkDamage, DamageType.Physical, this.unit.CritChance, this.unit.StunChance, this.unit.LethalChance);
+
+            // attack!
+            attackedUnitController.ReceiveDamage(attackDamageData);
 
             // call attacked unit's onAttacked function
             gameEventSystem.OnUnitAttack(isEnemy);
-            //attackedUnitController.OnAttacked();
 
             // if this is a player unit
             if(isEnemy == false) {
                 playerController.SetHasAttackedThisTurn(true);
             } 
 
-            hasAttackedThisTurn = true;
-
-            print($"{this.gameObject.name} just attacked {attackedUnit.name} for {this.unit.AtkDamage}! Leaving them at {attackedUnit.CurrentHp}");
+            hasAttackedThisTurn = true;            
             
             // if has already moved, no reason for the unit to be selected
             if(hasMovedThisTurn) {
@@ -253,6 +245,44 @@ namespace LUX {
             }
             // display locked selection
             LockSelection();
+        }
+        public void ReceiveDamage(DamageData damageData) {
+            int lethalRandom = Random.Range(0,100);
+            if(lethalRandom < damageData.LethalChance) {
+                this.unit.CurrentHp = 0;
+                print($"{damageData.Source.name} just dealt a LETHAL attack to {this.unit.name}! Instantly killing them!");
+                Die();                
+                return;
+            }
+            switch(damageData.Type) {
+                case DamageType.Physical:
+                    int physicalDamage = damageData.Amount;
+                    // critical
+                    int critRandom = Random.Range(0,100);
+                    if(critRandom < damageData.CritChance) {
+                        physicalDamage = physicalDamage * 2;                                                
+                    }
+                    // final atk damage
+                    int finalPhysicalDamage = physicalDamage - this.unit.Armor > 0 ? physicalDamage : 0;
+                    this.unit.CurrentHp -= finalPhysicalDamage;
+                    print($"{damageData.Source.name} just attacked {this.unit.name} for {finalPhysicalDamage} physical damage! Leaving them at {this.unit.CurrentHp}");                    
+                    break;
+                case DamageType.Magical:
+                    int magicalDamage = damageData.Amount;
+                    int finalMagicalDamage = magicalDamage - this.unit.MagicResistance > 0 ? damageData.Amount : 0;
+                    this.unit.CurrentHp -= finalMagicalDamage;
+                    break;
+                default:
+                    break;
+            }   
+            if(this.unit.CurrentHp <= 0) {
+                this.unit.CurrentHp = 0;
+                Die();
+            }         
+            RefreshDetails();                        
+        }
+        private void Die() {            
+            gameEventSystem.OnUnitDie(this.gameObject);            
         }
         public void OnPointerClick(PointerEventData eventData) {
             MouseClick();

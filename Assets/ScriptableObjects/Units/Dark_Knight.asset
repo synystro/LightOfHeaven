@@ -18,6 +18,11 @@ MonoBehaviour:
     type: 3}
   charPrefabLeft: {fileID: 5844065101770880116, guid: 922f60e9a919c3b4d92162a8a94bcd4f,
     type: 3}
+  strength: 0
+  stamina: 0
+  vitality: 0
+  dexterity: 0
+  intelligence: 0
   MaxHp: 100
   BaseHp: 100
   BonusHp: 0
@@ -33,9 +38,12 @@ MonoBehaviour:
   AtkDamage: 4
   BaseAtkDamage: 4
   BonusAtkDamage: 0
-  AtkRange: 2
-  BaseAtkRange: 2
+  AtkRange: 1
+  BaseAtkRange: 1
   BonusAtkRange: 0
+  Accuracy: 0
+  BaseAccuracy: 0
+  BonusAccuracy: 0
   MgcDamage: 0
   BaseMgcDamage: 0
   BonusMgcDamage: 0
@@ -45,3 +53,18 @@ MonoBehaviour:
   MagicResistance: 0
   BaseMagicResistance: 0
   BonusMagicResistance: 0
+  Poise: 0
+  BasePoise: 0
+  BonusPoise: 0
+  Evasion: 0
+  BaseEvasion: 0
+  BonusEvasion: 0
+  CritChance: 0
+  BaseCritChance: 0
+  BonusCritChance: 0
+  StunChance: 0
+  BaseStunChance: 0
+  BonusStunChance: 0
+  LethalChance: 0
+  BaseLethalChance: 0
+  BonusLethalChance: 0

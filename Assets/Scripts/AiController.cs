@@ -36,6 +36,12 @@ namespace LUX {
             }
         }
         private void StartActionPhase() {
+            // FIXME: if there are no enemy units, actually end the battle
+            if(unitManager.EnemyUnits.Count <= 0) {
+                turnManager.EndTurn();
+                return;
+            }
+
             int randomIndex = Random.Range(0, unitManager.EnemyUnits.Count);  
             GameObject unitGO = unitManager.EnemyUnits[randomIndex];
 

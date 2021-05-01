@@ -10,7 +10,6 @@ namespace LUX {
         public void SetDetailsCanvasState(bool state) {
             detailsCanvasGO.SetActive(state);
         }
-
         public void Refresh(Unit unit) {
             nameText.text = unit.name;
             currentHpText.text = unit.CurrentHp.ToString();         
