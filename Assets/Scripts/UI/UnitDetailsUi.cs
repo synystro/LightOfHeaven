@@ -2,7 +2,7 @@
 using TMPro;
 
 namespace LUX {
-    public class UnitDetails : MonoBehaviour {
+    public class UnitDetailsUi : MonoBehaviour {
         [SerializeField] private GameObject detailsCanvasGO;        
         [SerializeField] private TextMeshProUGUI nameText;
         [SerializeField] private TextMeshProUGUI currentHpText;

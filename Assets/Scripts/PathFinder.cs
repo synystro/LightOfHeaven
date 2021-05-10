@@ -25,22 +25,23 @@ namespace LUX {
             apsLeft = unitController.UnitData.CurrentAp;
 
             currentTile = unitController.CurrentTile.GetComponent<TileController>();
-            currentTile.SetApsLeft(unitController.UnitData.CurrentAp);        
+            //currentTile.SetAsReachable();
+            currentTile.SetMovesLeft(apsLeft);
             Search(currentTile);  
 
             return reachableTiles;          
         }
         private void Search(TileController tile) { 
             // return if the tile is out of range
-            if(tile.ApsLeft <= 0) { return; }     
+            if(tile.MovesLeft <= 0) { return; }     
 
-            foreach(TileController t in tile.AdjacentTiles) {
+            foreach(TileController t in tile.AdjacentTiles) {                
                 // if tile has already been checked, skip to thee next one
                 if(t.IsReachable) { continue; }
                 // if tile is free
-                if(t.HasObstacle == false || unitController.IsFlying) {                                        
+                if(t.HasObstacle == false || unitController.IsFlying) {                                                       
                     t.SetAsReachable();
-                    t.SetApsLeft(tile.ApsLeft - 1);             
+                    t.SetMovesLeft(tile.MovesLeft - 1);             
                     reachableTiles.Add(t.gameObject);                 
                 }
             }
@@ -61,21 +62,21 @@ namespace LUX {
             apsLeft = unitController.UnitData.AtkRange;
 
             currentTile = unitController.CurrentTile.GetComponent<TileController>(); 
-            currentTile.SetApsLeft(unitController.UnitData.AtkRange);  
+            currentTile.SetRangeLeft(apsLeft);  
             ScanForEnemy(currentTile);
 
             return reachableEnemies;          
         }
         private void ScanForEnemy(TileController tile) { 
             // return if the tile is out of range
-            if(tile.ApsLeft <= 0) { return; }   
+            if(tile.RangeLeft <= 0) { return; }   
 
             foreach(TileController t in tile.AdjacentTiles) {
                 // if tile has already been checked, skip to thee next one
                 if(t.IsInAtkRange) { continue; }
                 // if tile is free
                 if(t.HasObstacle == false) {
-                    t.SetApsLeft(tile.ApsLeft - 1);
+                    t.SetRangeLeft(tile.RangeLeft - 1);
                     t.SetInAtkRange();                   
                     reachableTiles.Add(t.gameObject);                 
                 } else if(t.CurrentUnit != null) {
@@ -84,12 +85,14 @@ namespace LUX {
                         // player detecting enemy
                         //print($"{t.CurrentUnit.UnitData.name}'s enemy unit is in {unitController.UnitData.name}'s atk range!");
                         reachableEnemies.Add(t.CurrentUnit.gameObject);
-                        t.CurrentUnit.DisplayAttackHighlight(true);                        
+                        t.CurrentUnit.SetAttackHighlightDamage(this.unitController.UnitData.AtkDamage);
+                        //t.CurrentUnit.DisplayAttackHighlight(true);                        
                     } else if(unitController.IsEnemy == true && t.CurrentUnit.IsEnemy == false) {
                         //enemy detecting player
                         //print($"{t.CurrentUnit.UnitData.name}'s player unit is in {unitController.UnitData.name}'s atk range!");
                         reachableEnemies.Add(t.CurrentUnit.gameObject);
-                        t.CurrentUnit.DisplayAttackHighlight(true); 
+                        t.CurrentUnit.SetAttackHighlightDamage(this.unitController.UnitData.AtkDamage);
+                        //t.CurrentUnit.DisplayAttackHighlight(true); 
                     }
                 }
             }

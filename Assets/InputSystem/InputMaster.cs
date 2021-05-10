@@ -25,6 +25,14 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": ""Press""
+                },
+                {
+                    ""name"": ""StartBattle"",
+                    ""type"": ""Button"",
+                    ""id"": ""906ce7f3-92bb-4d62-ba04-453214ac8cf6"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press""
                 }
             ],
             ""bindings"": [
@@ -36,6 +44,17 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard and Mouse"",
                     ""action"": ""EndTurn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ac93e4c7-95dd-418d-9da9-8675933e2972"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard and Mouse"",
+                    ""action"": ""StartBattle"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -64,6 +83,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_EndTurn = m_Player.FindAction("EndTurn", throwIfNotFound: true);
+        m_Player_StartBattle = m_Player.FindAction("StartBattle", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -114,11 +134,13 @@ public class @InputMaster : IInputActionCollection, IDisposable
     private readonly InputActionMap m_Player;
     private IPlayerActions m_PlayerActionsCallbackInterface;
     private readonly InputAction m_Player_EndTurn;
+    private readonly InputAction m_Player_StartBattle;
     public struct PlayerActions
     {
         private @InputMaster m_Wrapper;
         public PlayerActions(@InputMaster wrapper) { m_Wrapper = wrapper; }
         public InputAction @EndTurn => m_Wrapper.m_Player_EndTurn;
+        public InputAction @StartBattle => m_Wrapper.m_Player_StartBattle;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -131,6 +153,9 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @EndTurn.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEndTurn;
                 @EndTurn.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEndTurn;
                 @EndTurn.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEndTurn;
+                @StartBattle.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnStartBattle;
+                @StartBattle.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnStartBattle;
+                @StartBattle.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnStartBattle;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -138,6 +163,9 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @EndTurn.started += instance.OnEndTurn;
                 @EndTurn.performed += instance.OnEndTurn;
                 @EndTurn.canceled += instance.OnEndTurn;
+                @StartBattle.started += instance.OnStartBattle;
+                @StartBattle.performed += instance.OnStartBattle;
+                @StartBattle.canceled += instance.OnStartBattle;
             }
         }
     }
@@ -154,5 +182,6 @@ public class @InputMaster : IInputActionCollection, IDisposable
     public interface IPlayerActions
     {
         void OnEndTurn(InputAction.CallbackContext context);
+        void OnStartBattle(InputAction.CallbackContext context);
     }
 }

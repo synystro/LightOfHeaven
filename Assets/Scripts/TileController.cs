@@ -10,7 +10,8 @@ namespace LUX {
         [Header("Status")]
         [SerializeField] private UnitController currentUnit;
         [SerializeField] private bool hasObstacle; 
-        private int apsLeft;   
+        [SerializeField] private int movesLeft;
+        [SerializeField] private int rangeLeft;  
         [SerializeField] private bool isReachable;
         [SerializeField] private bool isInAtkRange;
         [SerializeField] private bool isMouseOver;
@@ -29,7 +30,8 @@ namespace LUX {
         public bool HasObstacle => hasObstacle;
         public bool IsReachable => isReachable;
         public bool IsInAtkRange => isInAtkRange;
-        public int ApsLeft => apsLeft;
+        public int MovesLeft => movesLeft;
+        public int RangeLeft => rangeLeft;
         public UnitController CurrentUnit => currentUnit;
         public TileController LeftTile => leftTile;
         public TileController RightTile => rightTile;
@@ -87,14 +89,18 @@ namespace LUX {
         public void SetInAtkRange() {
             isInAtkRange = true;
         }
-        public void SetApsLeft(int apsLeft) {
-            this.apsLeft = apsLeft;
+        public void SetMovesLeft(int movesLeft) {
+            this.movesLeft = movesLeft;
+        }
+        public void SetRangeLeft(int rangeLeft) {
+            this.rangeLeft = rangeLeft;
         }
         public void Reset() {
             spriteRenderer.color = Color.white;
             isInAtkRange = false;
             isReachable = false;
-            apsLeft = 0;            
+            movesLeft = 0;
+            rangeLeft = 0;            
         }
         public void OnPointerEnter(PointerEventData eventData) {
             this.transform.localScale += Vector3.one * hoverSize;

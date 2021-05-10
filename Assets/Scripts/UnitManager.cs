@@ -28,9 +28,10 @@ namespace LUX {
         }
         private void OnUnitDie(GameObject unitToDie) {
             if(EnemyUnits.Contains(unitToDie)) {
-                EnemyUnits.Remove(this.gameObject);
+                print($"removing {unitToDie} from enemy units");
+                EnemyUnits.Remove(unitToDie);                
             } else if(PlayerUnits.Contains(unitToDie)) {
-                PlayerUnits.Remove(this.gameObject);
+                PlayerUnits.Remove(unitToDie);
             }
             print($"{unitToDie.name} just died.");
             Destroy(unitToDie);            

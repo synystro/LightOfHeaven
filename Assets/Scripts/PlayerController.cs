@@ -22,10 +22,12 @@ namespace LUX {
             inputMaster.Enable();
             gameEventSystem.onTurnEnd += Reset;
             inputMaster.Player.EndTurn.performed += _ => EndTurn();
+            inputMaster.Player.StartBattle.performed += _ => turnManager.Init();
         }
         private void OnDisable() {
             gameEventSystem.onTurnEnd -= Reset;
             inputMaster.Player.EndTurn.performed -= _ => EndTurn();
+            inputMaster.Player.StartBattle.performed -= _ => turnManager.Init();
             inputMaster.Disable();
         }
         public void Reset() {

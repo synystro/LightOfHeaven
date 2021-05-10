@@ -1,8 +1,0 @@
-﻿using UnityEngine;
-
-namespace LUX {
-    public class GridManager : MonoBehaviour {
-        [Header("Prefabs")]
-        [SerializeField] private GameObject highlightPrefab;
-    }
-}

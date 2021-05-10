@@ -9091,6 +9091,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   turnIndex: 0
+  moveIndex: 0
   state: 0
 --- !u!4 &2023008554
 Transform:

@@ -69,19 +69,30 @@ namespace LUX {
         public int BaseLethalChance;
         public int BonusLethalChance;
 
-        public void Reset() {
+        public void ResetBonuses() {
+            BonusHp = 0; CurrentHp -= BonusHp;
+            BonusMp = 0;
+            BonusAp = 0;
+            BonusAtkDamage = 0;
+            BonusAtkRange = 0;
+            BonusMgcDamage = 0;
+            BonusArmor = 0;
+            BonusMagicResistance = 0;
+            BonusPoise = 0;            
+            BonusEvasion = 0;
+            BonusCritChance = 0;
+            BonusStunChance = 0;
+            BonusLethalChance = 0;
+        }
+        public void Setup() {
             // hp
-            MaxHp = BaseHp + BonusHp + (vitality * 10);
-            CurrentHp = MaxHp;
+            MaxHp = BaseHp + BonusHp + (vitality * 10);            
             // mp
-            MaxMp = BaseMp + BonusMp + (intelligence * 10);
-            CurrentMp = MaxMp;
+            MaxMp = BaseMp + BonusMp + (intelligence * 10);            
             // ap
-            MaxAp = BaseAp + BonusAp + Mathf.FloorToInt(stamina / 5);
-            CurrentAp = MaxAp;
+            MaxAp = BaseAp + BonusAp + Mathf.FloorToInt(stamina / 5);            
             // atk
-            AtkDamage = BaseAtkDamage + BonusAtkDamage + strength;
-            AtkRange = BaseAtkRange + BonusAtkRange;
+            AtkDamage = BaseAtkDamage + BonusAtkDamage + strength;            
             // mgc
             MgcDamage = BaseMgcDamage + BonusMgcDamage + intelligence;
             MagicResistance = BaseMagicResistance + BonusMagicResistance + vitality;
@@ -90,6 +101,35 @@ namespace LUX {
             CritChance = BaseCritChance + BonusCritChance + dexterity;
             StunChance = BaseStunChance + BonusStunChance + strength;
             LethalChance = BaseLethalChance + BonusLethalChance;
+        }
+        public void RestoreStats() {
+            CurrentHp = MaxHp;
+            CurrentMp = MaxMp;
+            CurrentAp = MaxAp;
+            AtkRange = BaseAtkRange + BonusAtkRange;            
+        }
+        public void RefreshBonuses() {
+            // hp
+            CurrentHp += BonusHp;
+            // mp
+            CurrentMp += BonusMp;
+            // ap
+            // MaxAp = BaseAp + BonusAp + Mathf.FloorToInt(stamina / 5);
+            // CurrentAp = MaxAp;
+            // // atk
+            // AtkDamage = BaseAtkDamage + BonusAtkDamage + strength;
+            // AtkRange = BaseAtkRange + BonusAtkRange;
+            // // mgc
+            // MgcDamage = BaseMgcDamage + BonusMgcDamage + intelligence;
+            // MagicResistance = BaseMagicResistance + BonusMagicResistance + vitality;
+            // // chances
+            // Evasion = BaseEvasion + BonusEvasion + stamina;
+            // CritChance = BaseCritChance + BonusCritChance + dexterity;
+            // StunChance = BaseStunChance + BonusStunChance + strength;
+            // LethalChance = BaseLethalChance + BonusLethalChance;
+        }
+        public void RestoreAps() {
+            CurrentAp = MaxAp;
         }
     }
 }

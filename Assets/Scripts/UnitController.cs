@@ -2,14 +2,17 @@
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
 using Zenject;
+using System.Linq;
 
 namespace LUX {
     [RequireComponent(typeof(SpriteRenderer))]
     [RequireComponent(typeof(PathFinder))]
-    [RequireComponent(typeof(UnitDetails))]
+    [RequireComponent(typeof(UnitDetailsUi))]
     public class UnitController : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler {
+        [SerializeField] private List<EffectData> activeEffects;
         [SerializeField] private GameObject selectionHighlightGO;
         [SerializeField] private GameObject attackHighlightGO;
+        [SerializeField] private GameObject damagePopupPrefab;
         [SerializeField] private Unit unit;
         [SerializeField] private bool isEnemy;
         [SerializeField] private bool isFlying;  
@@ -20,8 +23,7 @@ namespace LUX {
         [SerializeField] private bool isSelected;
         [SerializeField] private bool hasMovedThisTurn;
         [SerializeField] private bool hasAttackedThisTurn;
-        [SerializeField] private List<GameObject> enemiesInRange;
-        //private List<GameObject> attackHighlights;
+        [SerializeField] private List<GameObject> enemiesInRange;        
         public Unit UnitData => unit;
         public TileController CurrentTile => currentTile;
         public bool HasMovedThisTurn => hasMovedThisTurn;
@@ -44,20 +46,23 @@ namespace LUX {
 
         private SpriteRenderer selectionSR;   
         private PathFinder pathFinder;
-        private UnitDetails unitDetails;    
+        private UnitDetailsUi unitDetailsUi;    
 
         private void Awake() {            
+            activeEffects = new List<EffectData>();
             enemiesInRange = new List<GameObject>();
             selectionSR = selectionHighlightGO.GetComponent<SpriteRenderer>();
             pathFinder = this.GetComponent<PathFinder>();
-            unitDetails = this.GetComponent<UnitDetails>();
+            unitDetailsUi = this.GetComponent<UnitDetailsUi>();
         }
         private void Start() {
-            gameEventSystem.onTurnEnd += TurnEndReset;
+            gameEventSystem.onTurnStart += OnTurnStart;
+            gameEventSystem.onTurnEnd += OnTurnEnd;
             gameEventSystem.onUnitAttack += OnUnitAttacked;
         }
         private void OnDestroy() {
-            gameEventSystem.onTurnEnd -= TurnEndReset;
+            gameEventSystem.onTurnStart -= OnTurnStart;
+            gameEventSystem.onTurnEnd -= OnTurnEnd;
             gameEventSystem.onUnitAttack -= OnUnitAttacked;
         }
         public void Setup(Unit unit, GameObject tileToSpawnGO, bool isEnemy) {
@@ -79,34 +84,87 @@ namespace LUX {
             this.currentTile = tileToSpawnGO.transform.GetComponent<TileController>();
             this.currentTile.SetCurrentUnit(this);
             this.currentTile.SetHasObstacle(true);
-            unit.Reset();
+            unit.ResetBonuses();
+            unit.Setup();
+            unit.RestoreStats();
             this.gameObject.name = unit.name;
 
             // can this unit fly? 
             this.isFlying = unit.Flight;
             // enemy stuff
-            this.isEnemy = isEnemy;           
+            this.isEnemy = isEnemy;            
+
+            EffectData hpBuff = new EffectData(
+                null, EffectType.Hp, 25, 2, false
+            );
+            hpBuff.EffectType = EffectType.Hp;
+            hpBuff.Amount = 25;
+            hpBuff.Duration = 2;
+            activeEffects.Add(hpBuff);
+
+            EffectData fireDebuff = new EffectData(
+                null, DamageType.Magical, 10, 3, false
+            );
+            activeEffects.Add(fireDebuff);            
 
             // setup unit info display
-            RefreshDetails();            
-            }
-        public void TurnEndReset() {
+            RefreshDetailsUi();            
+        }
+        public void OnTurnStart() {
+            ResetUnitStats();                        
+        }
+        public void OnTurnEnd() {
             SetSelection(false);
             hasMovedThisTurn = false;
             hasAttackedThisTurn = false;
             hasTargetInRange = false;
             enemiesInRange.Clear();
-            DisplayAttackHighlight(false);
-            // RESET UNIT ! put somewhere else ?
-            ResetUnitStats();
-        }
+            DisplayAttackHighlight(false);            
+        }        
         public void OnUnitAttacked(bool isEnemyAttack) {
             //RefreshDetails(); // already running inside receive damage function
         }
+        public void AddEffect(EffectData effect) {
+            if(activeEffects.Contains(effect) == false) {
+                activeEffects.Add(effect);
+            }
+        }
+        public void RemoveEffect(EffectData effect) {
+            if(activeEffects.Contains(effect)) {
+                activeEffects.Remove(effect);
+            }
+        }
+        public void ApplyStatsModifier(EffectType id, int amount) {
+            if(id != EffectType.Debuff) {
+                print($"Appplying {amount} {id} to {unit.name}");
+            }
+            switch(id) {
+                case EffectType.Hp: unit.BonusHp += amount; unit.CurrentHp += amount; break;
+                case EffectType.Debuff: unit.CurrentHp -= amount; break;
+                default: break;
+            }
+        }
         private void ResetUnitStats() {
-            this.UnitData.CurrentAp = this.UnitData.MaxAp;
+            // reset modifiers
+            this.unit.ResetBonuses();
+            // apply modifiers
+            foreach(EffectData e in activeEffects.ToList()) {
+                ApplyStatsModifier(e.EffectType, e.Amount);
+                if(e.LastsTheEntireBattle) { continue; } // return if the effect isn't be removed until the end of battle
+                // after each turn, reduce its duration value
+                e.Duration -= 1;
+                if(e.Duration <= 0) {
+                    activeEffects.Remove(e);
+                }
+            }
+            //FIXME fix apply bonuses 
+            this.unit.Setup();
+            // restore aps
+            this.unit.RestoreAps();
+            // refresh unit details display
+            RefreshDetailsUi(); 
         }        
-        private void MouseClick() {
+        private void OnMouseClick() {
             // if clicked on an enemy unit
             if (isEnemy) {
                 UnitController selectedUnit = unitManager.GetSelectedUnit();
@@ -115,8 +173,6 @@ namespace LUX {
                     && selectedUnit.HasAttackedThisTurn == false
                     && playerController.HasAttackedThisTurn == false) {
                         selectedUnit.DealAttack(this, this.transform.position);
-                        this.DisplayAttackHighlight(false);
-                        // display damage done
                     }
                 }
             }
@@ -139,8 +195,8 @@ namespace LUX {
                 }
             }
         }        
-        private void RefreshDetails() {
-            unitDetails.Refresh(unit);
+        private void RefreshDetailsUi() {
+            unitDetailsUi.Refresh(unit);
         }  
         private void SetFacingDirectionTowardsCoordX(int targetPositionX) {
             if (targetPositionX - this.transform.position.x > 0) {
@@ -174,14 +230,30 @@ namespace LUX {
             selectionSR.color = Color.white;
             selectionHighlightGO.SetActive(state);
         }  
-        public void DisplayAttackHighlight(bool state) {
+        public void SetAttackHighlightDamage(int physicalDamage) {
+            int finalPhysicalDamage = physicalDamage - this.unit.Armor > 0 ? physicalDamage : 0;
+            AttackHighlight attackHighlight = attackHighlightGO.GetComponent<AttackHighlight>();
+            attackHighlight.SetDamageValue(finalPhysicalDamage);
+            DisplayAttackHighlight(true);
+        }
+        public void DisplayAttackHighlight(bool state) {            
             attackHighlightGO.SetActive(state);
+        }
+        public void DisplayDamagePopup(int value, Vector3 position) {
+            GameObject damagePopupGO = Instantiate(damagePopupPrefab, position, Quaternion.identity);
+            AttackHighlight damagePopup = damagePopupGO.GetComponentInChildren<AttackHighlight>();
+            damagePopup.SetDamageValue(value);
+            Destroy(damagePopupGO, 0.66f);
         }
         public void Move(Vector2 clickPoint, GameObject targetTileGO) {
             // return if there are no action points left
             if(this.UnitData.CurrentAp <= 0) { return; }
 
             TileController targetTile = targetTileGO.GetComponent<TileController>();
+            // if this is the player consume aps here!
+            if(isEnemy == false) {
+                this.unit.CurrentAp = targetTile.MovesLeft;
+            }
             // return if the player has already moved an unit this turn
             if(playerController.HasMovedThisTurn) { return; }
             // reset all tiles visual changes
@@ -200,7 +272,7 @@ namespace LUX {
             targetTile.SetHasObstacle(true);
             // trigget on unit move event
             gameEventSystem.OnUnitMove(isEnemy);
-            if(isEnemy == false) {
+            if(isEnemy == false) {                
                 playerController.SetHasMovedThisTurn(true);
             }            
             hasMovedThisTurn = true;
@@ -228,7 +300,14 @@ namespace LUX {
             DamageData attackDamageData = new DamageData(this.unit, this.unit.AtkDamage, DamageType.Physical, this.unit.CritChance, this.unit.StunChance, this.unit.LethalChance);
 
             // attack!
-            attackedUnitController.ReceiveDamage(attackDamageData);
+            int damageDealt = attackedUnitController.ReceiveDamage(attackDamageData);
+
+            // remove attacked unit's attack highlight
+            attackedUnitController.DisplayAttackHighlight(false);
+
+            // display damage popup
+            DisplayDamagePopup(damageDealt, attackedUnitPosition);
+            print(attackedUnitPosition);
 
             // call attacked unit's onAttacked function
             gameEventSystem.OnUnitAttack(isEnemy);
@@ -248,13 +327,17 @@ namespace LUX {
             // display locked selection
             LockSelection();
         }
-        public void ReceiveDamage(DamageData damageData) {
+        private void ReceiveDebuffDamage(EffectData debuff) {
+            
+        }
+        public int ReceiveDamage(DamageData damageData) {
+            int finalDamage;
             int lethalRandom = Random.Range(0,100);
             if(lethalRandom < damageData.LethalChance) {
                 this.unit.CurrentHp = 0;
                 print($"{damageData.Source.name} just dealt a LETHAL attack to {this.unit.name}! Instantly killing them!");
                 Die();                
-                return;
+                return 999;
             }
             switch(damageData.Type) {
                 case DamageType.Physical:
@@ -266,34 +349,38 @@ namespace LUX {
                     }
                     // final atk damage
                     int finalPhysicalDamage = physicalDamage - this.unit.Armor > 0 ? physicalDamage : 0;
+                    finalDamage = finalPhysicalDamage;
                     this.unit.CurrentHp -= finalPhysicalDamage;
                     print($"{damageData.Source.name} just attacked {this.unit.name} for {finalPhysicalDamage} physical damage! Leaving them at {this.unit.CurrentHp}");                    
                     break;
                 case DamageType.Magical:
                     int magicalDamage = damageData.Amount;
                     int finalMagicalDamage = magicalDamage - this.unit.MagicResistance > 0 ? damageData.Amount : 0;
+                    finalDamage = finalMagicalDamage;
                     this.unit.CurrentHp -= finalMagicalDamage;
                     break;
                 default:
+                    finalDamage = 0;
                     break;
             }   
             if(this.unit.CurrentHp <= 0) {
                 this.unit.CurrentHp = 0;
                 Die();
             }         
-            RefreshDetails();                        
+            RefreshDetailsUi();            
+            return finalDamage;                        
         }
         private void Die() {            
             gameEventSystem.OnUnitDie(this.gameObject);            
         }
         public void OnPointerClick(PointerEventData eventData) {
-            MouseClick();
+            OnMouseClick();
         }
         public void OnPointerEnter(PointerEventData eventData) {
-            unitDetails.SetDetailsCanvasState(true);
+            unitDetailsUi.SetDetailsCanvasState(true);
         }
         public void OnPointerExit(PointerEventData eventData) {
-            unitDetails.SetDetailsCanvasState(false);
+            unitDetailsUi.SetDetailsCanvasState(false);
         }
     }
 }

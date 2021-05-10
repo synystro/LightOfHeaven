@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80a077b39602e3b42aff360e02dd57be, type: 3}
   m_Name: Skeleton_Warrior
   m_EditorClassIdentifier: 
-  name: Melee Unit 1
+  name: Skeleton Warrior
   icon: {fileID: 0}
   charPrefabRight: {fileID: 2898409787636134312, guid: b4652fdc99cd2074dbca2713e84f7bbf,
     type: 3}

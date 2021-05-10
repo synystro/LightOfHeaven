@@ -31,23 +31,24 @@ namespace LUX {
             randomPlayerTargetUnit = null;
         }
         public void StartTurn() {
-            if(turnManager.IsPlayerTurn() == false) {
-                StartActionPhase();
-            }
-        }
-        private void StartActionPhase() {
-            // FIXME: if there are no enemy units, actually end the battle
+            // if there are no enemy units, actually end the battle
             if(unitManager.EnemyUnits.Count <= 0) {
                 turnManager.EndTurn();
                 return;
             }
+            foreach(GameObject enemyGO in unitManager.EnemyUnits) {
+                selectedUnitAi = enemyGO.GetComponent<UnitController>();
+                StartActionPhase();
+            }
+        }
+        private void StartActionPhase() {           
 
-            int randomIndex = Random.Range(0, unitManager.EnemyUnits.Count);  
-            GameObject unitGO = unitManager.EnemyUnits[randomIndex];
+            //int randomIndex = Random.Range(0, unitManager.EnemyUnits.Count);  
+            //GameObject unitGO = unitManager.EnemyUnits[randomIndex];
+            //selectedUnitAi = unitGO.GetComponent<UnitController>();
 
-            // below is the code for 1 unit
+            // below is the code for 1 unit            
             
-            selectedUnitAi = unitGO.GetComponent<UnitController>();
             selectedUnitAi.SetSelection(true);
             // decide player unit to attack
             ChooseRandomPlayerUnitAsTarget();
@@ -69,6 +70,8 @@ namespace LUX {
             if(IsTargetInRange()) {
                 Attack();
             }
+            // deselect unit
+            selectedUnitAi.SetSelection(false);
             turnManager.EndTurn(); // end this turn
         }
         private bool IsTargetInRange() {
