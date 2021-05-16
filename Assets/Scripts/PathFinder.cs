@@ -9,18 +9,18 @@ namespace LUX {
         [SerializeField] private TileController currentTile;
         [SerializeField] private int distanceBetweenTiles = 2;
 
-        private List<GameObject> reachableTiles;
-        private List<GameObject> reachableEnemies;
+        private List<UnityEngine.GameObject> reachableTiles;
+        private List<UnityEngine.GameObject> reachableEnemies;
         private int apsLeft;
 
         private UnitController unitController;
 
         private void Awake() {
             unitController = this.GetComponent<UnitController>();
-            reachableTiles = new List<GameObject>();     
-            reachableEnemies = new List<GameObject>();                        
+            reachableTiles = new List<UnityEngine.GameObject>();
+            reachableEnemies = new List<UnityEngine.GameObject>();                        
         }
-        public List<GameObject> GetReachableTiles() {
+        public List<UnityEngine.GameObject> GetReachableTiles() {
             reachableTiles.Clear();
             apsLeft = unitController.UnitData.CurrentAp;
 
@@ -56,7 +56,7 @@ namespace LUX {
             }
 
         }
-        public List<GameObject> GetReachableEnemies() {
+        public List<UnityEngine.GameObject> GetReachableEnemies() {
             reachableTiles.Clear();
             reachableEnemies.Clear();
             apsLeft = unitController.UnitData.AtkRange;

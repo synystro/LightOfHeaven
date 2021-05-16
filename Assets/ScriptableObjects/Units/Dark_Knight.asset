@@ -18,6 +18,9 @@ MonoBehaviour:
     type: 3}
   charPrefabLeft: {fileID: 5844065101770880116, guid: 922f60e9a919c3b4d92162a8a94bcd4f,
     type: 3}
+  Spells:
+  - {fileID: 11400000, guid: ea8367fff1b090b439e90013edaee9e7, type: 2}
+  - {fileID: 11400000, guid: d5a21d52242eddd40824d1c0467f6c37, type: 2}
   Flight: 1
   strength: 0
   stamina: 0
@@ -27,7 +30,7 @@ MonoBehaviour:
   MaxHp: 100
   BaseHp: 100
   BonusHp: 0
-  CurrentHp: 100
+  CurrentHp: 150
   MaxMp: 50
   BaseMp: 50
   BonusMp: 0
@@ -35,7 +38,7 @@ MonoBehaviour:
   MaxAp: 6
   BaseAp: 6
   BonusAp: 0
-  CurrentAp: 6
+  CurrentAp: 0
   AtkDamage: 4
   BaseAtkDamage: 4
   BonusAtkDamage: 0
@@ -48,9 +51,14 @@ MonoBehaviour:
   MgcDamage: 0
   BaseMgcDamage: 0
   BonusMgcDamage: 0
-  Armor: 0
-  BaseArmor: 0
+  MaxShield: 5
+  BaseShield: 5
+  BonusShield: 0
+  CurrentMagicShield: 5
+  MaxArmor: 5
+  BaseArmor: 5
   BonusArmor: 0
+  CurrentMagicArmor: 5
   MagicResistance: 0
   BaseMagicResistance: 0
   BonusMagicResistance: 0

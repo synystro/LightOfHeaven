@@ -18,6 +18,7 @@ namespace LUX {
 
         [Inject] private GameEventSystem gameEventSystem;
         [Inject] private MapManager mapManager;
+        [Inject] private PlayerController playerController;
 
         private void OnEnable() {
             gameEventSystem.onUnitMove += OnUnitMove;
@@ -28,7 +29,6 @@ namespace LUX {
         }
         private void OnUnitDie(GameObject unitToDie) {
             if(EnemyUnits.Contains(unitToDie)) {
-                print($"removing {unitToDie} from enemy units");
                 EnemyUnits.Remove(unitToDie);                
             } else if(PlayerUnits.Contains(unitToDie)) {
                 PlayerUnits.Remove(unitToDie);
@@ -37,8 +37,8 @@ namespace LUX {
             Destroy(unitToDie);            
         }
         private void Start() {
-            SpawnPlayerUnits(); 
-            SpawnEnemyUnits();  
+            SpawnPlayerUnits();            
+            SpawnEnemyUnits(); 
         }
         private void SpawnPlayerUnits() {
             int tileToSpawnIndex = (mapManager.GetTileCount() / 2);
@@ -46,8 +46,13 @@ namespace LUX {
                 GameObject tileToSpawnGO = mapManager.GetTileByIndex(tileToSpawnIndex).gameObject;
                 Vector3 tileToSpawnPosition = tileToSpawnGO.GetComponent<TileData>().GetPosition();
                 GameObject unitGO = Instantiate(unitPrefab, tileToSpawnPosition, Quaternion.identity);
-                unitGO.GetComponent<UnitController>().Setup(playerUnit, tileToSpawnGO, false);
-                PlayerUnits.Add(unitGO);
+                UnitController playerUnitController = unitGO.GetComponent<UnitController>();
+                playerUnitController.Setup(playerUnit, tileToSpawnGO, false);                
+                PlayerUnits.Add(unitGO); 
+
+                playerController.SetPlayerGO(unitGO);
+
+                gameEventSystem.OnPlayerSpawn();              
 
                 tileToSpawnIndex++;                                
             }
@@ -75,6 +80,11 @@ namespace LUX {
             if(selectedUnit == null) { return; }
             selectedUnit.SetSelection(false);
             selectedUnit = null;
+        }
+        public void HighlightEnemiesToTarget(bool state) {
+            foreach(GameObject eGO in EnemyUnits) {
+                eGO.GetComponent<UnitController>().HighlightToBeTargetted(state);
+            }
         }
     }
 }

@@ -58,7 +58,7 @@ namespace LUX {
         }
         private void SetupAdjacentTiles() {
             adjacentTiles = new List<TileController>();
-            foreach(GameObject tileGO in adjacentFinder.GetAdjacentObjects()) {
+            foreach(UnityEngine.GameObject tileGO in adjacentFinder.GetAdjacentObjects()) {
                 adjacentTiles.Add(tileGO.GetComponent<TileController>());              
             }
             if(adjacentFinder.LeftGO != null)

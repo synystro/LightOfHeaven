@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
 using Zenject;
@@ -8,51 +8,52 @@ namespace LUX {
     [RequireComponent(typeof(SpriteRenderer))]
     [RequireComponent(typeof(PathFinder))]
     [RequireComponent(typeof(UnitDetailsUi))]
-    public class UnitController : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler {
+    public class UnitController : TacticalMovement, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler {
         [SerializeField] private List<EffectData> activeEffects;
         [SerializeField] private GameObject selectionHighlightGO;
         [SerializeField] private GameObject attackHighlightGO;
         [SerializeField] private GameObject damagePopupPrefab;
         [SerializeField] private Unit unit;
-        [SerializeField] private bool isEnemy;
-        [SerializeField] private bool isFlying;  
-        [SerializeField] private bool hasTargetInRange;  
-        [SerializeField] private LayerMask groundLayer;  
-        [SerializeField] private TileController currentTile;
-        [SerializeField] private bool isFacingRight;
+        [SerializeField] private bool isEnemy;             
+        [SerializeField] private bool hasTargetInRange;                  
         [SerializeField] private bool isSelected;
-        [SerializeField] private bool hasMovedThisTurn;
+        [SerializeField] private bool isTarget;     
         [SerializeField] private bool hasAttackedThisTurn;
-        [SerializeField] private List<GameObject> enemiesInRange;        
+        [SerializeField] private bool isStunned;
+        [SerializeField] private List<GameObject> enemiesInRange; 
+
         public Unit UnitData => unit;
         public TileController CurrentTile => currentTile;
         public bool HasMovedThisTurn => hasMovedThisTurn;
         public bool HasAttackedThisTurn => hasAttackedThisTurn;
+        public bool IsStunned => isStunned;
         public bool HasTargetInRange => hasTargetInRange;
         public bool IsEnemy => isEnemy;
         public bool IsFlying => isFlying;
+        public bool IsTarget => isTarget;
         public List<GameObject> EnemiesInRange => enemiesInRange;
         public void SetHasMoved(bool state) { hasMovedThisTurn = state; }
         public void SetHasAttacked(bool state) { hasAttackedThisTurn = state; }
         public void SetHasTargetInRange(bool state) { hasTargetInRange = state; }
 
+        public GameEventSystem GameEventSystem => gameEventSystem;
+        public MapManager MapManager => mapManager;
+        public PlayerController PlayerController => playerController;        
+
         [Inject] private PlayerController playerController;
         [Inject] private GameEventSystem gameEventSystem;
         [Inject] private UnitManager unitManager;
-        [Inject] private MapManager mapManager;        
-
-        private GameObject facingLeftModelGO;
-        private GameObject facingRightModelGO; 
-
+        [Inject] private MapManager mapManager;
+        
         private SpriteRenderer selectionSR;   
-        private PathFinder pathFinder;
+        
         private UnitDetailsUi unitDetailsUi;    
 
         private void Awake() {            
             activeEffects = new List<EffectData>();
             enemiesInRange = new List<GameObject>();
-            selectionSR = selectionHighlightGO.GetComponent<SpriteRenderer>();
-            pathFinder = this.GetComponent<PathFinder>();
+            selectionSR = selectionHighlightGO.GetComponent<SpriteRenderer>(); 
+            pathFinder = this.GetComponent<PathFinder>();           
             unitDetailsUi = this.GetComponent<UnitDetailsUi>();
         }
         private void Start() {
@@ -92,29 +93,18 @@ namespace LUX {
             // can this unit fly? 
             this.isFlying = unit.Flight;
             // enemy stuff
-            this.isEnemy = isEnemy;            
-
-            EffectData hpBuff = new EffectData(
-                null, EffectType.Hp, 25, 2, false
-            );
-            hpBuff.EffectType = EffectType.Hp;
-            hpBuff.Amount = 25;
-            hpBuff.Duration = 2;
-            activeEffects.Add(hpBuff);
-
-            EffectData fireDebuff = new EffectData(
-                null, DamageType.Magical, 10, 3, false
-            );
-            activeEffects.Add(fireDebuff);            
+            this.isEnemy = isEnemy;                   
 
             // setup unit info display
             RefreshDetailsUi();            
         }
         public void OnTurnStart() {
+            isStunned = false;
             ResetUnitStats();                        
         }
         public void OnTurnEnd() {
             SetSelection(false);
+            isTarget = false;
             hasMovedThisTurn = false;
             hasAttackedThisTurn = false;
             hasTargetInRange = false;
@@ -134,14 +124,20 @@ namespace LUX {
                 activeEffects.Remove(effect);
             }
         }
-        public void ApplyStatsModifier(EffectType id, int amount) {
-            if(id != EffectType.Debuff) {
-                print($"Appplying {amount} {id} to {unit.name}");
-            }
-            switch(id) {
-                case EffectType.Hp: unit.BonusHp += amount; unit.CurrentHp += amount; break;
-                case EffectType.Debuff: unit.CurrentHp -= amount; break;
+        public void ApplyStatsModifier(EffectData e) {
+            bool tookDamage = false;
+            switch(e.EffectType) {                
+                case EffectType.Hp: unit.BonusHp += e.Amount; unit.CurrentHp += e.Amount; break;
+                case EffectType.Damage: unit.CurrentHp -= e.Amount; tookDamage = true; break;
+                case EffectType.Stun: isStunned = true; break;
                 default: break;
+            }
+            if(tookDamage) {
+                AudioManager.PlaySFX(e.TickSFX);
+                DisplayDamagePopup(e.Amount, this.transform.position);
+            }
+            if(this.unit.CurrentHp <= 0) {
+                Die();                
             }
         }
         private void ResetUnitStats() {
@@ -149,24 +145,39 @@ namespace LUX {
             this.unit.ResetBonuses();
             // apply modifiers
             foreach(EffectData e in activeEffects.ToList()) {
-                ApplyStatsModifier(e.EffectType, e.Amount);
+                ApplyStatsModifier(e);
                 if(e.LastsTheEntireBattle) { continue; } // return if the effect isn't be removed until the end of battle
                 // after each turn, reduce its duration value
                 e.Duration -= 1;
+                // remove the effect if it has reached the end of its duration
                 if(e.Duration <= 0) {
                     activeEffects.Remove(e);
                 }
             }
-            //FIXME fix apply bonuses 
+            // set everything up after resetting modifiers 
             this.unit.Setup();
-            // restore aps
-            this.unit.RestoreAps();
+            // restore things after the unit's turn has begun
+            this.unit.RestoreAfterTurn();
             // refresh unit details display
-            RefreshDetailsUi(); 
+            RefreshDetailsUi();
+            if(isStunned) {
+                print($"{this.name} is stunned and lost their turn!");
+                playerController.EndTurn();
+            }
+        }   
+        private void RefreshDetailsUi() {
+            unitDetailsUi.Refresh(unit);
         }        
         private void OnMouseClick() {
             // if clicked on an enemy unit
             if (isEnemy) {
+                if(isTarget) {
+                    // apply targetted spell to this enemy
+                    if(playerController.SelectedEffect != null) {
+                        activeEffects.Add(playerController.SelectedEffect);
+                        playerController.SpellWasCast();                     
+                    }
+                }
                 UnitController selectedUnit = unitManager.GetSelectedUnit();
                 if(selectedUnit != null) {
                     if(selectedUnit.EnemiesInRange.Contains(this.gameObject)
@@ -194,44 +205,30 @@ namespace LUX {
                     GetEnemiesInAtkRange();
                 }
             }
-        }        
-        private void RefreshDetailsUi() {
-            unitDetailsUi.Refresh(unit);
         }  
-        private void SetFacingDirectionTowardsCoordX(int targetPositionX) {
-            if (targetPositionX - this.transform.position.x > 0) {
-                if (isFacingRight == false) {
-                    isFacingRight = true;
-                    facingRightModelGO.SetActive(true);
-                    facingLeftModelGO.SetActive(false);
-                }
-            } else {
-                if (isFacingRight == true) {
-                    isFacingRight = false;
-                    facingRightModelGO.SetActive(false);
-                    facingLeftModelGO.SetActive(true);
-                }
-            }
-        }
         private void LockSelection() {
             Color red = new Color(.5f,0f,0f,1f);
             selectionSR.color = red;
-        }
-        public List<GameObject> GetReachableTiles() {
-            if (hasMovedThisTurn) { return null; }           
-            return pathFinder.GetReachableTiles();
-        }
+        }        
         public List<GameObject> GetEnemiesInAtkRange() {
             if(hasAttackedThisTurn) { return null; }
             return enemiesInRange = pathFinder.GetReachableEnemies();
         }
         public void SetSelection(bool state) {
-            isSelected = state;
+            isSelected = state;  
+            Highlight(state);          
+        }  
+        public void HighlightToBeTargetted(bool state) {
+            isTarget = state;
             selectionSR.color = Color.white;
             selectionHighlightGO.SetActive(state);
-        }  
+        }
+        public void Highlight(bool state) {
+            selectionSR.color = Color.white;
+            selectionHighlightGO.SetActive(state);
+        }
         public void SetAttackHighlightDamage(int physicalDamage) {
-            int finalPhysicalDamage = physicalDamage - this.unit.Armor > 0 ? physicalDamage : 0;
+            int finalPhysicalDamage = physicalDamage - this.unit.CurrentMagicArmor > 0 ? physicalDamage : 0;
             AttackHighlight attackHighlight = attackHighlightGO.GetComponent<AttackHighlight>();
             attackHighlight.SetDamageValue(finalPhysicalDamage);
             DisplayAttackHighlight(true);
@@ -249,33 +246,8 @@ namespace LUX {
             // return if there are no action points left
             if(this.UnitData.CurrentAp <= 0) { return; }
 
-            TileController targetTile = targetTileGO.GetComponent<TileController>();
-            // if this is the player consume aps here!
-            if(isEnemy == false) {
-                this.unit.CurrentAp = targetTile.MovesLeft;
-            }
-            // return if the player has already moved an unit this turn
-            if(playerController.HasMovedThisTurn) { return; }
-            // reset all tiles visual changes
-            mapManager.ResetTiles();
-            // free current tile
-            currentTile.SetCurrentUnit(null);
-            currentTile.SetHasObstacle(false);
-            // change unit facing direction towards target tile
-            SetFacingDirectionTowardsCoordX(Mathf.RoundToInt(clickPoint.x));
-            // move to target tile
-            this.transform.position = clickPoint;
-            // set target tile to be the current tile
-            currentTile = targetTile;
-            // occupy it
-            currentTile.SetCurrentUnit(this);
-            targetTile.SetHasObstacle(true);
-            // trigget on unit move event
-            gameEventSystem.OnUnitMove(isEnemy);
-            if(isEnemy == false) {                
-                playerController.SetHasMovedThisTurn(true);
-            }            
-            hasMovedThisTurn = true;
+            MoveUnit(clickPoint, targetTileGO, this);
+            
             // if has already attacked, no reason for the unit to be selected
             if(hasAttackedThisTurn) {
                 SetSelection(false);
@@ -290,7 +262,7 @@ namespace LUX {
         }
         public void DealAttack(UnitController attackedUnitController, Vector3 attackedUnitPosition) { 
             // return if the player has already attacked an unit this turn
-            if(playerController.HasAttackedThisTurn) { return; } 
+            if(playerController.HasAttackedThisTurn) { return; }
 
             Unit attackedUnit = attackedUnitController.UnitData;
 
@@ -307,7 +279,6 @@ namespace LUX {
 
             // display damage popup
             DisplayDamagePopup(damageDealt, attackedUnitPosition);
-            print(attackedUnitPosition);
 
             // call attacked unit's onAttacked function
             gameEventSystem.OnUnitAttack(isEnemy);
@@ -335,7 +306,7 @@ namespace LUX {
             int lethalRandom = Random.Range(0,100);
             if(lethalRandom < damageData.LethalChance) {
                 this.unit.CurrentHp = 0;
-                print($"{damageData.Source.name} just dealt a LETHAL attack to {this.unit.name}! Instantly killing them!");
+                print($"{damageData.Source.name} just dealt a LETHAL attack to {this.name}! Instantly killing them!");
                 Die();                
                 return 999;
             }
@@ -348,29 +319,31 @@ namespace LUX {
                         physicalDamage = physicalDamage * 2;                                                
                     }
                     // final atk damage
-                    int finalPhysicalDamage = physicalDamage - this.unit.Armor > 0 ? physicalDamage : 0;
-                    finalDamage = finalPhysicalDamage;
-                    this.unit.CurrentHp -= finalPhysicalDamage;
-                    print($"{damageData.Source.name} just attacked {this.unit.name} for {finalPhysicalDamage} physical damage! Leaving them at {this.unit.CurrentHp}");                    
+                    finalDamage = DamageCalculator.DealPhysicalDamage(physicalDamage, this.unit);
+                    print($"{damageData.Source.name} just attacked {this.name} for {finalDamage} physical damage! Leaving them at {this.unit.CurrentHp}");                    
                     break;
                 case DamageType.Magical:
                     int magicalDamage = damageData.Amount;
-                    int finalMagicalDamage = magicalDamage - this.unit.MagicResistance > 0 ? damageData.Amount : 0;
-                    finalDamage = finalMagicalDamage;
-                    this.unit.CurrentHp -= finalMagicalDamage;
+                    // final atk damage
+                    finalDamage = DamageCalculator.DealMagicalDamage(magicalDamage, this.unit);
+                    print($"{damageData.Source.name} just attacked {this.name} for {finalDamage} magical damage! Leaving them at {this.unit.CurrentHp}");
                     break;
                 default:
                     finalDamage = 0;
                     break;
             }   
-            if(this.unit.CurrentHp <= 0) {
-                this.unit.CurrentHp = 0;
+            if(this.unit.CurrentHp <= 0) {                
                 Die();
             }         
             RefreshDetailsUi();            
             return finalDamage;                        
         }
-        private void Die() {            
+        private void Die() {    
+            // zero unit hp
+            this.unit.CurrentHp = 0;
+            // free the tile it dies in
+            currentTile.SetHasObstacle(false);
+            // send game event
             gameEventSystem.OnUnitDie(this.gameObject);            
         }
         public void OnPointerClick(PointerEventData eventData) {

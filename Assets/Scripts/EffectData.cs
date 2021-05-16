@@ -1,7 +1,9 @@
 ﻿using System;
+using UnityEngine;
 
-namespace LUX {    
-    public enum EffectType { Debuff, Hp, Mp, Ap, Damage }
+namespace LUX {
+    public enum EffectType { Damage, Stun, Hp, Mp, Ap }
+    [System.Serializable]
     public class EffectData {
         public Unit Source { get; private set; }
         public int Amount;
@@ -9,25 +11,19 @@ namespace LUX {
         public bool LastsTheEntireBattle;
         public EffectType EffectType;
         public DamageType DamageType;
+        public AudioClip TickSFX;
 
         public event EventHandler<Unit> OnBeginEffect;
         public event EventHandler<Unit> OnEndEffect;
 
-        public EffectData(Unit source, EffectType effectType, int amount, int duration, bool lastsTheEntireBattle) {
+        public EffectData(Unit source, EffectType effectType, DamageType damageType, int amount, int duration, AudioClip tickSFX, bool lastsTheEntireBattle) {
             this.Source = source;
             this.EffectType = effectType;
-            this.Amount = amount;
-            this.Duration = duration;
-            this.LastsTheEntireBattle = lastsTheEntireBattle;
-        }
-        public EffectData(Unit source, DamageType damageType, int amount, int duration, bool lastsTheEntireBattle) {
-            this.Source = source;
-            this.EffectType = EffectType.Debuff;
             this.DamageType = damageType;
             this.Amount = amount;
             this.Duration = duration;
             this.LastsTheEntireBattle = lastsTheEntireBattle;
-        }   
-        
+            this.TickSFX = tickSFX;
+        }
     }
 }

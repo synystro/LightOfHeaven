@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 namespace LUX {
     [CreateAssetMenu(menuName = "LOH/Unit", fileName = "New Unit")]
@@ -8,6 +9,8 @@ namespace LUX {
         public Image icon;
         public GameObject charPrefabRight;
         public GameObject charPrefabLeft;
+        [Header("SPELLS")]
+        public List<Spell> Spells;
         [Header("FEATURES")]
         public bool Flight;
         [Header("ATTRIBUTES")]
@@ -46,9 +49,14 @@ namespace LUX {
         public int BaseMgcDamage;
         public int BonusMgcDamage;
         [Header("DEFENSE")]
-        public int Armor;
+        public int MaxShield;
+        public int BaseShield;
+        public int BonusShield;
+        public int CurrentMagicShield;
+        public int MaxArmor;
         public int BaseArmor;
         public int BonusArmor;
+        public int CurrentMagicArmor;
         public int MagicResistance;
         public int BaseMagicResistance;
         public int BonusMagicResistance;        
@@ -92,7 +100,10 @@ namespace LUX {
             // ap
             MaxAp = BaseAp + BonusAp + Mathf.FloorToInt(stamina / 5);            
             // atk
-            AtkDamage = BaseAtkDamage + BonusAtkDamage + strength;            
+            AtkDamage = BaseAtkDamage + BonusAtkDamage + strength;
+            // armor
+            MaxShield = BaseShield + BonusShield;
+            MaxArmor = BaseArmor + BonusArmor;
             // mgc
             MgcDamage = BaseMgcDamage + BonusMgcDamage + intelligence;
             MagicResistance = BaseMagicResistance + BonusMagicResistance + vitality;
@@ -106,13 +117,17 @@ namespace LUX {
             CurrentHp = MaxHp;
             CurrentMp = MaxMp;
             CurrentAp = MaxAp;
-            AtkRange = BaseAtkRange + BonusAtkRange;            
+            AtkRange = BaseAtkRange + BonusAtkRange; 
+            CurrentMagicShield = MaxShield;
+            CurrentMagicArmor = MaxArmor;           
         }
         public void RefreshBonuses() {
             // hp
             CurrentHp += BonusHp;
             // mp
             CurrentMp += BonusMp;
+            // shield
+            CurrentMagicShield += BonusShield;
             // ap
             // MaxAp = BaseAp + BonusAp + Mathf.FloorToInt(stamina / 5);
             // CurrentAp = MaxAp;
@@ -128,8 +143,17 @@ namespace LUX {
             // StunChance = BaseStunChance + BonusStunChance + strength;
             // LethalChance = BaseLethalChance + BonusLethalChance;
         }
-        public void RestoreAps() {
+        public void RestoreAfterTurn() {
             CurrentAp = MaxAp;
+            CurrentMagicShield = MaxShield;
+        }
+        public void AddSpell(Spell s) {
+            Spells.Add(s);
+        }
+        public void RemoveSpell(Spell s) {
+            if(Spells.Contains(s)) {
+                Spells.Remove(s);
+            }
         }
     }
 }

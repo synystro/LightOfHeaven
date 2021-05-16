@@ -6,13 +6,15 @@ namespace LUX {
         [SerializeField] private GameObject detailsCanvasGO;        
         [SerializeField] private TextMeshProUGUI nameText;
         [SerializeField] private TextMeshProUGUI currentHpText;
+        [SerializeField] private TextMeshProUGUI stunText;
 
         public void SetDetailsCanvasState(bool state) {
             detailsCanvasGO.SetActive(state);
         }
         public void Refresh(Unit unit) {
             nameText.text = unit.name;
-            currentHpText.text = unit.CurrentHp.ToString();         
+            currentHpText.text = unit.CurrentHp.ToString(); 
+            stunText.text = this.GetComponent<UnitController>().IsStunned.ToString();
         }
     }
 }

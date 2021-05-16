@@ -81,7 +81,7 @@ namespace LUX {
         }
         private void ChooseRandomPlayerUnitAsTarget() {
             // choose a random player unit to target
-            int randomIndex = Random.Range(0, unitManager.PlayerUnits.Count);  
+            int randomIndex = Random.Range(0, unitManager.PlayerUnits.Count);
             GameObject randomPlayerUnitGO = unitManager.PlayerUnits[randomIndex];
             randomPlayerTargetUnit = randomPlayerUnitGO.GetComponent<UnitController>();
         }
