@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using Zenject;
-using System;
 
 namespace LUX {
     public class UnitManager : MonoBehaviour {
@@ -50,7 +49,9 @@ namespace LUX {
                 playerUnitController.Setup(playerUnit, tileToSpawnGO, false);                
                 PlayerUnits.Add(unitGO); 
 
+                // set player // in another another later?
                 playerController.SetPlayerGO(unitGO);
+                playerController.SetPlayerUnitController(playerUnitController);
 
                 gameEventSystem.OnPlayerSpawn();              
 
@@ -81,10 +82,13 @@ namespace LUX {
             selectedUnit.SetSelection(false);
             selectedUnit = null;
         }
-        public void HighlightEnemiesToTarget(bool state) {
+        public void UntargetEnemyUnits() {
             foreach(GameObject eGO in EnemyUnits) {
-                eGO.GetComponent<UnitController>().HighlightToBeTargetted(state);
-            }
+                UnitController e = eGO.GetComponent<UnitController>();
+                e.DisplayDamagePreview(false);
+                e.SetIsTarget(false);
+                e.Highlight(false);
+            }            
         }
     }
 }

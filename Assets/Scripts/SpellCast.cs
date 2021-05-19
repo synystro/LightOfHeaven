@@ -6,9 +6,12 @@ namespace LUX {
     public class SpellCast : MonoBehaviour {        
         [SerializeField] Spell spell;
         public Spell Spell => spell;
+        public bool IsConsumed => isConsumed;
         private EffectData effect;
-        
-        //[Inject] UnitManager unitManager;
+        private bool isConsumed;
+
+        [Inject] MapManager mapManager;        
+        [Inject] UnitManager unitManager;
         [Inject] PlayerController playerController;
 
         private Image image;
@@ -17,34 +20,76 @@ namespace LUX {
             image = this.GetComponent<Image>();
         }
 
-        public virtual void Init() {
-            // base code here 
-            effect = new EffectData(playerController.PlayerGO.GetComponent<UnitController>().UnitData, spell.EffectType, spell.DamageType, spell.Amount, spell.Duration, spell.SFX, false); 
+        public virtual void Init() {        
+            effect = new EffectData(playerController.PlayerUnitController.UnitData, spell.EffectType, spell.DamageType, spell.AmountInstant, spell.AmountOverTurns, spell.Range, spell.IgnoreObstacles, spell.Duration, spell.SFX, spell.LastsTheEntireBattle); 
+            if(playerController.PlayerUnitController.UnitData.CurrentAp < spell.Cost) {
+                print($"{playerController.PlayerUnitController.UnitData} has not enough stamina to cast {spell.name}. Needs {spell.Cost}");
+                return;
+            }
             Cast();                   
         }
         public void AddSpell(Spell s) {
             spell = s;            
             SetSprite();
+            // set gameobject's name to the spell's name
+            this.gameObject.name = spell.name;
         }
-        public void Cast() {            
-            //unitManager.EnemyUnits[0].GetComponent<UnitController>().AddEffect(effect);
+        public void Cast() {
+            // deselect player
+            unitManager.DeselectUnit();
+            // reset tiles spell in range props            
+            mapManager.ResetTiles();
+            // untarget any targetted enemy units
+            unitManager.UntargetEnemyUnits();                              
+            // check the spell's target type
             switch(spell.TargetType) {
                 case SpellTargetType.NoTarget: break;
+                case SpellTargetType.TargetSelf: TargetSelf(); break;
                 case SpellTargetType.TargetUnit: SelectTargetUnit(); break;
                 case SpellTargetType.TargetTile: break;
                 default: break;
             }           
-            //DeactivateSpellButton();
+        }
+        public void ConsumeStamina() {  
+            playerController.PlayerUnitController.UnitData.CurrentAp -= spell.Cost; 
+        }
+        public void SetIsConsumed(bool state) {
+            isConsumed = state;
         }
         private void SetSprite() {
             image.sprite = spell.Image;            
         }
+        private void TargetSelf() {
+            playerController.PlayerUnitController.AddEffect(effect);
+            playerController.SetSelectedSpellButton(this.gameObject);
+            playerController.SetSelectedEffect(effect);            
+            playerController.SpellSelfTarget();
+        }
         private void SelectTargetUnit() {
-            playerController.SetSelectedTargetEffect(effect);
+            playerController.SetSelectedEffect(effect);
+            playerController.OnSelectedTargetEffect(effect);
             playerController.SetSelectedSpellButton(this.gameObject);
         }
-        private void DeactivateSpellButton() {
-            this.gameObject.SetActive(false);
+        public void CastOnTarget(UnitController targetUnitController) {                    
+            // enemy targetting was disabled here
+            targetUnitController.DisplayDamagePreview(false);
+            targetUnitController.SetIsTarget(false);
+            targetUnitController.Highlight(false);
+            
+            // call consume stamina on spellcast go
+            ConsumeStamina();
+            // if spell has an instant damage or heal, apply it now
+            UnitController playerUnitController = playerController.PlayerUnitController;
+            switch(spell.DamageType) {
+                case DamageType.Physical: playerUnitController.DealAttack(targetUnitController, spell.AmountInstant, targetUnitController.transform.position); break;
+                case DamageType.Magical: targetUnitController.ReceiveDamage(playerController.SelectedEffect.InstantDamageData); break;
+                case DamageType.Piercing: targetUnitController.ReceiveDamage(playerController.SelectedEffect.InstantDamageData); break;
+                default: break;
+            }
+            // if is spell is only once per combat, consume it
+            if(spell.OncePerCombat) {
+                SetIsConsumed(true);
+            }
         }
     }
 }

@@ -3,8 +3,9 @@ using UnityEngine;
 
 namespace LUX {
     public class MapManager : MonoBehaviour {
-        [SerializeField] LayerMask tileLayer;
-        [SerializeField] TileData[] tiles;
+        [SerializeField] private TilePack tilePack;
+        [SerializeField] private LayerMask tileLayer;
+        [SerializeField] private TileData[] tiles;
         public TileData[] Tiles => tiles;
         private TileController[] tileControllers;
         private const int mapWidth = 10;
@@ -17,6 +18,15 @@ namespace LUX {
         private void GatherTiles() {
             tiles = GetComponentsInChildren<TileData>();
             tileControllers = GetComponentsInChildren<TileController>();
+
+            ApplyTilePack();
+        }
+        private void ApplyTilePack() {
+            foreach(TileController t in tileControllers) {
+                SpriteRenderer tSR = t.GetComponent<SpriteRenderer>();
+                int randomTilePackIndex = Random.Range(0, tilePack.groundTiles.Count);
+                tSR.sprite = tilePack.groundTiles[randomTilePackIndex];
+            }
         }
         public int GetTileCount() {
             return tiles.Length;

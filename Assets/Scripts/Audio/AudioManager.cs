@@ -8,7 +8,6 @@ namespace LUX {
 
         public static void Init() {
             audioManagerGO = GameObject.FindGameObjectWithTag("AudioManager");
-            Debug.Log("audio manager initialized");
         }
 
         public static void PlaySFX(AudioClip audio) {

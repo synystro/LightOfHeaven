@@ -21,6 +21,7 @@ MonoBehaviour:
   Spells:
   - {fileID: 11400000, guid: ea8367fff1b090b439e90013edaee9e7, type: 2}
   - {fileID: 11400000, guid: d5a21d52242eddd40824d1c0467f6c37, type: 2}
+  - {fileID: 11400000, guid: d3beaad8982ed0a4b9295e3b072618da, type: 2}
   Flight: 1
   strength: 0
   stamina: 0
@@ -30,15 +31,15 @@ MonoBehaviour:
   MaxHp: 100
   BaseHp: 100
   BonusHp: 0
-  CurrentHp: 150
+  CurrentHp: 100
   MaxMp: 50
   BaseMp: 50
   BonusMp: 0
   CurrentMp: 50
-  MaxAp: 6
-  BaseAp: 6
+  MaxAp: 3
+  BaseAp: 3
   BonusAp: 0
-  CurrentAp: 0
+  CurrentAp: 3
   AtkDamage: 4
   BaseAtkDamage: 4
   BonusAtkDamage: 0
@@ -54,14 +55,19 @@ MonoBehaviour:
   MaxShield: 5
   BaseShield: 5
   BonusShield: 0
-  CurrentMagicShield: 5
-  MaxArmor: 5
-  BaseArmor: 5
+  CurrentShield: 5
+  MaxMagicShield: 0
+  BaseMagicShield: 0
+  BonusMagicShield: 0
+  CurrentMagicShield: 0
+  MaxArmor: 6
+  BaseArmor: 6
   BonusArmor: 0
-  CurrentMagicArmor: 5
-  MagicResistance: 0
-  BaseMagicResistance: 0
-  BonusMagicResistance: 0
+  CurrentArmor: 6
+  MaxMagicArmor: 0
+  BaseMagicArmor: 0
+  BonusMagicArmor: 0
+  CurrentMagicArmor: 0
   Poise: 0
   BasePoise: 0
   BonusPoise: 0
@@ -74,6 +80,6 @@ MonoBehaviour:
   StunChance: 0
   BaseStunChance: 0
   BonusStunChance: 0
-  LethalChance: 99
-  BaseLethalChance: 99
+  LethalChance: 1
+  BaseLethalChance: 1
   BonusLethalChance: 0

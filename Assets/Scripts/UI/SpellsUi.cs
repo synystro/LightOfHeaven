@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -49,7 +48,7 @@ namespace LUX {
         }
         public void RefreshSpells() {
             foreach(GameObject sbGO in spellButtons) {
-                if(sbGO.activeSelf == false) {
+                if(sbGO.activeSelf == false && sbGO.GetComponent<SpellCast>().IsConsumed == false) {
                     sbGO.SetActive(true);
                 }
             }

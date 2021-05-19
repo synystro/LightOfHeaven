@@ -153,7 +153,7 @@ MonoBehaviour:
   hasMovedThisTurn: 0
   activeEffects: []
   selectionHighlightGO: {fileID: 4227995371330779392}
-  attackHighlightGO: {fileID: 1763133553868936872}
+  damagePreviewGO: {fileID: 1763133553868936872}
   damagePopupPrefab: {fileID: 5656309525254307574, guid: a9af0a1346498634b95ad162a27b79a1,
     type: 3}
   unit: {fileID: 0}
@@ -557,7 +557,7 @@ PrefabInstance:
     - target: {fileID: 7460870432500674531, guid: e32597ed78d922c42816ae48abe9a157,
         type: 3}
       propertyPath: m_Name
-      value: attack_highlight
+      value: damage_preview
       objectReference: {fileID: 0}
     - target: {fileID: 7460870432500674531, guid: e32597ed78d922c42816ae48abe9a157,
         type: 3}

@@ -1,5 +1,5 @@
 ﻿namespace LUX {
-    public enum DamageType { None, Physical, Magical, Piercing, Heal }
+    public enum DamageType { None, Physical, Magical, Piercing }
 
     public struct DamageData {
         public Unit Source { get; private set; }

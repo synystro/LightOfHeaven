@@ -10,10 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 769926644019383578}
   - component: {fileID: 4656898832827340741}
+  - component: {fileID: 6728405986335619716}
   - component: {fileID: 4512535124461343814}
-  - component: {fileID: 6358556735702271556}
   m_Layer: 0
-  m_Name: attack_highlight
+  m_Name: damage_preview
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -84,6 +84,26 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &6728405986335619716
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7460870432500674531}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f6879a5cd3963046b4128008693dd03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  physicalDamageSprite: {fileID: 21300000, guid: 3f980881d3244e74583bf689e789afc4,
+    type: 3}
+  magicalDamageSprite: {fileID: 21300000, guid: a987d7a514c56864ba22fdb6465e2e4c,
+    type: 3}
+  piercingDamageSprite: {fileID: 21300000, guid: 9e49f2dda3b3b854dad8f5d9f39e9ad4,
+    type: 3}
+  damageText: {fileID: 6015207230272631166}
+  spriteRenderer: {fileID: 4656898832827340741}
 --- !u!95 &4512535124461343814
 Animator:
   serializedVersion: 3
@@ -103,19 +123,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &6358556735702271556
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7460870432500674531}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a08da4722c8922409ffcb12310eabb4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  damageText: {fileID: 6015207230272631166}
 --- !u!1001 &2136050216744884904
 PrefabInstance:
   m_ObjectHideFlags: 0

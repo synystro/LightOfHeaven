@@ -9,18 +9,18 @@ namespace LUX {
         [SerializeField] private TileController currentTile;
         [SerializeField] private int distanceBetweenTiles = 2;
 
-        private List<UnityEngine.GameObject> reachableTiles;
-        private List<UnityEngine.GameObject> reachableEnemies;
+        private List<GameObject> reachableTiles;
+        private List<GameObject> reachableEnemies;
         private int apsLeft;
 
         private UnitController unitController;
 
         private void Awake() {
             unitController = this.GetComponent<UnitController>();
-            reachableTiles = new List<UnityEngine.GameObject>();
-            reachableEnemies = new List<UnityEngine.GameObject>();                        
+            reachableTiles = new List<GameObject>();
+            reachableEnemies = new List<GameObject>();                        
         }
-        public List<UnityEngine.GameObject> GetReachableTiles() {
+        public List<GameObject> GetReachableTiles() {
             reachableTiles.Clear();
             apsLeft = unitController.UnitData.CurrentAp;
 
@@ -39,10 +39,13 @@ namespace LUX {
                 // if tile has already been checked, skip to thee next one
                 if(t.IsReachable) { continue; }
                 // if tile is free
-                if(t.HasObstacle == false || unitController.IsFlying) {                                                       
+                if(t.HasObstacle == false || unitController.IsFlying) {                                     
                     t.SetAsReachable();
                     t.SetMovesLeft(tile.MovesLeft - 1);             
-                    reachableTiles.Add(t.gameObject);                 
+                    reachableTiles.Add(t.gameObject); 
+                    if(t.CurrentUnit == null) {  
+                        t.Highlight();                        
+                    }                                   
                 }
             }
             reachableTiles.Remove(tile.gameObject);
@@ -56,43 +59,37 @@ namespace LUX {
             }
 
         }
-        public List<UnityEngine.GameObject> GetReachableEnemies() {
+        public List<GameObject> GetEnemiesInRangeOf(int tilesDistance, bool ignoreObstacles) {
             reachableTiles.Clear();
             reachableEnemies.Clear();
-            apsLeft = unitController.UnitData.AtkRange;
+            apsLeft = tilesDistance;
 
             currentTile = unitController.CurrentTile.GetComponent<TileController>(); 
             currentTile.SetRangeLeft(apsLeft);  
-            ScanForEnemy(currentTile);
+            ScanForEnemy(currentTile, ignoreObstacles);
 
             return reachableEnemies;          
         }
-        private void ScanForEnemy(TileController tile) { 
+        private void ScanForEnemy(TileController tile, bool ignoreObstacles) { 
             // return if the tile is out of range
             if(tile.RangeLeft <= 0) { return; }   
 
             foreach(TileController t in tile.AdjacentTiles) {
                 // if tile has already been checked, skip to thee next one
-                if(t.IsInAtkRange) { continue; }
+                if(t.IsInSpellRange) { continue; }
                 // if tile is free
                 if(t.HasObstacle == false) {
                     t.SetRangeLeft(tile.RangeLeft - 1);
-                    t.SetInAtkRange();                   
+                    t.SetInSpellRange();              
                     reachableTiles.Add(t.gameObject);                 
                 } else if(t.CurrentUnit != null) {
-                    t.SetInAtkRange();
+                    t.SetInSpellRange(); 
                     if(unitController.IsEnemy == false && t.CurrentUnit.IsEnemy == true) {
                         // player detecting enemy
-                        //print($"{t.CurrentUnit.UnitData.name}'s enemy unit is in {unitController.UnitData.name}'s atk range!");
-                        reachableEnemies.Add(t.CurrentUnit.gameObject);
-                        t.CurrentUnit.SetAttackHighlightDamage(this.unitController.UnitData.AtkDamage);
-                        //t.CurrentUnit.DisplayAttackHighlight(true);                        
+                        reachableEnemies.Add(t.CurrentUnit.gameObject);                    
                     } else if(unitController.IsEnemy == true && t.CurrentUnit.IsEnemy == false) {
                         //enemy detecting player
-                        //print($"{t.CurrentUnit.UnitData.name}'s player unit is in {unitController.UnitData.name}'s atk range!");
                         reachableEnemies.Add(t.CurrentUnit.gameObject);
-                        t.CurrentUnit.SetAttackHighlightDamage(this.unitController.UnitData.AtkDamage);
-                        //t.CurrentUnit.DisplayAttackHighlight(true); 
                     }
                 }
             }
@@ -102,8 +99,8 @@ namespace LUX {
             if(reachableTiles.Count > 0) {
                 TileController tiletoSearch = reachableTiles[0].GetComponent<TileController>();
                 // only search the tile if the has no obstacle
-                if(tiletoSearch.HasObstacle == false  || unitController.IsFlying)
-                    ScanForEnemy(tiletoSearch); 
+                if(tiletoSearch.HasObstacle == false  || ignoreObstacles)
+                    ScanForEnemy(tiletoSearch, ignoreObstacles); 
             }
 
         }

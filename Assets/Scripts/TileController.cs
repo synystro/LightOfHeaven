@@ -14,6 +14,7 @@ namespace LUX {
         [SerializeField] private int rangeLeft;  
         [SerializeField] private bool isReachable;
         [SerializeField] private bool isInAtkRange;
+        [SerializeField] private bool isInSpellRange;
         [SerializeField] private bool isMouseOver;
         [SerializeField] private List<TileController> adjacentTiles;
         [SerializeField] private TileController leftTile;
@@ -30,6 +31,7 @@ namespace LUX {
         public bool HasObstacle => hasObstacle;
         public bool IsReachable => isReachable;
         public bool IsInAtkRange => isInAtkRange;
+        public bool IsInSpellRange => isInSpellRange;
         public int MovesLeft => movesLeft;
         public int RangeLeft => rangeLeft;
         public UnitController CurrentUnit => currentUnit;
@@ -50,7 +52,7 @@ namespace LUX {
             tileData = this.GetComponent<TileData>();
             adjacentFinder = this.GetComponent<AdjacentFinder>();
 
-            SetupAdjacentTiles(); 
+            SetupAdjacentTiles();
         }
         private void Start() {
             // subscribe to events
@@ -82,12 +84,17 @@ namespace LUX {
         public void SetHasObstacle(bool state) {
             hasObstacle = state;
         }
-        public void SetAsReachable() {
+        public void Highlight() {
             spriteRenderer.color = highlightColor;
+        }
+        public void SetAsReachable() {            
             isReachable = true;
         }
         public void SetInAtkRange() {
             isInAtkRange = true;
+        }
+        public void SetInSpellRange() {
+            isInSpellRange = true;
         }
         public void SetMovesLeft(int movesLeft) {
             this.movesLeft = movesLeft;
@@ -98,6 +105,7 @@ namespace LUX {
         public void Reset() {
             spriteRenderer.color = Color.white;
             isInAtkRange = false;
+            isInSpellRange = false;
             isReachable = false;
             movesLeft = 0;
             rangeLeft = 0;            

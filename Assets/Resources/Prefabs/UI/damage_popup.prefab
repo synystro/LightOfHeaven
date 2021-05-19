@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7849305225516842787}
   - component: {fileID: 2801697908547970556}
-  - component: {fileID: 4503353467911124093}
+  - component: {fileID: 1817662646712665389}
   - component: {fileID: 1898168190850773947}
   m_Layer: 0
   m_Name: damage_popup_animation
@@ -84,7 +84,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &4503353467911124093
+--- !u!114 &1817662646712665389
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -93,10 +93,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 129293320211193306}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a08da4722c8922409ffcb12310eabb4, type: 3}
+  m_Script: {fileID: 11500000, guid: 3f6879a5cd3963046b4128008693dd03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  physicalDamageSprite: {fileID: 21300000, guid: 3f980881d3244e74583bf689e789afc4,
+    type: 3}
+  magicalDamageSprite: {fileID: 21300000, guid: a987d7a514c56864ba22fdb6465e2e4c,
+    type: 3}
+  piercingDamageSprite: {fileID: 21300000, guid: 9e49f2dda3b3b854dad8f5d9f39e9ad4,
+    type: 3}
   damageText: {fileID: 3835746011795211079}
+  spriteRenderer: {fileID: 2801697908547970556}
 --- !u!95 &1898168190850773947
 Animator:
   serializedVersion: 3

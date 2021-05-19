@@ -52,14 +52,19 @@ namespace LUX {
         public int MaxShield;
         public int BaseShield;
         public int BonusShield;
+        public int CurrentShield;
+        public int MaxMagicShield;
+        public int BaseMagicShield;
+        public int BonusMagicShield;
         public int CurrentMagicShield;
         public int MaxArmor;
         public int BaseArmor;
         public int BonusArmor;
-        public int CurrentMagicArmor;
-        public int MagicResistance;
-        public int BaseMagicResistance;
-        public int BonusMagicResistance;        
+        public int CurrentArmor;
+        public int MaxMagicArmor;
+        public int BaseMagicArmor;
+        public int BonusMagicArmor;
+        public int CurrentMagicArmor;          
         public int Poise;
         public int BasePoise;
         public int BonusPoise;
@@ -85,7 +90,7 @@ namespace LUX {
             BonusAtkRange = 0;
             BonusMgcDamage = 0;
             BonusArmor = 0;
-            BonusMagicResistance = 0;
+            BonusMagicArmor = 0;
             BonusPoise = 0;            
             BonusEvasion = 0;
             BonusCritChance = 0;
@@ -101,12 +106,15 @@ namespace LUX {
             MaxAp = BaseAp + BonusAp + Mathf.FloorToInt(stamina / 5);            
             // atk
             AtkDamage = BaseAtkDamage + BonusAtkDamage + strength;
-            // armor
+            // shields
             MaxShield = BaseShield + BonusShield;
+            MaxMagicShield = BaseMagicShield + BonusMagicShield;
+            // armor            
             MaxArmor = BaseArmor + BonusArmor;
+            MaxMagicArmor = BaseMagicArmor + BonusMagicArmor;
             // mgc
             MgcDamage = BaseMgcDamage + BonusMgcDamage + intelligence;
-            MagicResistance = BaseMagicResistance + BonusMagicResistance + vitality;
+            MaxMagicArmor = BaseMagicArmor + BonusMagicArmor + vitality;
             // chances
             Evasion = BaseEvasion + BonusEvasion + stamina;
             CritChance = BaseCritChance + BonusCritChance + dexterity;
@@ -118,16 +126,19 @@ namespace LUX {
             CurrentMp = MaxMp;
             CurrentAp = MaxAp;
             AtkRange = BaseAtkRange + BonusAtkRange; 
-            CurrentMagicShield = MaxShield;
-            CurrentMagicArmor = MaxArmor;           
+            CurrentShield = MaxShield;
+            CurrentMagicShield = MaxMagicShield;
+            CurrentArmor = MaxArmor;
+            CurrentMagicArmor = MaxMagicArmor;           
         }
         public void RefreshBonuses() {
             // hp
             CurrentHp += BonusHp;
             // mp
             CurrentMp += BonusMp;
-            // shield
-            CurrentMagicShield += BonusShield;
+            // shields
+            CurrentShield += BonusShield;
+            CurrentMagicShield += BonusMagicShield;
             // ap
             // MaxAp = BaseAp + BonusAp + Mathf.FloorToInt(stamina / 5);
             // CurrentAp = MaxAp;
@@ -145,7 +156,8 @@ namespace LUX {
         }
         public void RestoreAfterTurn() {
             CurrentAp = MaxAp;
-            CurrentMagicShield = MaxShield;
+            CurrentShield = MaxShield;
+            CurrentMagicShield = MaxMagicShield;
         }
         public void AddSpell(Spell s) {
             Spells.Add(s);

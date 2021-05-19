@@ -42,18 +42,13 @@ namespace LUX {
             }
         }
         private void StartActionPhase() {           
-
-            //int randomIndex = Random.Range(0, unitManager.EnemyUnits.Count);  
-            //GameObject unitGO = unitManager.EnemyUnits[randomIndex];
-            //selectedUnitAi = unitGO.GetComponent<UnitController>();
-
             // below is the code for 1 unit            
             
             selectedUnitAi.SetSelection(true);
             // decide player unit to attack
             ChooseRandomPlayerUnitAsTarget();
             // try to attack if player unit is in attack range
-            selectedUnitAi.GetEnemiesInAtkRange();
+            selectedUnitAi.GetEnemiesInRangeOf(selectedUnitAi.UnitData.AtkRange, false, selectedUnitAi.UnitData.Flight);
             if(IsTargetInRange()) {
                 Attack();
             }    
@@ -119,7 +114,7 @@ namespace LUX {
             // if has already attacked (this turn), return
             if(hasAttackedThisTurn) { return; }
 
-            selectedUnitAi.DealAttack(randomPlayerTargetUnit, randomPlayerTargetUnit.transform.position);
+            selectedUnitAi.DealAttack(randomPlayerTargetUnit, 0, randomPlayerTargetUnit.transform.position);
 
             hasAttackedThisTurn = true;
         }     
