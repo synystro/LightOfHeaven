@@ -1,0 +1,83 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80a077b39602e3b42aff360e02dd57be, type: 3}
+  m_Name: greevil_2
+  m_EditorClassIdentifier: 
+  name: Greevil 2
+  icon: {fileID: 0}
+  charPrefabRight: {fileID: 2898409787636134312, guid: b4652fdc99cd2074dbca2713e84f7bbf,
+    type: 3}
+  charPrefabLeft: {fileID: 4491116610780015743, guid: 81bd55fdd4162304ca73cbfebac05c35,
+    type: 3}
+  Spells:
+  - {fileID: 11400000, guid: 5791134acbc0df847b53fe126ec2a90d, type: 2}
+  Flight: 0
+  strength: 0
+  stamina: 0
+  vitality: 0
+  dexterity: 0
+  intelligence: 0
+  MaxHp: 20
+  BaseHp: 20
+  BonusHp: 0
+  CurrentHp: 20
+  MaxMp: 20
+  BaseMp: 20
+  BonusMp: 0
+  CurrentMp: 20
+  MaxAp: 1
+  BaseAp: 1
+  BonusAp: 0
+  CurrentAp: 1
+  AtkDamage: 5
+  BaseAtkDamage: 5
+  BonusAtkDamage: 0
+  AtkRange: 1
+  BaseAtkRange: 1
+  BonusAtkRange: 0
+  Accuracy: 0
+  BaseAccuracy: 0
+  BonusAccuracy: 0
+  MgcDamage: 0
+  BaseMgcDamage: 0
+  BonusMgcDamage: 0
+  MaxShield: 5
+  BaseShield: 5
+  BonusShield: 0
+  CurrentShield: 5
+  MaxMagicShield: 0
+  BaseMagicShield: 0
+  BonusMagicShield: 0
+  CurrentMagicShield: 0
+  MaxArmor: 0
+  BaseArmor: 0
+  BonusArmor: 0
+  CurrentArmor: 0
+  MaxMagicArmor: 0
+  BaseMagicArmor: 0
+  BonusMagicArmor: 0
+  CurrentMagicArmor: 0
+  Poise: 0
+  BasePoise: 0
+  BonusPoise: 0
+  Evasion: 0
+  BaseEvasion: 0
+  BonusEvasion: 0
+  CritChance: 0
+  BaseCritChance: 0
+  BonusCritChance: 0
+  StunChance: 0
+  BaseStunChance: 0
+  BonusStunChance: 0
+  LethalChance: 0
+  BaseLethalChance: 0
+  BonusLethalChance: 0

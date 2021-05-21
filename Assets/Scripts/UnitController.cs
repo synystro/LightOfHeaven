@@ -39,6 +39,7 @@ namespace LUX {
 
         [Inject] private PlayerController playerController;
         [Inject] private GameEventSystem gameEventSystem;
+        [Inject] private TurnManager turnManager;
         [Inject] private UnitManager unitManager;
         [Inject] private MapManager mapManager;
         
@@ -81,7 +82,6 @@ namespace LUX {
             this.unit = unit;
             this.currentTile = tileToSpawnGO.transform.GetComponent<TileController>();
             this.currentTile.SetCurrentUnit(this);
-            this.currentTile.SetHasObstacle(true);
             unit.ResetBonuses();
             unit.Setup();
             unit.RestoreStats();
@@ -125,7 +125,12 @@ namespace LUX {
             switch(e.EffectType) {                
                 case EffectType.Hp: unit.BonusHp += e.AmountOverTurns; unit.CurrentHp += e.AmountOverTurns; break;
                 case EffectType.Heal: Heal(e.AmountOverTurns); break;
-                case EffectType.Damage: this.ReceiveDamage(e.OverTurnsDamageData); tookHit = true; break;
+                case EffectType.Damage: 
+                    if(e.OverTurnsDamageData.Amount > 0) {
+                        this.ReceiveDamage(e.OverTurnsDamageData);
+                        tookHit = true;
+                     }
+                     break;
                 case EffectType.Stun: isStunned = true; this.ReceiveDamage(e.OverTurnsDamageData); break;
                 default: break;
             }
@@ -177,6 +182,7 @@ namespace LUX {
             }
             // if clicked on a player unit
             else {
+                if(turnManager.IsEnemyTurn() == true) { return; } // return if it's the enemy's turn
                 // untarget enemy units
                 unitManager.UntargetEnemyUnits();
                 // if has moved, return
@@ -236,19 +242,17 @@ namespace LUX {
             damagePopup.SetDamageSpriteByDamageType(damageType);
             Destroy(damagePopupGO, 0.66f);
         }
-        public void Move(Vector2 clickPoint, GameObject targetTileGO) {
+        public void Move(Vector2 clickPoint, GameObject targetTileGO, bool ignoreStamina) {
             // return if there are no action points left
-            if(this.UnitData.CurrentAp <= 0) { return; }
+            if(this.UnitData.CurrentAp <= 0 && ignoreStamina == false) { return; }
 
-            MoveUnit(clickPoint, targetTileGO, this);
+            MoveUnit(clickPoint, targetTileGO, this, ignoreStamina);
 
             // reset all tiles
             mapManager.ResetTiles();
-            // after unit has moved, scan for enemies in range           
-            //GetEnemiesInRangeOf(this.unit.AtkRange, false, this.unit.Flight);
             // display locked selection
             LockSelection();
-        }
+        }        
         public void DealAttack(UnitController attackedUnitController, int spellAtkDamage, Vector3 attackedUnitPosition) {
             Unit attackedUnit = attackedUnitController.UnitData;
 
@@ -345,19 +349,17 @@ namespace LUX {
         private void Die() {    
             // zero unit hp
             this.unit.CurrentHp = 0;
-            // free the tile it dies in
-            currentTile.SetHasObstacle(false);
             // send game event
             gameEventSystem.OnUnitDie(this.gameObject);            
         }
-        public void OnPointerClick(PointerEventData eventData) {
+        public void OnPointerClick(PointerEventData eventData) {                   
             OnMouseClick();
         }
         public void OnPointerEnter(PointerEventData eventData) {
-            unitDetailsUi.SetDetailsCanvasState(true);
+            unitDetailsUi.SetDisplayState(true);
         }
         public void OnPointerExit(PointerEventData eventData) {
-            unitDetailsUi.SetDetailsCanvasState(false);
+            unitDetailsUi.SetDisplayState(false);
         }
     }
 }

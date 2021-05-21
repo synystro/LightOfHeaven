@@ -8,7 +8,7 @@ namespace LUX {
         [SerializeField] private TextMeshProUGUI currentHpText;
         [SerializeField] private TextMeshProUGUI stunText;
 
-        public void SetDetailsCanvasState(bool state) {
+        public void SetDisplayState(bool state) {
             detailsCanvasGO.SetActive(state);
         }
         public void Refresh(Unit unit) {

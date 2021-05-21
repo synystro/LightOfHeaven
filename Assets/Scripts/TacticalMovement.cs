@@ -34,19 +34,18 @@ namespace LUX {
             if (hasMovedThisTurn) { return null; }           
             return pathFinder.GetReachableTiles();
         }
-        protected void MoveUnit(Vector2 clickPoint, UnityEngine.GameObject targetTileGO, UnitController unitController) {
+        protected void MoveUnit(Vector2 clickPoint, UnityEngine.GameObject targetTileGO, UnitController unitController, bool ignoreAlreadyMoved) {
             TileController targetTile = targetTileGO.GetComponent<TileController>();
             // if this is the player consume aps here!
             if(unitController.IsEnemy == false) {
                 unitController.UnitData.CurrentAp = targetTile.MovesLeft;
             }
             // return if the player has already moved an unit this turn
-            if(unitController.PlayerController.HasMovedThisTurn) { return; }
+            if(unitController.PlayerController.HasMovedThisTurn == true && ignoreAlreadyMoved == false) { return; }
             // reset all tiles visual changes
             unitController.MapManager.ResetTiles();
             // free current tile
             currentTile.SetCurrentUnit(null);
-            currentTile.SetHasObstacle(false);
             // change unit facing direction towards target tile
             SetFacingDirectionTowardsCoordX(Mathf.RoundToInt(clickPoint.x));
             // move to target tile
@@ -54,14 +53,13 @@ namespace LUX {
             // set target tile to be the current tile
             currentTile = targetTile;
             // occupy it
-            currentTile.SetCurrentUnit(unitController);
-            targetTile.SetHasObstacle(true);
-            // trigget on unit move event
-            unitController.GameEventSystem.OnUnitMove(unitController.IsEnemy);
+            currentTile.SetCurrentUnit(unitController);           
             if(unitController.IsEnemy == false) {                
                 unitController.PlayerController.SetHasMovedThisTurn(true);
-            }            
-            hasMovedThisTurn = true;           
+            }                        
+            hasMovedThisTurn = true;     
+            // trigger on unit move event
+            unitController.GameEventSystem.OnUnitMove(unitController.IsEnemy);      
         }
     }
 }

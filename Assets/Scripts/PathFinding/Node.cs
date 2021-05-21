@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 
 namespace LUX {
+    [System.Serializable]
     public class Node : IHeapItem<Node> {
 
         public int gridX;
@@ -10,6 +11,7 @@ namespace LUX {
         public Vector3 position;
 
         public Node Parent;
+        public Node Child;
 
         public int gCost;
         public int hCost;

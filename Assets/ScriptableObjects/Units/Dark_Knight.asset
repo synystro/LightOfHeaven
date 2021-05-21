@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 80a077b39602e3b42aff360e02dd57be, type: 3}
-  m_Name: Dark_Knight
+  m_Name: dark_knight
   m_EditorClassIdentifier: 
   name: Dark Knight
   icon: {fileID: 0}
@@ -22,6 +22,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ea8367fff1b090b439e90013edaee9e7, type: 2}
   - {fileID: 11400000, guid: d5a21d52242eddd40824d1c0467f6c37, type: 2}
   - {fileID: 11400000, guid: d3beaad8982ed0a4b9295e3b072618da, type: 2}
+  - {fileID: 11400000, guid: 5791134acbc0df847b53fe126ec2a90d, type: 2}
   Flight: 1
   strength: 0
   stamina: 0
@@ -31,7 +32,7 @@ MonoBehaviour:
   MaxHp: 100
   BaseHp: 100
   BonusHp: 0
-  CurrentHp: 100
+  CurrentHp: 90
   MaxMp: 50
   BaseMp: 50
   BonusMp: 0
@@ -55,15 +56,15 @@ MonoBehaviour:
   MaxShield: 5
   BaseShield: 5
   BonusShield: 0
-  CurrentShield: 5
+  CurrentShield: 0
   MaxMagicShield: 0
   BaseMagicShield: 0
   BonusMagicShield: 0
   CurrentMagicShield: 0
-  MaxArmor: 6
-  BaseArmor: 6
+  MaxArmor: 0
+  BaseArmor: 0
   BonusArmor: 0
-  CurrentArmor: 6
+  CurrentArmor: 0
   MaxMagicArmor: 0
   BaseMagicArmor: 0
   BonusMagicArmor: 0

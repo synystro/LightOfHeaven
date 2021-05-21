@@ -39,7 +39,7 @@ namespace LUX {
                 // if tile has already been checked, skip to thee next one
                 if(t.IsReachable) { continue; }
                 // if tile is free
-                if(t.HasObstacle == false || unitController.IsFlying) {                                     
+                if(t.HasObstacle() == false || unitController.IsFlying) {                                     
                     t.SetAsReachable();
                     t.SetMovesLeft(tile.MovesLeft - 1);             
                     reachableTiles.Add(t.gameObject); 
@@ -54,7 +54,7 @@ namespace LUX {
             if(reachableTiles.Count > 0) {
                 TileController tiletoSearch = reachableTiles[0].GetComponent<TileController>();
                 // only search the tile if the has no obstacle
-                if(tiletoSearch.HasObstacle == false || unitController.IsFlying)
+                if(tiletoSearch.HasObstacle() == false || unitController.IsFlying)
                     Search(tiletoSearch); 
             }
 
@@ -78,16 +78,16 @@ namespace LUX {
                 // if tile has already been checked, skip to thee next one
                 if(t.IsInSpellRange) { continue; }
                 // if tile is free
-                if(t.HasObstacle == false) {
+                if(t.HasObstacle() == false) {
                     t.SetRangeLeft(tile.RangeLeft - 1);
                     t.SetInSpellRange();              
                     reachableTiles.Add(t.gameObject);                 
                 } else if(t.CurrentUnit != null) {
-                    t.SetInSpellRange(); 
+                    t.SetInSpellRange();
                     if(unitController.IsEnemy == false && t.CurrentUnit.IsEnemy == true) {
                         // player detecting enemy
-                        reachableEnemies.Add(t.CurrentUnit.gameObject);                    
-                    } else if(unitController.IsEnemy == true && t.CurrentUnit.IsEnemy == false) {
+                        reachableEnemies.Add(t.CurrentUnit.gameObject);                 
+                    } else if(unitController.IsEnemy == true && t.CurrentUnit.IsEnemy == false) {                        
                         //enemy detecting player
                         reachableEnemies.Add(t.CurrentUnit.gameObject);
                     }
@@ -99,7 +99,7 @@ namespace LUX {
             if(reachableTiles.Count > 0) {
                 TileController tiletoSearch = reachableTiles[0].GetComponent<TileController>();
                 // only search the tile if the has no obstacle
-                if(tiletoSearch.HasObstacle == false  || ignoreObstacles)
+                if(tiletoSearch.HasObstacle() == false  || ignoreObstacles)
                     ScanForEnemy(tiletoSearch, ignoreObstacles); 
             }
 

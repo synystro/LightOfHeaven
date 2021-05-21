@@ -14,10 +14,10 @@ namespace LUX {
             BeginTurn();
         }
         private void BeginTurn() {
-            // if(IsPlayerTurn()) {
-            //     print("Beginning Player's turn.");
+            // if(IsEnemyTurn()) {
+            //     print("Beginning AI's turn.");
             // } else {
-            //     print("Beginning AI's turn");
+            //     print("Beginning Player's turn");
             // }
             state = TurnState.Start;
             if(IsEnemyTurn()) {

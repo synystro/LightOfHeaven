@@ -7,7 +7,7 @@ namespace LUX {
         [Header("Selection")]
         [SerializeField] private UnitController selectedUnit;
         [Header("Units Data")]
-        public List<Unit> PlayerUnitsSO;
+        public Unit PlayerUnitSO;        
         public List<Unit> EnemyUnitsSO;
         [Header("Units Spawned")]
         public List<GameObject> PlayerUnits;
@@ -27,47 +27,52 @@ namespace LUX {
             // do something about unit move depending on wether its player/friendly or enemy
         }
         private void OnUnitDie(GameObject unitToDie) {
-            if(EnemyUnits.Contains(unitToDie)) {
-                EnemyUnits.Remove(unitToDie);                
-            } else if(PlayerUnits.Contains(unitToDie)) {
+            if (EnemyUnits.Contains(unitToDie)) {
+                EnemyUnits.Remove(unitToDie);
+            } else if (PlayerUnits.Contains(unitToDie)) {
                 PlayerUnits.Remove(unitToDie);
             }
             print($"{unitToDie.name} just died.");
-            Destroy(unitToDie);            
+            Destroy(unitToDie);
         }
         private void Start() {
-            SpawnPlayerUnits();            
-            SpawnEnemyUnits(); 
+            SpawnPlayerUnits();
+            SpawnEnemyUnits();
         }
         private void SpawnPlayerUnits() {
-            int tileToSpawnIndex = (mapManager.GetTileCount() / 2);
-            foreach(Unit playerUnit in PlayerUnitsSO) {
-                GameObject tileToSpawnGO = mapManager.GetTileByIndex(tileToSpawnIndex).gameObject;
-                Vector3 tileToSpawnPosition = tileToSpawnGO.GetComponent<TileData>().GetPosition();
-                GameObject unitGO = Instantiate(unitPrefab, tileToSpawnPosition, Quaternion.identity);
-                UnitController playerUnitController = unitGO.GetComponent<UnitController>();
-                playerUnitController.Setup(playerUnit, tileToSpawnGO, false);                
-                PlayerUnits.Add(unitGO); 
+            TileController tileToSpawn = mapManager.StartingTiles[0];
 
-                // set player // in another another later?
-                playerController.SetPlayerGO(unitGO);
-                playerController.SetPlayerUnitController(playerUnitController);
-
-                gameEventSystem.OnPlayerSpawn();              
-
-                tileToSpawnIndex++;                                
-            }
+            Vector3 tileToSpawnPosition = tileToSpawn.TileData.GetPosition();
+            GameObject playerUnitGO = Instantiate(unitPrefab, tileToSpawnPosition, Quaternion.identity);
+            UnitController playerUnitController = playerUnitGO.GetComponent<UnitController>();
+            playerUnitController.Setup(PlayerUnitSO, tileToSpawn.gameObject, false);
+            PlayerUnits.Add(playerUnitGO);
+            // set player // in another another later?
+            playerController.SetPlayerGO(playerUnitGO);
+            playerController.SetPlayerUnitController(playerUnitController);
+            gameEventSystem.OnPlayerSpawn();
         }
-        private void SpawnEnemyUnits() {
-            int tileToSpawnIndex = ((mapManager.GetTileCount() / 2) - 1) + (mapManager.MapWidth -1) - EnemyUnitsSO.Count;
-            foreach(Unit enemyUnit in EnemyUnitsSO) {
+        public void PlayerOnStartingPosition() {
+            playerController.PlayerGO.transform.position = mapManager.StartingTiles[0].transform.position;
+        }
+        public void SpawnMinions(Dimension d) {
+            EnemyUnitsSO.Clear();
+            foreach(Unit m in d.MinionPacks[0].Monsters) {
+                EnemyUnitsSO.Add(m);
+                print($"Setting {m.name} as enemy.");
+            }
+            SpawnEnemyUnits();
+        }
+        public void SpawnEnemyUnits() {
+            int tileToSpawnIndex = ((mapManager.GetTileCount() / 2) - 1) + (8 - 1) - EnemyUnitsSO.Count;
+            foreach (Unit enemyUnit in EnemyUnitsSO) {
                 GameObject tileToSpawnGO = mapManager.GetTileByIndex(tileToSpawnIndex).gameObject;
                 Vector3 tileToSpawnPosition = tileToSpawnGO.GetComponent<TileData>().GetPosition();
                 GameObject unitGO = Instantiate(unitPrefab, tileToSpawnPosition, Quaternion.identity);
                 unitGO.GetComponent<UnitController>().Setup(enemyUnit, tileToSpawnGO, true);
                 EnemyUnits.Add(unitGO);
 
-                tileToSpawnIndex++;                                
+                tileToSpawnIndex++;
             }
         }
         public void SetSelectedUnit(UnitController unit) {
@@ -75,20 +80,28 @@ namespace LUX {
             unit.SetSelection(true);
         }
         public UnitController GetSelectedUnit() {
-            return selectedUnit;            
+            return selectedUnit;
         }
         public void DeselectUnit() {
-            if(selectedUnit == null) { return; }
+            if (selectedUnit == null) { return; }
             selectedUnit.SetSelection(false);
             selectedUnit = null;
         }
         public void UntargetEnemyUnits() {
-            foreach(GameObject eGO in EnemyUnits) {
+            foreach (GameObject eGO in EnemyUnits) {
                 UnitController e = eGO.GetComponent<UnitController>();
                 e.DisplayDamagePreview(false);
                 e.SetIsTarget(false);
                 e.Highlight(false);
-            }            
+            }
+        }
+        public void WipeEnemies() {
+            EnemyUnitsSO.Clear();
+            foreach(GameObject e in EnemyUnits) {
+                Destroy(e);
+            }
+            // clear current enemies
+            EnemyUnits.Clear();
         }
     }
 }

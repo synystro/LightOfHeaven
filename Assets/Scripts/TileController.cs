@@ -9,7 +9,6 @@ namespace LUX {
     public class TileController : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler {
         [Header("Status")]
         [SerializeField] private UnitController currentUnit;
-        [SerializeField] private bool hasObstacle; 
         [SerializeField] private int movesLeft;
         [SerializeField] private int rangeLeft;  
         [SerializeField] private bool isReachable;
@@ -28,7 +27,13 @@ namespace LUX {
 
         public TileData TileData => tileData;
         public List<TileController> AdjacentTiles => adjacentTiles;
-        public bool HasObstacle => hasObstacle;
+        //public bool HasObstacle => hasObstacle;
+        public bool HasObstacle() {
+            if (Physics2D.OverlapCircle(this.transform.position, 0.2f, obstacleLayer)) {
+                return true;
+            }
+            return false;
+        }
         public bool IsReachable => isReachable;
         public bool IsInAtkRange => isInAtkRange;
         public bool IsInSpellRange => isInSpellRange;
@@ -81,9 +86,6 @@ namespace LUX {
         public void SetCurrentUnit(UnitController unit) {
             currentUnit = unit;
         }
-        public void SetHasObstacle(bool state) {
-            hasObstacle = state;
-        }
         public void Highlight() {
             spriteRenderer.color = highlightColor;
         }
@@ -117,8 +119,8 @@ namespace LUX {
             this.transform.localScale -= Vector3.one * hoverSize;
         }
         public void OnPointerClick(PointerEventData eventData) {
-            if(isReachable == false || hasObstacle || unitManager.GetSelectedUnit() == null) { return; }
-            unitManager.GetSelectedUnit().Move(this.transform.position, tileData.gameObject);
+            if(isReachable == false || HasObstacle() || unitManager.GetSelectedUnit() == null) { return; }
+            unitManager.GetSelectedUnit().Move(this.transform.position, tileData.gameObject, false);
         }
     }
 }

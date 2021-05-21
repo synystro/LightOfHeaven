@@ -1,15 +1,17 @@
 ﻿using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Zenject;
 
 namespace LUX {
-    public class SpellCast : MonoBehaviour {        
+    public class SpellCast : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler {        
         [SerializeField] Spell spell;
         public Spell Spell => spell;
         public bool IsConsumed => isConsumed;
         private EffectData effect;
         private bool isConsumed;
 
+        [Inject] SpellDetailsUi spellDetailsUi;
         [Inject] MapManager mapManager;        
         [Inject] UnitManager unitManager;
         [Inject] PlayerController playerController;
@@ -23,7 +25,7 @@ namespace LUX {
         public virtual void Init() {        
             effect = new EffectData(playerController.PlayerUnitController.UnitData, spell.EffectType, spell.DamageType, spell.AmountInstant, spell.AmountOverTurns, spell.Range, spell.IgnoreObstacles, spell.Duration, spell.SFX, spell.LastsTheEntireBattle); 
             if(playerController.PlayerUnitController.UnitData.CurrentAp < spell.Cost) {
-                print($"{playerController.PlayerUnitController.UnitData} has not enough stamina to cast {spell.name}. Needs {spell.Cost}");
+                print($"{playerController.PlayerUnitController.UnitData.name} has not enough stamina to cast {spell.name}. Needs {spell.Cost}");
                 return;
             }
             Cast();                   
@@ -72,6 +74,7 @@ namespace LUX {
         }
         public void CastOnTarget(UnitController targetUnitController) {                    
             // enemy targetting was disabled here
+            
             targetUnitController.DisplayDamagePreview(false);
             targetUnitController.SetIsTarget(false);
             targetUnitController.Highlight(false);
@@ -90,6 +93,19 @@ namespace LUX {
             if(spell.OncePerCombat) {
                 SetIsConsumed(true);
             }
+        }
+
+        public void OnPointerClick(PointerEventData eventData) {
+            Init();
+        }
+
+        public void OnPointerEnter(PointerEventData eventData) {
+            spellDetailsUi.Refresh(spell);     
+            spellDetailsUi.gameObject.SetActive(true);       
+        }
+
+        public void OnPointerExit(PointerEventData eventData) {
+            spellDetailsUi.gameObject.SetActive(false);
         }
     }
 }

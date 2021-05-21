@@ -4,7 +4,6 @@ using Zenject;
 
 namespace LUX {
     public class PathFindingGrid : MonoBehaviour {
-
         [Space(10)]
         public bool onlyDisplayPathGizmos;
         public LayerMask obstacleMask;
@@ -88,33 +87,33 @@ namespace LUX {
             }
         }
 
-        // DIAGONALS INCLUDED (8 DIRECTIONS)
-        // public List<Node> GetNeighbourNodes(Node _node) {
-        //     List<Node> NeighbourNodes = new List<Node>();
+        //DIAGONALS INCLUDED (8 DIRECTIONS)
+        public List<Node> GetNeighbourNodesDiagonal(Node _node) {
+            List<Node> NeighbourNodes = new List<Node>();
 
-        //     for (int x = -1; x <= 1; x++) {
-        //         for (int y = -1; y <= 1; y++) {
-        //             //if we are on the node that was passed in, skip this iteration.
-        //             if (x == 0 && y == 0) {
-        //                 continue;
-        //             }
+            for (int x = -1; x <= 1; x++) {
+                for (int y = -1; y <= 1; y++) {
+                    //if we are on the node that was passed in, skip this iteration.
+                    if (x == 0 && y == 0) {
+                        continue;
+                    }
 
-        //             int checkX = _node.gridX + x;
-        //             int checkY = _node.gridY + y;
+                    int checkX = _node.gridX + x;
+                    int checkY = _node.gridY + y;
 
-        //             //Make sure the node is within the grid.
-        //             if (checkX >= 0 && checkX < gridSizeX && checkY >= 0 && checkY < gridSizeY) {
-        //                 NeighbourNodes.Add(nodeArray[checkX, checkY]); //Adds to the neighbours list.
-        //             }
+                    //Make sure the node is within the grid.
+                    if (checkX >= 0 && checkX < gridSizeX && checkY >= 0 && checkY < gridSizeY) {
+                        NeighbourNodes.Add(nodeArray[checkX, checkY]); //Adds to the neighbours list.
+                    }
 
-        //         }
-        //     }
+                }
+            }
 
-        //     return NeighbourNodes;
-        // }
+            return NeighbourNodes;
+        }
 
         // ORTHOGONALS ONLY (4 DIRECTIONS)
-        public List<Node> GetNeighbourNodes(Node _node) {
+        public List<Node> GetNeighbourNodesOrthogonal(Node _node) {
             List<Node> NeighbourNodes = new List<Node>();
 
             for(int x = -1; x <= 1; x++) {
@@ -181,18 +180,25 @@ namespace LUX {
             } else {
                 if (nodeArray != null) {
                     foreach (Node node in nodeArray) {
-                        if (!node.isWalkable) {
+                        if (node.isWalkable == false) {
                             Gizmos.color = Color.yellow;
                         } else {
                             Gizmos.color = Color.white;
                         }
                         if (FinalPath != null) {
                             if (FinalPath.Contains(node)) {
+                                print(node + "is path");
                                 Gizmos.color = Color.black;
                             }
                         }
                         Gizmos.DrawCube(node.position, Vector3.one * (nodeDiameter - gapBetweenNodes));
                     }
+                    //if (FinalPath != null) {
+                    //  foreach (Node node in FinalPath) {
+                    //      Gizmos.color = Color.black;
+                    //      Gizmos.DrawCube(node.position, Vector3.one * (nodeDiameter - gapBetweenNodes));
+                    //  }
+                    //}                
                 }
             }
         }

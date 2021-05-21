@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 2792515533916421474}
   - component: {fileID: 6939629657831652315}
   - component: {fileID: 235608404854265372}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Unit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -161,7 +161,6 @@ MonoBehaviour:
   hasTargetInRange: 0
   isSelected: 0
   isTarget: 0
-  hasAttackedThisTurn: 0
   isStunned: 0
   enemiesInRange: []
 --- !u!114 &2792515533916421474
@@ -193,7 +192,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da5ed928349b3f14b9157e6e204ecf12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetTransform: {fileID: 0}
+  FinalPath: []
 --- !u!114 &235608404854265372
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -10,25 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 80a077b39602e3b42aff360e02dd57be, type: 3}
-  m_Name: Skeleton_Warrior
+  m_Name: hellhound
   m_EditorClassIdentifier: 
-  name: Skeleton Warrior
+  name: Hellhound
   icon: {fileID: 0}
   charPrefabRight: {fileID: 2898409787636134312, guid: b4652fdc99cd2074dbca2713e84f7bbf,
     type: 3}
   charPrefabLeft: {fileID: 4491116610780015743, guid: 81bd55fdd4162304ca73cbfebac05c35,
     type: 3}
-  Spells: []
+  Spells:
+  - {fileID: 11400000, guid: 5791134acbc0df847b53fe126ec2a90d, type: 2}
   Flight: 0
   strength: 0
   stamina: 0
   vitality: 0
   dexterity: 0
   intelligence: 0
-  MaxHp: 50
-  BaseHp: 50
+  MaxHp: 20
+  BaseHp: 20
   BonusHp: 0
-  CurrentHp: 36
+  CurrentHp: 20
   MaxMp: 20
   BaseMp: 20
   BonusMp: 0
@@ -37,8 +38,8 @@ MonoBehaviour:
   BaseAp: 1
   BonusAp: 0
   CurrentAp: 1
-  AtkDamage: 7
-  BaseAtkDamage: 7
+  AtkDamage: 5
+  BaseAtkDamage: 5
   BonusAtkDamage: 0
   AtkRange: 1
   BaseAtkRange: 1
@@ -46,17 +47,17 @@ MonoBehaviour:
   Accuracy: 0
   BaseAccuracy: 0
   BonusAccuracy: 0
-  MgcDamage: 10
-  BaseMgcDamage: 10
+  MgcDamage: 0
+  BaseMgcDamage: 0
   BonusMgcDamage: 0
   MaxShield: 5
   BaseShield: 5
   BonusShield: 0
   CurrentShield: 5
-  MaxMagicShield: 5
-  BaseMagicShield: 5
+  MaxMagicShield: 0
+  BaseMagicShield: 0
   BonusMagicShield: 0
-  CurrentMagicShield: 5
+  CurrentMagicShield: 0
   MaxArmor: 0
   BaseArmor: 0
   BonusArmor: 0

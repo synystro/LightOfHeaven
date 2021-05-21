@@ -25,8 +25,7 @@ namespace LUX {
                 GameObject spellButtonGO = Instantiate(spellButtonPrefab, this.transform);
                 spellButtons.Add(spellButtonGO);
                 SpellCast spellCast = spellButtonGO.GetComponent<SpellCast>();
-                spellCast.AddSpell(s);
-                spellButtonGO.GetComponent<Button>().onClick.AddListener(spellCast.Init);                
+                spellCast.AddSpell(s);               
             }
         }
         public void DeactivateSpellButton(GameObject button) {

@@ -17,16 +17,17 @@ namespace LUX {
         public bool HasAttackedThisTurn => hasAttackedThisTurn;
         public EffectData SelectedEffect => selectedEffect;
         public void SetPlayerUnitController(UnitController playerUnitController) { this.playerUnitController = playerUnitController; }
-        public void SetPlayerGO(GameObject playerGO) { this.playerGO = playerGO; }
+        public void SetPlayerGO(GameObject pg) { playerGO = pg; }
         public void SetHasMovedThisTurn(bool state) { hasMovedThisTurn = state; }
         public void SetHasAttackedThisTurn(bool state) { hasAttackedThisTurn = state; }        
         public void SetSelectedSpellButton(GameObject sbGO) { selectedSpellButton = sbGO; }
-        public void SetSpellsUi(SpellsUi spellsUi) { this.spellsUi = spellsUi; }
+        public void SetSpellsUi(SpellsUi s) { spellsUi = s; }
 
         private InputMaster inputMaster;
         private SpellsUi spellsUi;
 
         [Inject] private GameEventSystem gameEventSystem;
+        [Inject] MapManager mapManager;
         [Inject] private TurnManager turnManager;
         [Inject] private UnitManager unitManager;
 
@@ -55,6 +56,9 @@ namespace LUX {
             spellsUi.CheckIfOutOfSpells();
             turnManager.EndTurn();
         }
+        public void PlayerToStartingPosition() {
+            playerUnitController.Move(mapManager.StartingTiles[0].transform.position, mapManager.StartingTiles[0].gameObject, true);
+        }
         public void SetSelectedEffect(EffectData e) {
             selectedEffect = e;
         }
@@ -75,9 +79,12 @@ namespace LUX {
             SpellCast spellCast = selectedSpellButton.GetComponent<SpellCast>();
             
             // enemy targetting was disabled here
-            targetUnitController.DisplayDamagePreview(false);
-            targetUnitController.SetIsTarget(false);
-            targetUnitController.Highlight(false);
+            foreach(GameObject e in unitManager.EnemyUnits) {
+                UnitController eUC = e.GetComponent<UnitController>();
+                eUC.DisplayDamagePreview(false);
+                eUC.SetIsTarget(false);
+                eUC.Highlight(false);
+            }
             
             // call consume stamina on spellcast go
             spellCast.ConsumeStamina();

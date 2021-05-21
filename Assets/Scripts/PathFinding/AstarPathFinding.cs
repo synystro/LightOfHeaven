@@ -4,8 +4,6 @@ using Zenject;
 
 namespace LUX {
     public class AstarPathFinding : MonoBehaviour {
-        public Transform targetTransform;
-
         public List<Node> FinalPath;
 
         [Inject] private PathFindingGrid grid;
@@ -35,16 +33,22 @@ namespace LUX {
 
             while (OpenList.Count > 0) {
                 Node currentNode = OpenList.RemoveFirst();
+                
                 ClosedList.Add(currentNode);
+                
 
                 if (currentNode == targetNode) {
                     GetFinalPath(startNode, targetNode);
                     break;
                 }
 
-                foreach (Node neighbourNode in grid.GetNeighbourNodes(currentNode)) {
+                foreach (Node neighbourNode in grid.GetNeighbourNodesDiagonal(currentNode)) {
+                    // if(neighbourNode == targetNode && currentNode.isWalkable) {
+                    //     targetNode.Child = currentNode;
+                    // }
+                    neighbourNode.Child = currentNode;
                     if (ignoreObstacles == false) {
-                        if (!neighbourNode.isWalkable || ClosedList.Contains(neighbourNode)) {
+                        if (neighbourNode.isWalkable == false || ClosedList.Contains(neighbourNode)) {
                             continue;
                         }
                     } else if (ClosedList.Contains(neighbourNode)) {
@@ -57,16 +61,35 @@ namespace LUX {
                         neighbourNode.hCost = GetManhattanDistance(neighbourNode, targetNode);
                         neighbourNode.Parent = currentNode;
 
-                        if (!OpenList.Contains(neighbourNode)) {
+                        if (OpenList.Contains(neighbourNode) == false) {
                             OpenList.Add(neighbourNode);
                         }
                     }
                 }
             }
-            return targetNode.isWalkable ? true : false;
+            // if(targetNode.isWalkable == false) {
+            //     targetNode = targetNode.Child;
+            //     GetFinalPath(startNode, targetNode);
+            // }      
+            bool validPath = true;      
+            if(targetNode.isWalkable == false) {
+                validPath = false;
+                foreach (Node n in grid.GetNeighbourNodesOrthogonal(targetNode)) {
+                    if(n.isWalkable == true) {                            
+                        targetNode = n;
+                        GetFinalPath(startNode, targetNode);
+                        validPath = true;
+                        break;
+                    }
+                }
+                if(validPath == false) {
+                    Debug.LogWarning("No path!");
+                }
+            }
+            //return targetNode.isWalkable ? true : false;
+            return validPath;
         }
         void GetFinalPath(Node _startNode, Node _endNode) {
-
             FinalPath = new List<Node>();
             Node currentNode = _endNode;
 
