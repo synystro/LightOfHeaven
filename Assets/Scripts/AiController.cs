@@ -12,8 +12,11 @@ namespace LUX {
         [SerializeField] private LayerMask tileMask;
 
         private bool selectedUnitAttacked;
+        private bool selectedUnitHitObstacle;
+        private GameObject obstacleToDestroy;
+        private HashSet<TileController> tilesChecked = new HashSet<TileController>();
 
-        private const float unitTurnTime = 0.1f;
+        private const float unitTurnTime = .1f;
 
         [Inject] private GameEventSystem gameEventSystem;
         [Inject] private UnitManager unitManager;
@@ -38,6 +41,10 @@ namespace LUX {
         IEnumerator KillWait(float delay, Task t) {
             yield return new WaitForSeconds(delay);
             t.Stop();
+        }
+
+        private void Awake() {
+            tilesChecked = new HashSet<TileController>();
         }
 
         private void OnEnable() {
@@ -70,19 +77,30 @@ namespace LUX {
 
             // try to attack if player unit is in attack range
             selectedUnitAttacked = false;
+            selectedUnitHitObstacle = false;
             selectedUnitAi.GetEnemiesInRangeOf(selectedUnitAi.UnitData.AtkRange, false, selectedUnitAi.UnitData.Flight);
-            
+            selectedUnitAi.GetDestructiblesInRangeOf(selectedUnitAi.UnitData.AtkRange, false, selectedUnitAi.UnitData.Flight);
+
             if(IsTargetInRange()) {
                 Attack();
-            }    
+            } else if (obstacleToDestroy != null) {
+                AttackObstacle();                
+            }
             // move 
-            while(selectedUnitAi.UnitData.CurrentAp > 0 && IsTargetInRange() == false && selectedUnitAiValidPath == true) {   
+            while(selectedUnitAi.UnitData.CurrentAp > 0 &&
+            IsTargetInRange() == false &&
+            selectedUnitAiValidPath == true &&
+            selectedUnitHitObstacle == false
+            ) {   
+                obstacleToDestroy = null;
                 Move();
             }         
             // try to attack if hasn't already and player unit is in attack range        
             if(IsTargetInRange() && selectedUnitAttacked == false) {
                 Attack();
-            }                      
+            } else if (obstacleToDestroy != null && selectedUnitAttacked == false) {
+                AttackObstacle();                
+            }                   
         }
         private bool IsTargetInRange() {
             return selectedUnitAi.EnemiesInRange.Contains(unitManager.PlayerUnits[0]);
@@ -93,15 +111,28 @@ namespace LUX {
             // display path towards player
             AstarPathFinding selectedUnitPF = selectedUnitAi.GetComponent<AstarPathFinding>();
 
-            // import for detecting "dynamic" obstacles properly (e.g. other units)
+            // for detecting "dynamic" obstacles properly (e.g. other units)
             grid.Generate();
 
-            selectedUnitAiValidPath = selectedUnitPF.FindPath(selectedUnitAi.transform.position, unitManager.PlayerUnits[0].transform.position, selectedUnitAi.IsFlying);
+            Vector2 targetPos = unitManager.PlayerUnits[0].transform.position;
+
+            selectedUnitAiValidPath = selectedUnitPF.FindPath(selectedUnitAi.transform.position, targetPos, selectedUnitAi.IsFlying);
+            
             if(selectedUnitAiValidPath == false) {
-                //nopath!
-                return;
+                //nopath                
+                tilesChecked.Clear();
+                TileController blockedTile = mapManager.GetTileByWorldPosition(targetPos);
+                TileController targetTile = CheckBlockedTile(blockedTile);
+                if(targetTile != null) {
+                    selectedUnitAiValidPath = selectedUnitPF.FindPath(selectedUnitAi.transform.position, targetTile.transform.position, selectedUnitAi.IsFlying);
+                }               
             }
-            Vector2 targetNodePos = selectedUnitPF.FinalPath[0].position;
+            Vector2 targetNodePos = selectedUnitAi.transform.position;          
+            if(selectedUnitPF.FinalPath.Count > 0) {
+                targetNodePos = selectedUnitPF.FinalPath[0].position;
+            } else {
+                //Debug.LogWarning($"Initial node is missing on the path of {selectedUnitAi.gameObject.name}");
+            }
             // get the tile
             TileController tileToMove;
             Collider2D tileHit = Physics2D.OverlapCircle(targetNodePos, 0.2f, tileMask);
@@ -114,13 +145,44 @@ namespace LUX {
                 if(tileToMove.HasObstacle() == false) {
                     selectedUnitAi.Move(tileToMove.transform.position, tileToMove.gameObject, false);
                 } else {
-                    print($"an obstacle is on the way of {selectedUnitAi.UnitData.name}");
+                    //Debug.LogWarning($"an obstacle is on the way of {selectedUnitAi.UnitData.name}");
                 }
                 // subtract 1 AP because it has moved 1 tile
                 selectedUnitAi.UnitData.CurrentAp -= 1;                
             } else {
                 Debug.LogError("Something is wrong with AI movement behaviour's LOGIC. You probably forgot to set tileLayer's mask");                
             }
+        }
+        private TileController CheckBlockedTile(TileController blockedTile) {
+            TileController targetTile = null;
+
+            Collider2D obstacle = Physics2D.OverlapCircle(blockedTile.transform.position, 0.2f, grid.obstacleMask);
+            if (obstacle != null) {
+                IDestructible destructible = obstacle.GetComponent<IDestructible>();
+                if(destructible != null) {
+                    obstacleToDestroy = obstacle.gameObject;
+                }                
+            }
+
+            for(int i = 0; i < blockedTile.AdjacentTiles.Count; i++) {
+                TileController t = blockedTile.AdjacentTiles[i];  
+                if(tilesChecked.Contains(t)) { continue; }           
+                Collider2D obstacleCollider = Physics2D.OverlapCircle(t.transform.position, 0.2f, grid.obstacleMask);
+                if (obstacleCollider == null) {                    
+                    return blockedTile;
+                }
+                if (i == blockedTile.AdjacentTiles.Count - 1) {
+                    if(tilesChecked.Contains(blockedTile) == false) {
+                        tilesChecked.Add(blockedTile);         
+                        for(int j = 0; j < blockedTile.AdjacentTiles.Count; j++) {
+                            t = CheckBlockedTile(blockedTile.AdjacentTiles[j]); 
+                            if(t != null) { return t; }
+                        }
+                    }                                                       
+                }
+            }
+
+            return targetTile;
         }
         private void Attack() {
             // select spell to use            
@@ -135,6 +197,14 @@ namespace LUX {
                 default: break;
             }
             selectedUnitAttacked = true;       
+        }
+        private void AttackObstacle() {  
+            if(selectedUnitAi.DestructiblesInRange.Contains(obstacleToDestroy)) {         
+                obstacleToDestroy.GetComponent<IDestructible>().Damage(selectedUnitAi.UnitData.AtkDamage);
+                print($"{selectedUnitAi.UnitData.name} attacked an obstacle for {selectedUnitAi.UnitData.AtkDamage}");
+                selectedUnitAttacked = true;
+                selectedUnitHitObstacle = true;                
+            }            
         }
         // private void TargetSelf() {
         //     selectedUnitAi.AddEffect(selectedEffect);

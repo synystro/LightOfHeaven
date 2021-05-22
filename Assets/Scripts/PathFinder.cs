@@ -11,6 +11,7 @@ namespace LUX {
 
         private List<GameObject> reachableTiles;
         private List<GameObject> reachableEnemies;
+        private List<GameObject> reachableDestructibles;
         private int apsLeft;
 
         private UnitController unitController;
@@ -18,7 +19,8 @@ namespace LUX {
         private void Awake() {
             unitController = this.GetComponent<UnitController>();
             reachableTiles = new List<GameObject>();
-            reachableEnemies = new List<GameObject>();                        
+            reachableEnemies = new List<GameObject>();  
+            reachableDestructibles = new List<GameObject>();                      
         }
         public List<GameObject> GetReachableTiles() {
             reachableTiles.Clear();
@@ -91,6 +93,49 @@ namespace LUX {
                         //enemy detecting player
                         reachableEnemies.Add(t.CurrentUnit.gameObject);
                     }
+                }
+            }
+            reachableTiles.Remove(tile.gameObject);
+
+            // if there are tiles left to search, recursive it
+            if(reachableTiles.Count > 0) {
+                TileController tiletoSearch = reachableTiles[0].GetComponent<TileController>();
+                // only search the tile if the has no obstacle
+                if(tiletoSearch.HasObstacle() == false  || ignoreObstacles)
+                    ScanForEnemy(tiletoSearch, ignoreObstacles); 
+            }
+
+        }
+        public List<GameObject> GetDestructiblesInRangeOf(int tilesDistance, bool ignoreObstacles) {
+            reachableTiles.Clear();
+            reachableDestructibles.Clear();
+            apsLeft = tilesDistance;
+
+            currentTile = unitController.CurrentTile.GetComponent<TileController>(); 
+            currentTile.SetRangeLeft(apsLeft);  
+            ScanForDestructible(currentTile, ignoreObstacles);
+
+            return reachableDestructibles;          
+        }
+        private void ScanForDestructible(TileController tile, bool ignoreObstacles) { 
+            // return if the tile is out of range
+            if(tile.RangeLeft <= 0) { return; }   
+
+            foreach(TileController t in tile.AdjacentTiles) {
+                // if tile has already been checked, skip to the next one
+                if(t.IsInAtkRange) { continue; }
+                // if tile is free
+                if(t.HasObstacle() == false) {
+                    t.SetRangeLeft(tile.RangeLeft - 1);
+                    t.SetInAtkRange();              
+                    reachableTiles.Add(t.gameObject);                 
+                } else {
+                    // if the obstacle isn't destructible, skip to the next tile
+                    IDestructible destructible = t.GetObstacle().GetComponent<IDestructible>();
+                    if(destructible == null) { continue; }
+
+                    t.SetInAtkRange();
+                    reachableDestructibles.Add(t.GetObstacle());
                 }
             }
             reachableTiles.Remove(tile.gameObject);

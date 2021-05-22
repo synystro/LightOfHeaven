@@ -64,7 +64,7 @@ namespace LUX {
             SpawnEnemyUnits();
         }
         public void SpawnEnemyUnits() {
-            int tileToSpawnIndex = ((mapManager.GetTileCount() / 2) - 1) + (8 - 1) - EnemyUnitsSO.Count;
+            int tileToSpawnIndex = ((mapManager.GetTileCount() / 2)) + (24) - EnemyUnitsSO.Count;
             foreach (Unit enemyUnit in EnemyUnitsSO) {
                 GameObject tileToSpawnGO = mapManager.GetTileByIndex(tileToSpawnIndex).gameObject;
                 Vector3 tileToSpawnPosition = tileToSpawnGO.GetComponent<TileData>().GetPosition();

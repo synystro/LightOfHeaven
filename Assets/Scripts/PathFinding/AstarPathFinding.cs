@@ -34,8 +34,7 @@ namespace LUX {
             while (OpenList.Count > 0) {
                 Node currentNode = OpenList.RemoveFirst();
                 
-                ClosedList.Add(currentNode);
-                
+                ClosedList.Add(currentNode);                
 
                 if (currentNode == targetNode) {
                     GetFinalPath(startNode, targetNode);
@@ -43,10 +42,8 @@ namespace LUX {
                 }
 
                 foreach (Node neighbourNode in grid.GetNeighbourNodesDiagonal(currentNode)) {
-                    // if(neighbourNode == targetNode && currentNode.isWalkable) {
-                    //     targetNode.Child = currentNode;
-                    // }
                     neighbourNode.Child = currentNode;
+
                     if (ignoreObstacles == false) {
                         if (neighbourNode.isWalkable == false || ClosedList.Contains(neighbourNode)) {
                             continue;
@@ -66,24 +63,21 @@ namespace LUX {
                         }
                     }
                 }
-            }
-            // if(targetNode.isWalkable == false) {
-            //     targetNode = targetNode.Child;
-            //     GetFinalPath(startNode, targetNode);
-            // }      
+            }             
             bool validPath = true;      
             if(targetNode.isWalkable == false) {
                 validPath = false;
                 foreach (Node n in grid.GetNeighbourNodesOrthogonal(targetNode)) {
-                    if(n.isWalkable == true) {                            
+                    if(n == targetNode) { continue; }
+                    if(n.isWalkable == true) {                      
                         targetNode = n;
                         GetFinalPath(startNode, targetNode);
                         validPath = true;
-                        break;
+                        break;                     
                     }
                 }
                 if(validPath == false) {
-                    Debug.LogWarning("No path!");
+                    //Debug.LogWarning("No path!");                 
                 }
             }
             //return targetNode.isWalkable ? true : false;
@@ -94,6 +88,9 @@ namespace LUX {
             Node currentNode = _endNode;
 
             while (currentNode != _startNode) {
+                if(currentNode.Parent == null) {
+                    break;
+                }
                 FinalPath.Add(currentNode);
                 currentNode = currentNode.Parent;
             }

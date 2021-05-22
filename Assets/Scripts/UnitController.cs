@@ -20,6 +20,7 @@ namespace LUX {
         [SerializeField] private bool isTarget;     
         [SerializeField] private bool isStunned;
         [SerializeField] private List<GameObject> enemiesInRange; 
+        [SerializeField] private List<GameObject> destructiblesInRange;
 
         public Unit UnitData => unit;
         public TileController CurrentTile => currentTile;
@@ -30,6 +31,7 @@ namespace LUX {
         public bool IsFlying => isFlying;
         public bool IsTarget => isTarget;
         public List<GameObject> EnemiesInRange => enemiesInRange;
+        public List<GameObject> DestructiblesInRange => destructiblesInRange;
         public void SetHasMoved(bool state) { hasMovedThisTurn = state; }
         public void SetHasTargetInRange(bool state) { hasTargetInRange = state; }
 
@@ -50,6 +52,7 @@ namespace LUX {
         private void Awake() {            
             activeEffects = new List<EffectData>();
             enemiesInRange = new List<GameObject>();
+            destructiblesInRange = new List<GameObject>();
             selectionSR = selectionHighlightGO.GetComponent<SpriteRenderer>(); 
             pathFinder = this.GetComponent<PathFinder>();           
             unitDetailsUi = this.GetComponent<UnitDetailsUi>();
@@ -105,6 +108,7 @@ namespace LUX {
             hasMovedThisTurn = false;
             hasTargetInRange = false;
             enemiesInRange.Clear();
+            destructiblesInRange.Clear();
             DisplayDamagePreview(false);            
         }        
         public void OnUnitAttacked(bool isEnemyAttack) {
@@ -207,6 +211,9 @@ namespace LUX {
         }
         public List<GameObject> GetEnemiesInRangeOf(int tilesDistance, bool isSpell, bool ignoreObstacles) {
             return enemiesInRange = pathFinder.GetEnemiesInRangeOf(tilesDistance, ignoreObstacles);
+        }
+        public List<GameObject> GetDestructiblesInRangeOf(int tilesDistance, bool isSpell, bool ignoreObstacles) {
+            return destructiblesInRange = pathFinder.GetDestructiblesInRangeOf(tilesDistance, ignoreObstacles);
         }
         public void SetSelection(bool state) {
             isSelected = state;  

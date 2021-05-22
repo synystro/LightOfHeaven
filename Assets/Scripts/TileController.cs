@@ -34,6 +34,9 @@ namespace LUX {
             }
             return false;
         }
+        public GameObject GetObstacle() {
+            return Physics2D.OverlapCircle(this.transform.position, 0.2f, obstacleLayer).gameObject;
+        }
         public bool IsReachable => isReachable;
         public bool IsInAtkRange => isInAtkRange;
         public bool IsInSpellRange => isInSpellRange;

@@ -23,6 +23,13 @@ namespace LUX {
         public TileData GetTileByIndex(int index) {
             return tiles[index];
         }
+        public TileController GetTileByWorldPosition(Vector2 p) {
+            Collider2D tileCollider = Physics2D.OverlapCircle(p, 0.2f, tileLayer);
+            if (tileCollider) {
+                return tileCollider.GetComponent<TileController>();
+            }
+            return null;
+        }
         public void ResetTiles() {
             foreach(TileController tileController in tileControllers) {
                 tileController.Reset();
