@@ -13,6 +13,7 @@ namespace LUX {
 
         Node[,] nodeArray;
         public List<Node> FinalPath;
+        public Node NodeLowestH;
 
         //private Vector3 gridOffset;
         private Vector2 bottomLeft;

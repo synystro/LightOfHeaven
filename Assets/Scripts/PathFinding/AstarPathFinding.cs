@@ -7,12 +7,7 @@ namespace LUX {
         public List<Node> FinalPath;
 
         [Inject] private PathFindingGrid grid;
-
-        // private void Update() {
-        //     if (targetTransform != null) {
-        //         FindPath(this.transform.position, targetTransform.position);
-        //     }
-        // }
+        
         public bool FindPath(Vector3 _startPosition, Vector3 _targetPosition, bool ignoreObstacles) {
 
             // rount target position to int
@@ -34,14 +29,14 @@ namespace LUX {
             while (OpenList.Count > 0) {
                 Node currentNode = OpenList.RemoveFirst();
                 
-                ClosedList.Add(currentNode);                
+                ClosedList.Add(currentNode);
 
                 if (currentNode == targetNode) {
                     GetFinalPath(startNode, targetNode);
                     break;
                 }
 
-                foreach (Node neighbourNode in grid.GetNeighbourNodesDiagonal(currentNode)) {
+                foreach (Node neighbourNode in grid.GetNeighbourNodesOrthogonal(currentNode)) {
                     neighbourNode.Child = currentNode;
 
                     if (ignoreObstacles == false) {
@@ -53,7 +48,7 @@ namespace LUX {
                     }
 
                     int moveCost = currentNode.gCost + GetManhattanDistance(currentNode, neighbourNode);
-                    if (moveCost < neighbourNode.gCost || !OpenList.Contains(neighbourNode)) {
+                    if (moveCost < neighbourNode.gCost || OpenList.Contains(neighbourNode) == false) {
                         neighbourNode.gCost = moveCost;
                         neighbourNode.hCost = GetManhattanDistance(neighbourNode, targetNode);
                         neighbourNode.Parent = currentNode;
@@ -64,25 +59,33 @@ namespace LUX {
                     }
                 }
             }             
-            bool validPath = true;      
-            if(targetNode.isWalkable == false) {
+            bool validPath = true;
+            if(targetNode.isWalkable == false && ignoreObstacles == false) {
                 validPath = false;
+                Node nodeLowestF = null;
                 foreach (Node n in grid.GetNeighbourNodesOrthogonal(targetNode)) {
-                    if(n == targetNode) { continue; }
-                    if(n.isWalkable == true) {                      
-                        targetNode = n;
-                        GetFinalPath(startNode, targetNode);
-                        validPath = true;
-                        break;                     
+                    if(n == targetNode) { continue; }                    
+                    if(n.isWalkable == true) {
+                        if(nodeLowestF == null) { nodeLowestF = n; targetNode = n; }
+                        else {
+                            if(n.fCost < nodeLowestF.fCost) {
+                                targetNode = n;
+                                nodeLowestF = n;
+                            }
+                        }                    
                     }
                 }
-                if(validPath == false) {
-                    //Debug.LogWarning("No path!");                 
+                if(targetNode != null) {
+                    GetFinalPath(startNode, targetNode);
+                    validPath = true;
                 }
-            }
-            //return targetNode.isWalkable ? true : false;
+                if(validPath == false) {
+                    Debug.LogWarning("No path!");                 
+                }
+            }            
             return validPath;
         }
+
         void GetFinalPath(Node _startNode, Node _endNode) {
             FinalPath = new List<Node>();
             Node currentNode = _endNode;
@@ -95,14 +98,16 @@ namespace LUX {
                 currentNode = currentNode.Parent;
             }
             FinalPath.Reverse();
-
+            
             grid.FinalPath = FinalPath;
         }
+
         int GetManhattanDistance(Node _nodeA, Node _nodeB) {
             int iX = Mathf.Abs(_nodeA.gridX - _nodeB.gridX);
             int iY = Mathf.Abs(_nodeA.gridY - _nodeB.gridY);
 
             return iX + iY;
         }
+        
     }
 }
