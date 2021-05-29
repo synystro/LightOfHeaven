@@ -89,6 +89,8 @@ namespace LUX {
                 case DamageType.Piercing: targetUnitController.ReceiveDamage(playerController.SelectedEffect.InstantDamageData); break;
                 default: break;
             }
+            // play spell sfx
+            AudioManager.PlaySFX(spell.SFX);
             // if is spell is only once per combat, consume it
             if(spell.OncePerCombat) {
                 SetIsConsumed(true);

@@ -28,9 +28,7 @@ namespace LUX {
                 spellCast.AddSpell(s);               
             }
         }
-        public void DeactivateSpellButton(GameObject button) {
-            // play spell sfx before deactivating
-            AudioManager.PlaySFX(button.GetComponent<SpellCast>().Spell.SFX);
+        public void DeactivateSpellButton(GameObject button) {            
             button.SetActive(false);  
             //CheckIfOutOfSpells();
         }

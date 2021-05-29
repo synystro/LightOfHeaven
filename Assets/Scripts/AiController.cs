@@ -7,6 +7,7 @@ namespace LUX {
     public class AiController : MonoBehaviour {
         [SerializeField] private UnitController selectedUnitAi;
         [SerializeField] private Spell selectedSpell;
+        [SerializeField] private UnitController selectedSpellTargetUnit;
         private EffectData selectedEffect;
         [SerializeField] private bool selectedUnitAiValidPath;
         [SerializeField] private LayerMask tileMask;
@@ -14,7 +15,8 @@ namespace LUX {
         private bool selectedUnitAttacked;
         private HashSet<TileController> tilesChecked = new HashSet<TileController>();
 
-        private const float unitTurnTime = 1f;
+        private const float unitTurnTime = .5f;
+        private const float attackDelayTime = 1f;
 
         [Inject] private GameEventSystem gameEventSystem;
         [Inject] private UnitManager unitManager;
@@ -35,6 +37,30 @@ namespace LUX {
             }
             turnManager.EndTurn(); // end this turn
             yield return null;                     
+        }
+        IEnumerator WaitThenAct(float seconds) {            
+            yield return new WaitForSeconds(seconds);
+
+            if(selectedSpell != null) {
+                Attack();
+            } else if (selectedUnitAi.DestructiblesInRange.Count > 0 && selectedUnitAttacked == false) {
+                AttackObstacle();                
+            }
+
+            // move 
+            while(selectedUnitAi.UnitData.CurrentAp > 0 &&
+            selectedUnitAttacked == false &&
+            IsBlockedByObstacle() == false &&
+            SelectSpell() == false &&
+            selectedUnitAiValidPath == true) {
+                Move();
+            }         
+            // try to attack if hasn't already and player unit is in attack range        
+            if(selectedSpell != null && selectedUnitAttacked == false) {
+                Attack();
+            } else if (selectedUnitAi.DestructiblesInRange.Count > 0 && selectedUnitAttacked == false && selectedUnitAi.HasMovedThisTurn == false) {
+                AttackObstacle();                
+            }                     
         }
         IEnumerator KillWait(float delay, Task t) {
             yield return new WaitForSeconds(delay);
@@ -64,44 +90,64 @@ namespace LUX {
                 turnManager.EndTurn();
                 return;
             }
-            Task waitTask = new Task(WaitUnitTurn(unitTurnTime));
-            new Task(KillWait((unitTurnTime * unitManager.EnemyUnits.Count) + unitTurnTime, waitTask));
+            Task unitTurnDelayTask = new Task(WaitUnitTurn(unitTurnTime));
+            new Task(KillWait((unitTurnTime * unitManager.EnemyUnits.Count) + unitTurnTime, unitTurnDelayTask));
         }
         private void StartUnitActionPhase() {
             selectedUnitAi.SetSelection(true);
             selectedUnitAiValidPath = true;
 
-            // decide player unit to attack??
+            // try to cast chosen spell if player unit is in cast range
+            selectedUnitAttacked = false;            
+            //selectedUnitAi.GetEnemiesInRangeOf(selectedUnitAi.UnitData.AtkRange, false, selectedUnitAi.UnitData.Flight);
+            IsBlockedByObstacle();
 
-            // try to attack if player unit is in attack range
-            selectedUnitAttacked = false;
-            selectedUnitAi.GetEnemiesInRangeOf(selectedUnitAi.UnitData.AtkRange, false, selectedUnitAi.UnitData.Flight);
-            selectedUnitAi.GetDestructiblesInRangeOf(selectedUnitAi.UnitData.AtkRange, false, selectedUnitAi.UnitData.Flight);
-
-            if(IsTargetInRange()) {
-                Attack();
-            } else if (selectedUnitAi.DestructiblesInRange.Count > 0 && selectedUnitAttacked == false) {
-                AttackObstacle();                
+            // if there are no spells left to cast, reset the spells pool
+            if(selectedUnitAi.SpellPool.Count <= 0) {
+                selectedUnitAi.ResetSpellsPool();
             }
-            // move 
-            while(selectedUnitAi.UnitData.CurrentAp > 0 &&
-            IsTargetInRange() == false &&
-            selectedUnitAiValidPath == true
-            ) {
-                Move();
-            }         
-            // try to attack if hasn't already and player unit is in attack range        
-            if(IsTargetInRange() && selectedUnitAttacked == false) {
-                Attack();
-            } else if (selectedUnitAi.DestructiblesInRange.Count > 0 && selectedUnitAttacked == false && selectedUnitAi.HasMovedThisTurn == false) {
-                AttackObstacle();                
-            }                   
+
+            // use buff on self/other enemy?
+            // apply debuff to player?            
+            // decide spell to cast on player (longest range first)
+            SelectSpell();
+
+            Task atkDelayTask = new Task(WaitThenAct(attackDelayTime));
+            new Task(KillWait(attackDelayTime, atkDelayTask));                             
         }
         private bool IsTargetInRange() {
             return selectedUnitAi.EnemiesInRange.Contains(unitManager.PlayerUnits[0]);
         }
+        private bool IsBlockedByObstacle() {
+            return selectedUnitAi.GetDestructiblesInRangeOf(selectedUnitAi.UnitData.AtkRange, false, selectedUnitAi.UnitData.Flight).Count > 0;
+        }
+        private bool SelectSpell() {
+            int higherDamage = -100;
+            bool hasSpellToCast = false;
+            
+            foreach(Spell spell in selectedUnitAi.SpellPool) {
+                // reset tiles spell in range props            
+                mapManager.ResetTiles();
+                List<GameObject> spellTargetsInRange = selectedUnitAi.GetEnemiesInRangeOf(spell.Range, true, spell.IgnoreObstacles);
+                if(spellTargetsInRange.Count <= 0) { continue; } // continue if no targets in range
+                
+                GameObject selectedSpellTarget = spellTargetsInRange[0];
+                if(selectedSpellTarget != null) {
+                    if(selectedUnitAi.UnitData.CurrentAp >= spell.Cost) {
+                        if(spell.AmountInstant > higherDamage) {
+                            higherDamage = spell.AmountInstant;
+                            selectedSpellTargetUnit = selectedSpellTarget.GetComponent<UnitController>();
+                            selectedSpell = spell;
+                            selectedEffect = new EffectData(selectedUnitAi.UnitData, selectedSpell.EffectType, selectedSpell.DamageType, selectedSpell.AmountInstant, selectedSpell.AmountOverTurns, selectedSpell.Range, selectedSpell.IgnoreObstacles, selectedSpell.Duration, selectedSpell.SFX, selectedSpell.LastsTheEntireBattle);
+                            hasSpellToCast = true;
+                        }                        
+                    }
+                }
+            }
+            return hasSpellToCast;
+        }
         private void Move() {        
-            if(selectedUnitAi.HasMovedThisTurn || selectedUnitAi.UnitData.CurrentAp <= 0) { return; } // if has already moved (this turn), return
+            if(selectedUnitAi.UnitData.CurrentAp <= 0) { return; } // if has already moved (this turn), return
 
             // display path towards player
             AstarPathFinding selectedUnitPF = selectedUnitAi.GetComponent<AstarPathFinding>();
@@ -141,16 +187,23 @@ namespace LUX {
         }
         private void Attack() {
             // select spell to use            
-            selectedSpell = selectedUnitAi.UnitData.Spells[0];
-            selectedEffect = new EffectData(selectedUnitAi.UnitData, selectedSpell.EffectType, selectedSpell.DamageType, selectedSpell.AmountInstant, selectedSpell.AmountOverTurns, selectedSpell.Range, selectedSpell.IgnoreObstacles, selectedSpell.Duration, selectedSpell.SFX, selectedSpell.LastsTheEntireBattle); 
+            //selectedSpell = selectedUnitAi.UnitData.Spells[0];
+            //selectedEffect = new EffectData(selectedUnitAi.UnitData, selectedSpell.EffectType, selectedSpell.DamageType, selectedSpell.AmountInstant, selectedSpell.AmountOverTurns, selectedSpell.Range, selectedSpell.IgnoreObstacles, selectedSpell.Duration, selectedSpell.SFX, selectedSpell.LastsTheEntireBattle); 
             // check the spell's target type
             switch(selectedSpell.TargetType) {
                 case SpellTargetType.NoTarget: break;
                 //case SpellTargetType.TargetSelf: TargetSelf(); break;
-                case SpellTargetType.TargetUnit: HandleTargetUnit(); break;
+                case SpellTargetType.TargetUnit: HandleUnitTarget(); break;
                 case SpellTargetType.TargetTile: break;
                 default: break;
             }
+
+            UnitConsumeSelectedSpell();
+
+            // deselect spell and effect
+            selectedSpell = null;
+            selectedEffect = null;
+            // set as attacked
             selectedUnitAttacked = true;       
         }
         private void AttackObstacle() {
@@ -158,35 +211,26 @@ namespace LUX {
             selectedUnitAttacked = true; 
             //print($"{selectedUnitAi.UnitData.name} attacked an obstacle for {selectedUnitAi.UnitData.AtkDamage}");
         }
-        // private void TargetSelf() {
-        //     selectedUnitAi.AddEffect(selectedEffect);
-        //     selectedUnitAi.SetSelectedEffect(selectedEffect);            
-        //     selectedUnitAi.SpellSelfTarget();
-        // }
-        private void HandleTargetUnit() {
-            // highlight player units in range
-            foreach(GameObject playerUnit in selectedUnitAi.EnemiesInRange) {
-                UnitController playerUnitController = playerUnit.GetComponent<UnitController>();
-                playerUnitController.SetSpellPreviewDamage(selectedEffect.InstantDamageData);
-                playerUnitController.DisplayDamagePreview(true);
-                playerUnitController.SetIsTarget(true);
-                playerUnitController.Highlight(true);
-            }
-            // decide which one to cast the spell on
-            int randomIndex = Random.Range(0, selectedUnitAi.EnemiesInRange.Count);
-            UnitController pUC = selectedUnitAi.EnemiesInRange[randomIndex].GetComponent<UnitController>();
-            SpellCastOn(pUC);
+        private void UnitConsumeSelectedSpell() {
+            selectedUnitAi.RemoveSpellFromPool(selectedSpell);
+        }
+        private void TargetSelf() {
+            selectedUnitAi.AddEffect(selectedEffect);         
+            SpellCastOn(selectedUnitAi);
+        }
+        private void HandleUnitTarget() {
+            SpellCastOn(selectedSpellTargetUnit);            
         }
         private void SpellCastOn(UnitController targetUnitController) {
             // apply effect to target unit
             targetUnitController.AddEffect(selectedEffect);
             
             // enemy targetting was disabled here
-            foreach(GameObject e in unitManager.EnemyUnits) {
-                UnitController eUC = e.GetComponent<UnitController>();
-                eUC.DisplayDamagePreview(false);
-                eUC.SetIsTarget(false);
-                eUC.Highlight(false);
+            foreach(GameObject p in unitManager.PlayerUnits) {
+                UnitController pUC = p.GetComponent<UnitController>();
+                pUC.DisplayDamagePreview(false);
+                pUC.SetIsTarget(false);
+                pUC.Highlight(false);
             }
             
             // if spell has an instant damage or heal, apply it now
@@ -196,13 +240,12 @@ namespace LUX {
                 case DamageType.Piercing: targetUnitController.ReceiveDamage(selectedEffect.InstantDamageData); break;
                 default: break;
             }
+            // play spell sfx
+            AudioManager.PlaySFX(selectedSpell.SFX);
             // if is spell is only once per combat, consume it
             // if(selectedSpell.OncePerCombat) {
             //     spellCast.SetIsConsumed(true);
-            // }        
-            // deselect spell and effect
-            selectedSpell = null;
-            selectedEffect = null;
+            // }
         }        
     }
 }

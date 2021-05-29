@@ -27,7 +27,6 @@ namespace LUX {
 
         public TileData TileData => tileData;
         public List<TileController> AdjacentTiles => adjacentTiles;
-        //public bool HasObstacle => hasObstacle;
         public bool HasObstacle() {
             if (Physics2D.OverlapCircle(this.transform.position, 0.2f, obstacleLayer)) {
                 return true;

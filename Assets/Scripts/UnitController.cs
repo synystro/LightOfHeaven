@@ -9,6 +9,7 @@ namespace LUX {
     [RequireComponent(typeof(PathFinder))]
     [RequireComponent(typeof(UnitDetailsUi))]
     public class UnitController : TacticalMovement, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler {
+        [SerializeField] private List<Spell> spellPool;
         [SerializeField] private List<EffectData> activeEffects;
         [SerializeField] private GameObject selectionHighlightGO;
         [SerializeField] private GameObject damagePreviewGO;
@@ -22,6 +23,7 @@ namespace LUX {
         [SerializeField] private List<GameObject> enemiesInRange; 
         [SerializeField] private List<GameObject> destructiblesInRange;
 
+        public List<Spell> SpellPool => spellPool;
         public Unit UnitData => unit;
         public TileController CurrentTile => currentTile;
         public bool HasMovedThisTurn => hasMovedThisTurn;
@@ -50,6 +52,7 @@ namespace LUX {
         private UnitDetailsUi unitDetailsUi;    
 
         private void Awake() {            
+            spellPool = new List<Spell>();
             activeEffects = new List<EffectData>();
             enemiesInRange = new List<GameObject>();
             destructiblesInRange = new List<GameObject>();
@@ -88,12 +91,15 @@ namespace LUX {
             unit.ResetBonuses();
             unit.Setup();
             unit.RestoreStats();
+            // set unit gameobject's name
             this.gameObject.name = unit.name;
+            // set spells pool
+            ResetSpellsPool();
 
             // can this unit fly? 
             this.isFlying = unit.Flight;
             // enemy stuff
-            this.isEnemy = isEnemy;                   
+            this.isEnemy = isEnemy;                                        
 
             // setup unit info display
             RefreshDetailsUi();            
@@ -143,6 +149,17 @@ namespace LUX {
             }
             if(this.unit.CurrentHp <= 0) {
                 Die();                
+            }
+        }
+        public void RemoveSpellFromPool(Spell s) {
+            if(spellPool.Contains(s)) {
+                spellPool.Remove(s);
+            }
+        }
+        public void ResetSpellsPool() {
+            spellPool.Clear();
+            foreach(Spell s in unit.Spells) {
+                spellPool.Add(s);
             }
         }
         private void ResetUnitStats() {
