@@ -3,7 +3,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Zenject;
 
-namespace LUX {
+namespace LUX.LightOfHeaven {
     public class SpellCast : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler {        
         [SerializeField] Spell spell;
         public Spell Spell => spell;
@@ -73,7 +73,13 @@ namespace LUX {
             playerController.SetSelectedSpellButton(this.gameObject);
         }
         public void CastOnTarget(UnitController targetUnitController) {                    
-            // enemy targetting was disabled here
+            // enemy targetting is disabled here
+            foreach(GameObject e in unitManager.EnemyUnits) {
+                UnitController eUC = e.GetComponent<UnitController>();
+                eUC.DisplayDamagePreview(false);
+                eUC.SetIsTarget(false);
+                eUC.Highlight(false);
+            }
             
             targetUnitController.DisplayDamagePreview(false);
             targetUnitController.SetIsTarget(false);

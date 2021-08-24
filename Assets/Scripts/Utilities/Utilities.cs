@@ -1,4 +1,4 @@
-﻿namespace LUX {
+﻿namespace LUX.LightOfHeaven {
     public static class Utilities {
         public static int BitmaskToLayerInt(int bitMask) {
             int result = bitMask > 0 ? 0 : 31;

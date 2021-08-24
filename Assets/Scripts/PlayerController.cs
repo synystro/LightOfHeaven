@@ -2,7 +2,7 @@
 using UnityEngine;
 using Zenject;
 
-namespace LUX {
+namespace LUX.LightOfHeaven {
     public class PlayerController : MonoBehaviour {
         [SerializeField] private UnitController playerUnitController;
         [SerializeField] private GameObject playerGO;
@@ -77,29 +77,9 @@ namespace LUX {
             targetUnitController.AddEffect(selectedEffect);
 
             SpellCast spellCast = selectedSpellButton.GetComponent<SpellCast>();
-            
-            // enemy targetting was disabled here
-            foreach(GameObject e in unitManager.EnemyUnits) {
-                UnitController eUC = e.GetComponent<UnitController>();
-                eUC.DisplayDamagePreview(false);
-                eUC.SetIsTarget(false);
-                eUC.Highlight(false);
-            }
-            
-            // call consume stamina on spellcast go
-            spellCast.ConsumeStamina();
-            // if spell has an instant damage or heal, apply it now
-            UnitController playerUnitController = playerGO.GetComponent<UnitController>();
-            switch(spellCast.Spell.DamageType) {
-                case DamageType.Physical: playerUnitController.DealAttack(targetUnitController, spellCast.Spell.AmountInstant, targetUnitController.transform.position); break;
-                case DamageType.Magical: targetUnitController.ReceiveDamage(selectedEffect.InstantDamageData); break;
-                case DamageType.Piercing: targetUnitController.ReceiveDamage(selectedEffect.InstantDamageData); break;
-                default: break;
-            }
-            // if is spell is only once per combat, consume it
-            if(spellCast.Spell.OncePerCombat) {
-                spellCast.SetIsConsumed(true);
-            }
+
+            spellCast.CastOnTarget(targetUnitController);
+
             // deactivate spell button
             spellsUi.DeactivateSpellButton(selectedSpellButton);            
             // deselect effect

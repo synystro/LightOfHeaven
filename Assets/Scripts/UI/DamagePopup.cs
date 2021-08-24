@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using TMPro;
 
-namespace LUX {
+namespace LUX.LightOfHeaven {
     public class DamagePopup : MonoBehaviour {
         [Header("Damage Type Sprites")]
         [SerializeField] Sprite physicalDamageSprite;

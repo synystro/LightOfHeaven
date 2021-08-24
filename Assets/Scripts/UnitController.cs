@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Zenject;
 using System.Linq;
 
-namespace LUX {
+namespace LUX.LightOfHeaven {
     [RequireComponent(typeof(SpriteRenderer))]
     [RequireComponent(typeof(PathFinder))]
     [RequireComponent(typeof(UnitDetailsUi))]

@@ -2,7 +2,7 @@
 using UnityEngine;
 using Zenject;
 
-namespace LUX {
+namespace LUX.LightOfHeaven {
     public class PathFindingGrid : MonoBehaviour {
         [Space(10)]
         public bool onlyDisplayPathGizmos;

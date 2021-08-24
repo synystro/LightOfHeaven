@@ -2,7 +2,7 @@
 using UnityEngine;
 using Zenject;
 
-namespace LUX {
+namespace LUX.LightOfHeaven {
     public class AstarPathFinding : MonoBehaviour {
         public List<Node> FinalPath;
 

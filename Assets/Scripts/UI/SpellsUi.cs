@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
-namespace LUX {
+namespace LUX.LightOfHeaven {
     public class SpellsUi : MonoBehaviour {
         [SerializeField] private GameObject spellButtonPrefab;
         [SerializeField] private List<GameObject> spellButtons;

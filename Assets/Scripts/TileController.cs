@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using Zenject;
 
-namespace LUX {  
+namespace LUX.LightOfHeaven {  
     [RequireComponent(typeof(TileData))]  
     [RequireComponent(typeof(SpriteRenderer))]
     public class TileController : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler {

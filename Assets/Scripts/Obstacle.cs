@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace LUX {
+namespace LUX.LightOfHeaven {
     public class Obstacle : MonoBehaviour, IDestructible {
         [SerializeField] private int hp;
         public void Damage(int damage) {

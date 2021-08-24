@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace LUX {
+namespace LUX.LightOfHeaven {
     public class MapManager : MonoBehaviour {
         [SerializeField] private LayerMask tileLayer;
         [SerializeField] private TileData[] tiles;

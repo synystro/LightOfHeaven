@@ -36,7 +36,7 @@ using System.Collections;
 /// It is an error to attempt to start a task that has been stopped or which has
 /// naturally terminated.
 
-namespace LUX {
+namespace LUX.LightOfHeaven {
     public class Task {
         /// Returns true if and only if the coroutine is running.  Paused tasks
         /// are considered to be running.

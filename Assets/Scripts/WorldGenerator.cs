@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace LUX {
+namespace LUX.LightOfHeaven {
     public enum DimensionType { Hell, Purgatory, Heaven }
     public class WorldGenerator : MonoBehaviour {
         [SerializeField] private Dimension[] dimensions;

@@ -3,7 +3,7 @@ using UnityEngine;
 
 // this script finds gameobjects adjacent to this gameobject based on a distance
 
-namespace LUX {
+namespace LUX.LightOfHeaven {
     public class AdjacentFinder : MonoBehaviour {        
         [SerializeField] List<GameObject> adjacentObjects;
         [SerializeField] int distanceOffset = 2;

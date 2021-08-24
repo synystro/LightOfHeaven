@@ -2,7 +2,7 @@
 using UnityEngine.EventSystems;
 using Zenject;
 
-namespace LUX {
+namespace LUX.LightOfHeaven {
     public enum TerrainType { Start, Hell, Purgatory, Heaven } // dream as dlc maybe?
     public enum RoomType { Unknown, Shrine, Market, Minions, Champion, Unique, Boss }
     public class Portal : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler {

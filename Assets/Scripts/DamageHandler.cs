@@ -1,4 +1,4 @@
-﻿namespace LUX {
+﻿namespace LUX.LightOfHeaven {
     public static class DamageHandler {
         public static int GetPhysicalDamageOnUnit(int damage, Unit unit) {
             int finalDamage = damage;

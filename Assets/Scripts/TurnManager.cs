@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using Zenject;
 
-namespace LUX {
+namespace LUX.LightOfHeaven {
     public enum TurnState { Start, Action, End }
     public class TurnManager : MonoBehaviour {
         [SerializeField] private int turnIndex;

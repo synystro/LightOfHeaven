@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace LUX {
+namespace LUX.LightOfHeaven {
     public enum EffectType { Damage, Heal, Stun, Hp, Mp, Ap }
     [System.Serializable]
     public class EffectData {

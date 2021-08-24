@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace LUX {
+namespace LUX.LightOfHeaven {
     public class GameEventSystem : MonoBehaviour {
         public event Action onPlayerSpawn;
         public void OnPlayerSpawn() { onPlayerSpawn?.Invoke(); }

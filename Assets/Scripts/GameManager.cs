@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using Zenject;
 
-namespace LUX {
+namespace LUX.LightOfHeaven {
     public class GameManager : MonoBehaviour {
 
         [Inject] WorldGenerator worldGenerator;

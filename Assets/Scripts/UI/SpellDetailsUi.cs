@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using TMPro;
 
-namespace LUX {
+namespace LUX.LightOfHeaven {
     public class SpellDetailsUi : MonoBehaviour {        
         [SerializeField] private TextMeshProUGUI nameText;
         [SerializeField] private TextMeshProUGUI effectTypeText;

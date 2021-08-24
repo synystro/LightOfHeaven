@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 80a077b39602e3b42aff360e02dd57be, type: 3}
-  m_Name: dark_knight
+  m_Name: hero
   m_EditorClassIdentifier: 
-  name: Dark Knight
+  name: Hero
   icon: {fileID: 0}
-  charPrefabRight: {fileID: 766595767646098184, guid: 5eebf1be9d4c93645a41228ebbced32b,
+  charPrefabRight: {fileID: 420725749550593119, guid: 35ddad8416963674ebc85999f857f973,
     type: 3}
-  charPrefabLeft: {fileID: 5844065101770880116, guid: 922f60e9a919c3b4d92162a8a94bcd4f,
+  charPrefabLeft: {fileID: 2284473891057891469, guid: 95e54eb9578128a429a9e196bb96c591,
     type: 3}
   Spells:
   - {fileID: 11400000, guid: ea8367fff1b090b439e90013edaee9e7, type: 2}
@@ -32,7 +32,7 @@ MonoBehaviour:
   MaxHp: 100
   BaseHp: 100
   BonusHp: 0
-  CurrentHp: 90
+  CurrentHp: 100
   MaxMp: 50
   BaseMp: 50
   BonusMp: 0
@@ -56,7 +56,7 @@ MonoBehaviour:
   MaxShield: 5
   BaseShield: 5
   BonusShield: 0
-  CurrentShield: 0
+  CurrentShield: 5
   MaxMagicShield: 0
   BaseMagicShield: 0
   BonusMagicShield: 0

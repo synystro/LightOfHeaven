@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace LUX {
+namespace LUX.LightOfHeaven {
     [System.Serializable]
     public class Node : IHeapItem<Node> {
 

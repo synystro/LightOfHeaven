@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Zenject;
 using System.Collections;
 
-namespace LUX {
+namespace LUX.LightOfHeaven {
     public class AiController : MonoBehaviour {
         [SerializeField] private UnitController selectedUnitAi;
         [SerializeField] private Spell selectedSpell;

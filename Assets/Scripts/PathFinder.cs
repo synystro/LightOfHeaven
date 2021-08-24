@@ -1,13 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-namespace LUX {
+namespace LUX.LightOfHeaven {
     [RequireComponent(typeof(UnitController))]
     public class PathFinder : MonoBehaviour {
         [Header("Tile Setup")]
         [SerializeField] private LayerMask tileLayer;
         [SerializeField] private TileController currentTile;
-        [SerializeField] private int distanceBetweenTiles = 2;
 
         private List<GameObject> reachableTiles;
         private List<GameObject> reachableEnemies;

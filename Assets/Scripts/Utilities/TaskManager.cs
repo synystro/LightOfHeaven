@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-namespace LUX {
+namespace LUX.LightOfHeaven {
     class TaskManager : MonoBehaviour {
         static TaskManager singleton;
         public static TaskState CreateTask(IEnumerator coroutine) {

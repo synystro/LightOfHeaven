@@ -1,4 +1,4 @@
-﻿namespace LUX {
+﻿namespace LUX.LightOfHeaven {
     public enum DamageType { None, Physical, Magical, Piercing }
 
     public struct DamageData {

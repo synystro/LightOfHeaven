@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using TMPro;
 
-namespace LUX {
+namespace LUX.LightOfHeaven {
     public class UnitDetailsUi : MonoBehaviour {
         [SerializeField] private GameObject detailsCanvasGO;        
         [SerializeField] private TextMeshProUGUI nameText;

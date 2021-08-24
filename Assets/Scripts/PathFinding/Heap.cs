@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LUX {
+namespace LUX.LightOfHeaven {
     public class Heap<T> where T : IHeapItem<T> {
 
         T[] items;

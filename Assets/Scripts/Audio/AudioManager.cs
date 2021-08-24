@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace LUX {
+namespace LUX.LightOfHeaven {
     public static class AudioManager {
         private static GameObject audioManagerGO;
         private static GameObject sfxGO;

@@ -1,4 +1,4 @@
-﻿namespace LUX {
+﻿namespace LUX.LightOfHeaven {
     public interface IMouseDown {
         void OnMouseDown();
     }

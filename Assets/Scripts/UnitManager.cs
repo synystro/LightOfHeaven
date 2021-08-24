@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Zenject;
 
-namespace LUX {
+namespace LUX.LightOfHeaven {
     public class UnitManager : MonoBehaviour {
         [Header("Selection")]
         [SerializeField] private UnitController selectedUnit;

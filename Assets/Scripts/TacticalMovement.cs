@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace LUX {
+namespace LUX.LightOfHeaven {
     public class TacticalMovement : MonoBehaviour {
         [SerializeField] protected bool isFlying;
         [SerializeField] protected LayerMask groundLayer;  

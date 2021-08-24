@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections.Generic;
 
-namespace LUX {
+namespace LUX.LightOfHeaven {
     [CreateAssetMenu(menuName = "LOH/Unit", fileName = "New Unit")]
     public class Unit : ScriptableObject {
         public new string name;

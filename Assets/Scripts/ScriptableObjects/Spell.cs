@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace LUX {
+namespace LUX.LightOfHeaven {
     public enum SpellTargetType { NoTarget, TargetSelf, TargetUnit, TargetTile }
     [CreateAssetMenu(menuName = "LOH/Spell", fileName = "New Spell")]
     public class Spell : ScriptableObject {
