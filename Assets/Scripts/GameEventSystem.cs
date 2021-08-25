@@ -5,6 +5,8 @@ namespace LUX.LightOfHeaven {
     public class GameEventSystem : MonoBehaviour {
         public event Action onPlayerSpawn;
         public void OnPlayerSpawn() { onPlayerSpawn?.Invoke(); }
+        public event Action onBattleStart;
+        public void OnBattleStart() { onBattleStart?.Invoke(); print("battle started!"); }
         public event Action onTurnStart;
         public void OnTurnStart() { onTurnStart?.Invoke(); }
         public event Action onTurnEnd;

@@ -6,17 +6,24 @@ using Zenject;
 namespace LUX.LightOfHeaven {
     public class SpellsUi : MonoBehaviour {
         [SerializeField] private GameObject spellButtonPrefab;
-        [SerializeField] private List<GameObject> spellButtons;
+        [SerializeField] private List<GameObject> spellButtons;        
         [Inject] GameEventSystem gameEventSystem;
         [Inject] PlayerController playerController;
+
+        private Image panelBg;
         private void OnEnable() {
-            gameEventSystem.onPlayerSpawn += Init;
+            gameEventSystem.onBattleStart += Init;
         }
         private void OnDisable() {
-            gameEventSystem.onPlayerSpawn -= Init;
+            gameEventSystem.onBattleStart -= Init;
+        }
+        private void Awake() {
+            panelBg = this.GetComponent<Image>();
         }
         public void Init() {
+            print("yeah");
             playerController.SetSpellsUi(this);
+            panelBg.enabled = true;
             GetPlayerSpells();
         }
         private void GetPlayerSpells() {

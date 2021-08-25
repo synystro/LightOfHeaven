@@ -65,7 +65,7 @@ namespace LUX.LightOfHeaven {
             gameEventSystem.onTurnEnd += OnTurnEnd;
             gameEventSystem.onUnitAttack += OnUnitAttacked;
         }
-        private void OnDestroy() {
+        private void OnDisable() {
             gameEventSystem.onTurnStart -= OnTurnStart;
             gameEventSystem.onTurnEnd -= OnTurnEnd;
             gameEventSystem.onUnitAttack -= OnUnitAttacked;
@@ -89,7 +89,7 @@ namespace LUX.LightOfHeaven {
             this.currentTile = tileToSpawnGO.transform.GetComponent<TileController>();
             this.currentTile.SetCurrentUnit(this);
             unit.ResetBonuses();
-            unit.Setup();
+            unit.SetStats();
             unit.RestoreStats();
             // set unit gameobject's name
             this.gameObject.name = unit.name;
@@ -104,9 +104,20 @@ namespace LUX.LightOfHeaven {
             // setup unit info display
             RefreshDetailsUi();            
         }
-        public void OnTurnStart() {
-            isStunned = false;
-            ResetUnitStats();                        
+        public void OnTurnStart() {    
+            print($"{this.gameObject.name}'s turn");        
+            ResetUnitStats();
+            ApplyModifiers();
+            
+            this.unit.SetStats();
+            this.unit.RestoreDepletedStats();
+
+            RefreshDetailsUi();
+
+            if(isStunned) {
+                print($"{this.name} is stunned and lost their turn!");
+                playerController.EndTurn();
+            }                      
         }
         public void OnTurnEnd() {
             SetSelection(false);
@@ -163,9 +174,13 @@ namespace LUX.LightOfHeaven {
             }
         }
         private void ResetUnitStats() {
+            // reset status
+            isStunned = false;
+            //isSleeping, etc
             // reset modifiers
-            this.unit.ResetBonuses();
-            // apply modifiers
+            this.unit.ResetBonuses();            
+        } 
+        private void ApplyModifiers() {
             foreach(EffectData e in activeEffects.ToList()) {
                 ApplyEffect(e);
                 if(e.LastsTheEntireBattle) { continue; } // return if the effect isn't be removed until the end of battle
@@ -175,18 +190,8 @@ namespace LUX.LightOfHeaven {
                 if(e.Duration <= 0) {
                     activeEffects.Remove(e);
                 }
-            }
-            // set everything up after resetting modifiers 
-            this.unit.Setup();
-            // restore things after the unit's turn has begun
-            this.unit.RestoreAfterTurn();
-            // refresh unit details display
-            RefreshDetailsUi();
-            if(isStunned) {
-                print($"{this.name} is stunned and lost their turn!");
-                playerController.EndTurn();
-            }
-        }   
+            }            
+        }  
         private void RefreshDetailsUi() {
             unitDetailsUi.Refresh(unit);
         }

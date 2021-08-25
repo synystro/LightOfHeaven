@@ -10,6 +10,13 @@ namespace LUX.LightOfHeaven {
         [Inject] private GameEventSystem gameEventSystem;
         [Inject] private AiController aiController;
         public bool IsEnemyTurn() { return moveIndex % 2 == 0; }  
+
+        private void OnEnable() {
+            gameEventSystem.onBattleStart += Init;
+        }
+        private void OnDisable() {
+            gameEventSystem.onBattleStart -= Init;
+        }
         public void Init() {
             BeginTurn();
         }

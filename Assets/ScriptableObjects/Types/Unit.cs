@@ -97,7 +97,7 @@ namespace LUX.LightOfHeaven {
             BonusStunChance = 0;
             BonusLethalChance = 0;
         }
-        public void Setup() {
+        public void SetStats() {
             // hp
             MaxHp = BaseHp + BonusHp + (vitality * 10);            
             // mp
@@ -154,7 +154,7 @@ namespace LUX.LightOfHeaven {
             // StunChance = BaseStunChance + BonusStunChance + strength;
             // LethalChance = BaseLethalChance + BonusLethalChance;
         }
-        public void RestoreAfterTurn() {
+        public void RestoreDepletedStats() {
             CurrentAp = MaxAp;
             CurrentShield = MaxShield;
             CurrentMagicShield = MaxMagicShield;

@@ -55,6 +55,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -151,6 +152,7 @@ MonoBehaviour:
   currentTile: {fileID: 0}
   isFacingRight: 0
   hasMovedThisTurn: 0
+  spellPool: []
   activeEffects: []
   selectionHighlightGO: {fileID: 4227995371330779392}
   damagePreviewGO: {fileID: 1763133553868936872}
@@ -163,6 +165,7 @@ MonoBehaviour:
   isTarget: 0
   isStunned: 0
   enemiesInRange: []
+  destructiblesInRange: []
 --- !u!114 &2792515533916421474
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -179,7 +182,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   currentTile: {fileID: 0}
-  distanceBetweenTiles: 2
 --- !u!114 &6939629657831652315
 MonoBehaviour:
   m_ObjectHideFlags: 0
