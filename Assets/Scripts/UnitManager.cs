@@ -20,8 +20,12 @@ namespace LUX.LightOfHeaven {
         [Inject] private PlayerController playerController;
 
         private void OnEnable() {
-            gameEventSystem.onUnitMove += OnUnitMove;
-            gameEventSystem.onUnitDie += OnUnitDie;
+            gameEventSystem.onUnitMoved += OnUnitMove;
+            gameEventSystem.onUnitDied += OnUnitDie;
+        }
+        private void OnDisable() {
+            gameEventSystem.onUnitMoved -= OnUnitMove;
+            gameEventSystem.onUnitDied -= OnUnitDie;
         }
         private void OnUnitMove(bool isEnemy) {
             // do something about unit move depending on wether its player/friendly or enemy
@@ -34,6 +38,9 @@ namespace LUX.LightOfHeaven {
             }
             print($"{unitToDie.name} just died.");
             Destroy(unitToDie);
+
+            if(EnemyUnits.Count <= 0)
+                gameEventSystem.OnBattleEnded();
         }
         private void Start() {
             SpawnPlayerUnits();
@@ -50,7 +57,7 @@ namespace LUX.LightOfHeaven {
             // set player // in another another later?
             playerController.SetPlayerGO(playerUnitGO);
             playerController.SetPlayerUnitController(playerUnitController);
-            gameEventSystem.OnPlayerSpawn();
+            gameEventSystem.OnPlayerSpawned();
         }
         public void PlayerOnStartingPosition() {
             playerController.PlayerGO.transform.position = mapManager.StartingTiles[0].transform.position;

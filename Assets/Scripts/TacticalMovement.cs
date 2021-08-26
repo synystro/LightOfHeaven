@@ -59,7 +59,7 @@ namespace LUX.LightOfHeaven {
             }                        
             hasMovedThisTurn = true;     
             // trigger on unit move event
-            unitController.GameEventSystem.OnUnitMove(unitController.IsEnemy);      
+            unitController.GameEventSystem.OnUnitMoved(unitController.IsEnemy);      
         }
     }
 }

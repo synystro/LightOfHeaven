@@ -26,10 +26,10 @@ namespace LUX.LightOfHeaven {
         [Inject] PathFindingGrid grid;
 
         private void OnEnable() {
-            gameEventSystem.onTurnEnd += Reset;
+            gameEventSystem.onTurnEnded += Reset;
         }
         private void OnDisable() {
-            gameEventSystem.onTurnEnd -= Reset;
+            gameEventSystem.onTurnEnded -= Reset;
         }
         IEnumerator WaitUnitTurn(float seconds) {
             int i = 0;

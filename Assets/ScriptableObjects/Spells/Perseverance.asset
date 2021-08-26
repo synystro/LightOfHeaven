@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Perseverance
   m_EditorClassIdentifier: 
   Image: {fileID: 2455123156765208722, guid: aa7bdf3b00f03b74eb6eb037ac2ae036, type: 3}
-  SFX: {fileID: 0}
+  SFX: {fileID: 8300000, guid: 34c638d8d99ccfd44a261f13505ab317, type: 3}
   TargetType: 1
   Cost: 3
   Range: 0

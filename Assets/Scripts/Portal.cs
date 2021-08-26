@@ -11,28 +11,42 @@ namespace LUX.LightOfHeaven {
 
         // these are hidden
         [SerializeField] private MonsterPack monsterPack;
+        private bool isActive;
         // treasure?
+
+        [Inject] GameEventSystem gameEventSystem;
 
         private float hoverSize = 0.2f;
 
-        [Inject] WorldGenerator worldGenerator;
         [Inject] GameManager gameManager;
 
+        private void OnEnable() {
+            gameEventSystem.onBattleEnded += OnBattleEnded;
+        }
+        private void OnDisable() {
+            gameEventSystem.onBattleEnded -= OnBattleEnded;
+        }
+        private void Start() {
+            isActive = false;
+        }
+        private void OnBattleEnded() {
+            isActive = true;
+        }
         private void LoadNewRoom() {
             gameManager.ResetBattlefield();
             gameManager.GenerateRoom(roomType);
-            // onLoadNewRoom()?.Invoke();
-        }
 
+            gameEventSystem.OnNextRoomLoaded();
+        }
         public void AssignRoom(RoomType rt) {
             roomType = rt;
         }
-
         public void OnPointerClick(PointerEventData eventData) {
             // on click
-            LoadNewRoom();
-            worldGenerator.RaiseLevel();
-            // gameEvent?.OnLoadNewRomm
+            if(isActive) {
+                LoadNewRoom();
+                isActive = false;
+            }
         }
         public void OnPointerEnter(PointerEventData eventData) {
             // on enter

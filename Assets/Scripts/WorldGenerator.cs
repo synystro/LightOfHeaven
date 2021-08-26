@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 namespace LUX.LightOfHeaven {
     public enum DimensionType { Hell, Purgatory, Heaven }
@@ -32,10 +32,20 @@ namespace LUX.LightOfHeaven {
         RoomType[] roomsToAdd;
         Stack<RoomType> generatedRooms;
 
+        [Inject] GameEventSystem gameEventSystem;
+
         private void Awake() {
             roomsToAdd = new RoomType[unkown+minions+champions+uniques+shrines+markets];            
             generatedRooms = new Stack<RoomType>();
         }        
+
+        private void OnEnable() {
+            gameEventSystem.onNextRoomLoaded += OnNextRoomLoaded;
+        }
+
+        private void OnDisable() {
+            gameEventSystem.onNextRoomLoaded -= OnNextRoomLoaded;
+        }
 
         public void Init() {   
             AddRooms();
@@ -45,8 +55,9 @@ namespace LUX.LightOfHeaven {
             AssignRoomsToPortals();
         }
 
-        public void RaiseLevel() {
+        public void OnNextRoomLoaded() {
             level++;
+            AssignRoomsToPortals();
         }
 
         public void AssignRoomsToPortals() {

@@ -12,10 +12,10 @@ namespace LUX.LightOfHeaven {
 
         private Image panelBg;
         private void OnEnable() {
-            gameEventSystem.onBattleStart += Init;
+            gameEventSystem.onBattleStarted += Init;
         }
         private void OnDisable() {
-            gameEventSystem.onBattleStart -= Init;
+            gameEventSystem.onBattleStarted -= Init;
         }
         private void Awake() {
             panelBg = this.GetComponent<Image>();

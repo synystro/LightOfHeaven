@@ -63,7 +63,7 @@ namespace LUX.LightOfHeaven {
         }
         private void Start() {
             // subscribe to events
-            gameEventSystem.onTurnEnd += TurnEndReset;
+            gameEventSystem.onTurnEnded += TurnEndReset;
         }
         private void SetupAdjacentTiles() {
             adjacentTiles = new List<TileController>();
@@ -80,7 +80,7 @@ namespace LUX.LightOfHeaven {
                 downTile = adjacentFinder.DownGO.GetComponent<TileController>();   
         }
         private void OnDestroy() {
-            gameEventSystem.onTurnEnd -= TurnEndReset;
+            gameEventSystem.onTurnEnded -= TurnEndReset;
         }
         private void TurnEndReset() {
             Reset();

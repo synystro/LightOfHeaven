@@ -35,10 +35,10 @@ namespace LUX.LightOfHeaven {
         [Inject] private GameEventSystem gameEventSystem;
 
         private void OnEnable() {
-            gameEventSystem.onUnitMove += OnUnitMove;
+            gameEventSystem.onUnitMoved += OnUnitMove;
         }
         private void OnDisable() {
-            gameEventSystem.onUnitMove -= OnUnitMove;
+            gameEventSystem.onUnitMoved -= OnUnitMove;
         }
         private void Start() {
             Generate();

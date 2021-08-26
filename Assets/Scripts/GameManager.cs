@@ -4,6 +4,7 @@ using Zenject;
 namespace LUX.LightOfHeaven {
     public class GameManager : MonoBehaviour {
 
+        [Inject] GameEventSystem gameEventSystem;
         [Inject] WorldGenerator worldGenerator;
         [Inject] PlayerController playerController;
         [Inject] MapManager mapManager;
@@ -11,6 +12,12 @@ namespace LUX.LightOfHeaven {
 
         private void Awake() {
             AudioManager.Init();
+        }
+        private void OnEnable() {
+            gameEventSystem.onBattleEnded += ResetBattlefield;
+        }
+        private void OnDisable() {
+            gameEventSystem.onBattleEnded -= ResetBattlefield;
         }
         private void Start() {
             worldGenerator.Init();            
@@ -30,6 +37,8 @@ namespace LUX.LightOfHeaven {
         public void GenerateRoom(RoomType rt) {
             switch(rt) {
                 case RoomType.Minions: unitManager.SpawnMinions(worldGenerator.Dimensions[(int)worldGenerator.CurrentDimension]); break;
+                case RoomType.Market: gameEventSystem.OnPeacefulRoomLoaded(); break;
+                case RoomType.Shrine: gameEventSystem.OnPeacefulRoomLoaded(); break;
                 default: break;
             }
         }

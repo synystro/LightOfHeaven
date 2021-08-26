@@ -61,14 +61,14 @@ namespace LUX.LightOfHeaven {
             unitDetailsUi = this.GetComponent<UnitDetailsUi>();
         }
         private void Start() {
-            gameEventSystem.onTurnStart += OnTurnStart;
-            gameEventSystem.onTurnEnd += OnTurnEnd;
-            gameEventSystem.onUnitAttack += OnUnitAttacked;
+            gameEventSystem.onTurnStarted += OnTurnStart;
+            gameEventSystem.onTurnEnded += OnTurnEnd;
+            gameEventSystem.onUnitAttacked += OnUnitAttacked;
         }
         private void OnDisable() {
-            gameEventSystem.onTurnStart -= OnTurnStart;
-            gameEventSystem.onTurnEnd -= OnTurnEnd;
-            gameEventSystem.onUnitAttack -= OnUnitAttacked;
+            gameEventSystem.onTurnStarted -= OnTurnStart;
+            gameEventSystem.onTurnEnded -= OnTurnEnd;
+            gameEventSystem.onUnitAttacked -= OnUnitAttacked;
         }
         public void Setup(Unit unit, GameObject tileToSpawnGO, bool isEnemy) {
             // set facing direction
@@ -300,7 +300,7 @@ namespace LUX.LightOfHeaven {
             //DisplayDamagePopup(damageDealt, attackedUnitPosition);
 
             // call attacked unit's onAttacked function
-            gameEventSystem.OnUnitAttack(isEnemy);         
+            gameEventSystem.OnUnitAttacked(isEnemy);         
             
             // if has already moved, no reason for the unit to be selected
             if(hasMovedThisTurn) {
@@ -379,7 +379,7 @@ namespace LUX.LightOfHeaven {
             // zero unit hp
             this.unit.CurrentHp = 0;
             // send game event
-            gameEventSystem.OnUnitDie(this.gameObject);            
+            gameEventSystem.OnUnitDied(this.gameObject);            
         }
         public void OnPointerClick(PointerEventData eventData) {                   
             OnMouseClick();

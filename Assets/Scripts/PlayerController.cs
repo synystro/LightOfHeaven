@@ -37,12 +37,12 @@ namespace LUX.LightOfHeaven {
 
         private void OnEnable() {
             inputMaster.Enable();
-            gameEventSystem.onTurnEnd += Reset;
+            gameEventSystem.onTurnEnded += Reset;
             inputMaster.Player.EndTurn.performed += _ => EndTurn();
             inputMaster.Player.StartBattle.performed += _ => turnManager.Init();
         }
         private void OnDisable() {
-            gameEventSystem.onTurnEnd -= Reset;
+            gameEventSystem.onTurnEnded -= Reset;
             inputMaster.Player.EndTurn.performed -= _ => EndTurn();
             inputMaster.Player.StartBattle.performed -= _ => turnManager.Init();
             inputMaster.Disable();

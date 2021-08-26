@@ -29,7 +29,7 @@ MonoBehaviour:
   MaxHp: 20
   BaseHp: 20
   BonusHp: 0
-  CurrentHp: 20
+  CurrentHp: 0
   MaxMp: 20
   BaseMp: 20
   BonusMp: 0

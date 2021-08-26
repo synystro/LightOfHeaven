@@ -12,10 +12,10 @@ namespace LUX.LightOfHeaven {
         public bool IsEnemyTurn() { return moveIndex % 2 == 0; }  
 
         private void OnEnable() {
-            gameEventSystem.onBattleStart += Init;
+            gameEventSystem.onBattleStarted += Init;
         }
         private void OnDisable() {
-            gameEventSystem.onBattleStart -= Init;
+            gameEventSystem.onBattleStarted -= Init;
         }
         public void Init() {
             BeginTurn();
@@ -28,7 +28,7 @@ namespace LUX.LightOfHeaven {
             // }
             state = TurnState.Start;
             if(IsEnemyTurn()) {
-                gameEventSystem.OnTurnStart();
+                gameEventSystem.OnTurnStarted();
             }
             ActionPhase();
         }
@@ -42,7 +42,7 @@ namespace LUX.LightOfHeaven {
         public void EndTurn() {
             state = TurnState.End;
             if(IsEnemyTurn() == false) {
-                gameEventSystem.OnTurnEnd();
+                gameEventSystem.OnTurnEnded();
             }
             // reset all units and controllers
             moveIndex++;
