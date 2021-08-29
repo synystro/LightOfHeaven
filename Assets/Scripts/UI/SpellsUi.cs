@@ -21,7 +21,6 @@ namespace LUX.LightOfHeaven {
             panelBg = this.GetComponent<Image>();
         }
         public void Init() {
-            print("yeah");
             playerController.SetSpellsUi(this);
             panelBg.enabled = true;
             GetPlayerSpells();

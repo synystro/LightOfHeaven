@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 
 namespace LUX.LightOfHeaven {
+    [System.Serializable]
     [CreateAssetMenu(menuName = "LOH/Unit", fileName = "New Unit")]
     public class Unit : ScriptableObject {
         public new string name;
@@ -11,6 +12,8 @@ namespace LUX.LightOfHeaven {
         public GameObject charPrefabLeft;
         [Header("SPELLS")]
         public List<Spell> Spells;
+        [Header("EFFECTS")]
+        [SerializeField] public List<EffectData> ActiveEffects;
         [Header("FEATURES")]
         public bool Flight;
         [Header("ATTRIBUTES")]
@@ -81,6 +84,10 @@ namespace LUX.LightOfHeaven {
         public int LethalChance;
         public int BaseLethalChance;
         public int BonusLethalChance;
+
+        private void Awake() {
+            ActiveEffects = new List<EffectData>();
+        }
 
         public void ResetBonuses() {
             BonusHp = 0; CurrentHp -= BonusHp;

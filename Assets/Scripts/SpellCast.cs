@@ -91,8 +91,8 @@ namespace LUX.LightOfHeaven {
             UnitController playerUnitController = playerController.PlayerUnitController;
             switch(spell.DamageType) {
                 case DamageType.Physical: playerUnitController.DealAttack(targetUnitController, spell.AmountInstant, targetUnitController.transform.position); break;
-                case DamageType.Magical: targetUnitController.ReceiveDamage(playerController.SelectedEffect.InstantDamageData); break;
-                case DamageType.Piercing: targetUnitController.ReceiveDamage(playerController.SelectedEffect.InstantDamageData); break;
+                case DamageType.Magical: targetUnitController.Damage(playerController.SelectedEffect.InstantDamageData); break;
+                case DamageType.Piercing: targetUnitController.Damage(playerController.SelectedEffect.InstantDamageData); break;
                 default: break;
             }
             // play spell sfx

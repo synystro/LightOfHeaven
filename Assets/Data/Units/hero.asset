@@ -23,6 +23,16 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d5a21d52242eddd40824d1c0467f6c37, type: 2}
   - {fileID: 11400000, guid: d3beaad8982ed0a4b9295e3b072618da, type: 2}
   - {fileID: 11400000, guid: 5791134acbc0df847b53fe126ec2a90d, type: 2}
+  ActiveEffects:
+  - AmountInstant: 0
+    AmountOverTurns: 5
+    Range: 0
+    IgnoreObstacles: 0
+    Duration: 0
+    LastsTheEntireBattle: 1
+    EffectType: 1
+    DamageType: 0
+    TickSFX: {fileID: 8300000, guid: 34c638d8d99ccfd44a261f13505ab317, type: 3}
   Flight: 1
   strength: 0
   stamina: 0

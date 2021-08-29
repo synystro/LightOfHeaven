@@ -235,8 +235,8 @@ namespace LUX.LightOfHeaven {
             // if spell has an instant damage or heal, apply it now
             switch (selectedEffect.DamageType) {
                 case DamageType.Physical: selectedUnitAi.DealAttack(targetUnitController, selectedEffect.AmountInstant, targetUnitController.transform.position); break;
-                case DamageType.Magical: targetUnitController.ReceiveDamage(selectedEffect.InstantDamageData); break;
-                case DamageType.Piercing: targetUnitController.ReceiveDamage(selectedEffect.InstantDamageData); break;
+                case DamageType.Magical: targetUnitController.Damage(selectedEffect.InstantDamageData); break;
+                case DamageType.Piercing: targetUnitController.Damage(selectedEffect.InstantDamageData); break;
                 default: break;
             }
             // play spell sfx

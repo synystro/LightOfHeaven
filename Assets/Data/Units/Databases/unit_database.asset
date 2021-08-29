@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: caa59da41650ac346a330e7a73b7c810, type: 3}
+  m_Name: unit_database
+  m_EditorClassIdentifier: 
+  hellUnits:
+  - {fileID: 11400000, guid: f4710a45334980e4ca9a448e26d4cd70, type: 2}
+  - {fileID: 11400000, guid: fc7e7c40120b3824495836a8d6c1d23d, type: 2}
+  - {fileID: 11400000, guid: 0e8853688447be545a026b88f72d3dd0, type: 2}
+  - {fileID: 11400000, guid: 177fd8bbd4eaf7d4b95ef97cf0f942d6, type: 2}
+  - {fileID: 11400000, guid: 1b926932a13ae7f4e8cf115075a47d1c, type: 2}
+  skyUnits: []
+  spaceUnits: []

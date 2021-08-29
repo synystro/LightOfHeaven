@@ -6,15 +6,17 @@ using System.Linq;
 
 namespace LUX.LightOfHeaven {
     [RequireComponent(typeof(SpriteRenderer))]
+    [RequireComponent(typeof(Damage))]
+    [RequireComponent(typeof(Effect))]
     [RequireComponent(typeof(PathFinder))]
     [RequireComponent(typeof(UnitDetailsUi))]
     public class UnitController : TacticalMovement, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler {
         [SerializeField] private List<Spell> spellPool;
-        [SerializeField] private List<EffectData> activeEffects;
+        //[SerializeField] private List<EffectData> activeEffects;
         [SerializeField] private GameObject selectionHighlightGO;
         [SerializeField] private GameObject damagePreviewGO;
         [SerializeField] private GameObject damagePopupPrefab;
-        [SerializeField] private Unit unit;
+        [Expandable][SerializeField] private Unit unit;
         [SerializeField] private bool isEnemy;             
         [SerializeField] private bool hasTargetInRange;                  
         [SerializeField] private bool isSelected;
@@ -49,16 +51,19 @@ namespace LUX.LightOfHeaven {
         
         private SpriteRenderer selectionSR;   
         
+        private Damage damage;
+        private Effect effect;
         private UnitDetailsUi unitDetailsUi;    
 
         private void Awake() {            
-            spellPool = new List<Spell>();
-            activeEffects = new List<EffectData>();
+            spellPool = new List<Spell>();            
             enemiesInRange = new List<GameObject>();
             destructiblesInRange = new List<GameObject>();
             selectionSR = selectionHighlightGO.GetComponent<SpriteRenderer>(); 
             pathFinder = this.GetComponent<PathFinder>();           
             unitDetailsUi = this.GetComponent<UnitDetailsUi>();
+            damage = this.GetComponent<Damage>();
+            effect = this.GetComponent<Effect>();
         }
         private void Start() {
             gameEventSystem.onTurnStarted += OnTurnStart;
@@ -107,7 +112,7 @@ namespace LUX.LightOfHeaven {
         public void OnTurnStart() {    
             print($"{this.gameObject.name}'s turn");        
             ResetUnitStats();
-            ApplyModifiers();
+            ApplyEffects();
             
             this.unit.SetStats();
             this.unit.RestoreDepletedStats();
@@ -132,35 +137,15 @@ namespace LUX.LightOfHeaven {
             //RefreshDetails(); // already running inside receive damage function
         }
         public void AddEffect(EffectData effect) {
-            if(activeEffects.Contains(effect) == false) {
-                activeEffects.Add(effect);
-            }
+            if(this.unit.ActiveEffects.Contains(effect) == false)
+                this.unit.ActiveEffects.Add(effect);
         }
         public void RemoveEffect(EffectData effect) {
-            if(activeEffects.Contains(effect)) {
-                activeEffects.Remove(effect);
-            }
+            if(this.unit.ActiveEffects.Contains(effect))
+                this.unit.ActiveEffects.Remove(effect);
         }
-        public void ApplyEffect(EffectData e) {
-            bool tookHit = false;
-            switch(e.EffectType) {                
-                case EffectType.Hp: unit.BonusHp += e.AmountOverTurns; unit.CurrentHp += e.AmountOverTurns; break;
-                case EffectType.Heal: Heal(e.AmountOverTurns); break;
-                case EffectType.Damage: 
-                    if(e.OverTurnsDamageData.Amount > 0) {
-                        this.ReceiveDamage(e.OverTurnsDamageData);
-                        tookHit = true;
-                     }
-                     break;
-                case EffectType.Stun: isStunned = true; this.ReceiveDamage(e.OverTurnsDamageData); break;
-                default: break;
-            }
-            if(tookHit) {
-                AudioManager.PlaySFX(e.TickSFX);                
-            }
-            if(this.unit.CurrentHp <= 0) {
-                Die();                
-            }
+        public void Stun() {
+            isStunned = true;
         }
         public void RemoveSpellFromPool(Spell s) {
             if(spellPool.Contains(s)) {
@@ -180,17 +165,8 @@ namespace LUX.LightOfHeaven {
             // reset modifiers
             this.unit.ResetBonuses();            
         } 
-        private void ApplyModifiers() {
-            foreach(EffectData e in activeEffects.ToList()) {
-                ApplyEffect(e);
-                if(e.LastsTheEntireBattle) { continue; } // return if the effect isn't be removed until the end of battle
-                // after each turn, reduce its duration value
-                e.Duration -= 1;
-                // remove the effect if it has reached the end of its duration
-                if(e.Duration <= 0) {
-                    activeEffects.Remove(e);
-                }
-            }            
+        private void ApplyEffects() {
+            effect.ApplyEffects(this);           
         }  
         private void RefreshDetailsUi() {
             unitDetailsUi.Refresh(unit);
@@ -201,7 +177,7 @@ namespace LUX.LightOfHeaven {
                 if (isTarget) {
                     // apply targetted spell to this enemy
                     if (playerController.SelectedEffect != null) {
-                        //activeEffects.Add(playerController.SelectedEffect);
+                        //this.unit.ActiveEffects.Add(playerController.SelectedEffect);
                         playerController.SpellCastOn(this);
                     }
                 }
@@ -252,8 +228,8 @@ namespace LUX.LightOfHeaven {
             DamagePopup damagePopup = damagePreviewGO.GetComponent<DamagePopup>();
             int displayDamage = 0;
             switch(damageData.Type) {
-                case DamageType.Physical: displayDamage = DamageHandler.GetPhysicalDamageOnUnit(damageData.Amount + damageData.Source.AtkDamage, this.unit); break;
-                case DamageType.Magical: displayDamage = DamageHandler.GetMagicalDamageOnUnit(damageData.Amount, this.unit); break;
+                case DamageType.Physical: displayDamage = damage.GetPhysicalDamageOnUnit(damageData.Amount + damageData.Source.AtkDamage, this.unit); break;
+                case DamageType.Magical: displayDamage = damage.GetMagicalDamageOnUnit(damageData.Amount, this.unit); break;
                 case DamageType.Piercing: displayDamage = damageData.Amount; break;
                 default: break;
             }
@@ -291,7 +267,7 @@ namespace LUX.LightOfHeaven {
             DamageData attackDamageData = new DamageData(this.unit, (this.unit.AtkDamage + spellAtkDamage), DamageType.Physical, this.unit.CritChance, this.unit.StunChance, this.unit.LethalChance);
 
             // attack!
-            int damageDealt = attackedUnitController.ReceiveDamage(attackDamageData);
+            int damageDealt = attackedUnitController.Damage(attackDamageData);
 
             // remove attacked unit's attack highlight
             attackedUnitController.DisplayDamagePreview(false);
@@ -319,54 +295,22 @@ namespace LUX.LightOfHeaven {
                 this.unit.CurrentHp = this.unit.MaxHp;
             }            
         }
-        public int ReceiveDamage(DamageData damageData) {
-            int finalDamage;
-            int lethalRandom = Random.Range(0,100);
-            if(lethalRandom < damageData.LethalChance) {
-                this.unit.CurrentHp = 0;
-                print($"{damageData.Source.name} just dealt a LETHAL attack to {this.name}! Instantly killing them!");
-                Die();                
-                return 999;
-            }
-            switch(damageData.Type) {
-                case DamageType.Physical:
-                    int physicalDamage = damageData.Amount;
-                    // critical
-                    int critRandom = Random.Range(0,100);
-                    if(critRandom < damageData.CritChance) {
-                        physicalDamage = physicalDamage * 2;                                                
-                    }
-                    // final atk damage
-                    finalDamage = DamageHandler.DealPhysicalDamageOnUnit(physicalDamage, this.unit);
-                    //print($"{damageData.Source.name} just attacked {this.name} for {finalDamage} physical damage! Leaving them at {this.unit.CurrentHp}");                    
-                    break;
-                case DamageType.Magical:
-                    int magicalDamage = damageData.Amount;
-                    // final atk damage
-                    finalDamage = DamageHandler.DealMagicalDamageOnUnit(magicalDamage, this.unit);
-                    //print($"{damageData.Source.name} just attacked {this.name} for {finalDamage} magical damage! Leaving them at {this.unit.CurrentHp}");
-                    break;
-                case DamageType.Piercing:
-                    finalDamage = damageData.Amount;
-                    break;
-                default:
-                    finalDamage = 0;
-                    break;
-            }
-            // subtract this unit's hp by finaldamage
-            if (finalDamage > 0) {
-                unit.CurrentHp -= finalDamage;
+        public int Damage(DamageData damageData) {
+            int damageTaken = damage.GetDamageTaken(damageData, this.unit);
+            // subtract this unit's hp by damage taken
+            if (damageTaken > 0) {
+                unit.CurrentHp -= damageTaken;
             }
             // clamp hp, shields and armors
             ClampDefenseValues();
-            // die if hits 0 hp or less
+            // die if 0 hp or less
             if (this.unit.CurrentHp <= 0) {                
                 Die();
             }
             // display damage popup
-            DisplayDamagePopup(finalDamage, damageData.Type, this.transform.position);
+            DisplayDamagePopup(damageTaken, damageData.Type, this.transform.position);
             RefreshDetailsUi();            
-            return finalDamage;                        
+            return damageTaken;                        
         }
         private void ClampDefenseValues() {
             if(this.unit.CurrentHp <= 0) { this.unit.CurrentHp = 0; }
@@ -375,7 +319,7 @@ namespace LUX.LightOfHeaven {
             if(this.unit.CurrentArmor <= 0) { this.unit.CurrentArmor = 0; }
             if(this.unit.CurrentMagicArmor <= 0) { this.unit.CurrentMagicArmor = 0; }
         }
-        private void Die() {    
+        public void Die() {    
             // zero unit hp
             this.unit.CurrentHp = 0;
             // send game event
