@@ -23,8 +23,8 @@ namespace LUX.LightOfHeaven {
         }
 
         public virtual void Init() {        
-            effect = new EffectData(playerController.PlayerUnitController.UnitData, spell.EffectType, spell.DamageType, spell.AmountInstant, spell.AmountOverTurns, spell.Range, spell.IgnoreObstacles, spell.Duration, spell.SFX, spell.LastsTheEntireBattle); 
-            if(playerController.PlayerUnitController.UnitData.CurrentAp < spell.Cost) {
+            effect = new EffectData(playerController.PlayerUnitController.UnitStats, spell.EffectType, spell.DamageType, spell.AmountInstant, spell.AmountOverTurns, spell.Range, spell.IgnoreObstacles, spell.Duration, spell.SFX, spell.LastsTheEntireBattle); 
+            if(playerController.PlayerUnitController.CurrentSp < spell.Cost) {
                 print($"{playerController.PlayerUnitController.UnitData.name} has not enough stamina to cast {spell.name}. Needs {spell.Cost}");
                 return;
             }
@@ -53,7 +53,8 @@ namespace LUX.LightOfHeaven {
             }           
         }
         public void ConsumeStamina() {  
-            playerController.PlayerUnitController.UnitData.CurrentAp -= spell.Cost; 
+            //playerController.PlayerUnitController.CurrentSp -= spell.Cost; 
+            playerController.PlayerUnitController.ConsumeStamina(spell.Cost);
         }
         public void SetIsConsumed(bool state) {
             isConsumed = state;

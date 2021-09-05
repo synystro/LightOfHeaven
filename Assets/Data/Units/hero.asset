@@ -23,74 +23,19 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d5a21d52242eddd40824d1c0467f6c37, type: 2}
   - {fileID: 11400000, guid: d3beaad8982ed0a4b9295e3b072618da, type: 2}
   - {fileID: 11400000, guid: 5791134acbc0df847b53fe126ec2a90d, type: 2}
-  ActiveEffects:
-  - AmountInstant: 0
-    AmountOverTurns: 5
-    Range: 0
-    IgnoreObstacles: 0
-    Duration: 0
-    LastsTheEntireBattle: 1
-    EffectType: 1
-    DamageType: 0
-    TickSFX: {fileID: 8300000, guid: 34c638d8d99ccfd44a261f13505ab317, type: 3}
   Flight: 1
-  strength: 0
-  stamina: 0
-  vitality: 0
-  dexterity: 0
-  intelligence: 0
-  MaxHp: 100
-  BaseHp: 100
-  BonusHp: 0
-  CurrentHp: 100
-  MaxMp: 50
-  BaseMp: 50
-  BonusMp: 0
-  CurrentMp: 50
-  MaxAp: 3
-  BaseAp: 3
-  BonusAp: 0
-  CurrentAp: 3
-  AtkDamage: 4
-  BaseAtkDamage: 4
-  BonusAtkDamage: 0
+  Strength: 1
+  Stamina: 1
+  Vitality: 1
+  Dexterity: 1
+  Intelligence: 1
+  Hp: 50
+  Ep: 20
+  Sp: 2
+  PhyDamage: 0
+  MagDamage: 0
   AtkRange: 1
-  BaseAtkRange: 1
-  BonusAtkRange: 0
-  Accuracy: 0
-  BaseAccuracy: 0
-  BonusAccuracy: 0
-  MgcDamage: 0
-  BaseMgcDamage: 0
-  BonusMgcDamage: 0
-  MaxShield: 5
-  BaseShield: 5
-  BonusShield: 0
-  CurrentShield: 5
-  MaxMagicShield: 0
-  BaseMagicShield: 0
-  BonusMagicShield: 0
-  CurrentMagicShield: 0
-  MaxArmor: 0
-  BaseArmor: 0
-  BonusArmor: 0
-  CurrentArmor: 0
-  MaxMagicArmor: 0
-  BaseMagicArmor: 0
-  BonusMagicArmor: 0
-  CurrentMagicArmor: 0
+  AtkAccuracy: 0
+  PhyArmor: 0
+  MagArmor: 0
   Poise: 0
-  BasePoise: 0
-  BonusPoise: 0
-  Evasion: 0
-  BaseEvasion: 0
-  BonusEvasion: 0
-  CritChance: 0
-  BaseCritChance: 0
-  BonusCritChance: 0
-  StunChance: 0
-  BaseStunChance: 0
-  BonusStunChance: 0
-  LethalChance: 1
-  BaseLethalChance: 1
-  BonusLethalChance: 0

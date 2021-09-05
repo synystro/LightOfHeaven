@@ -56,7 +56,6 @@ namespace LUX.LightOfHeaven {
             PlayerUnits.Add(playerUnitGO);
             // set player // in another another later?
             playerController.SetPlayerGO(playerUnitGO);
-            playerController.SetPlayerUnitController(playerUnitController);
             gameEventSystem.OnPlayerSpawned();
         }
         public void PlayerOnStartingPosition() {

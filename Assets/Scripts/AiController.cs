@@ -52,9 +52,8 @@ namespace LUX.LightOfHeaven {
             } else if (selectedUnitAi.DestructiblesInRange.Count > 0 && selectedUnitAttacked == false) {
                 AttackObstacle();
             }
-
             // move 
-            while (selectedUnitAi.UnitData.CurrentAp > 0 &&
+            while (selectedUnitAi.CurrentSp > 0 &&
             selectedUnitAttacked == false &&
             IsBlockedByObstacle() == false &&
             SelectSpell() == false &&
@@ -123,6 +122,7 @@ namespace LUX.LightOfHeaven {
         private bool SelectSpell() {
             int higherDamage = -100;
             bool hasSpellToCast = false;
+            List<Spell> unusableSpells = new List<Spell>();
 
             foreach (Spell spell in selectedUnitAi.SpellPool) {
                 // reset tiles spell in range props            
@@ -132,21 +132,25 @@ namespace LUX.LightOfHeaven {
 
                 GameObject selectedSpellTarget = spellTargetsInRange[0];
                 if (selectedSpellTarget != null) {
-                    if (selectedUnitAi.UnitData.CurrentAp >= spell.Cost) {
+                    if (selectedUnitAi.CurrentSp >= spell.Cost) {
                         if (spell.AmountInstant > higherDamage) {
                             higherDamage = spell.AmountInstant;
                             selectedSpellTargetUnit = selectedSpellTarget.GetComponent<UnitController>();
                             selectedSpell = spell;
-                            selectedEffect = new EffectData(selectedUnitAi.UnitData, selectedSpell.EffectType, selectedSpell.DamageType, selectedSpell.AmountInstant, selectedSpell.AmountOverTurns, selectedSpell.Range, selectedSpell.IgnoreObstacles, selectedSpell.Duration, selectedSpell.SFX, selectedSpell.LastsTheEntireBattle);
+                            selectedEffect = new EffectData(selectedUnitAi.UnitStats, selectedSpell.EffectType, selectedSpell.DamageType, selectedSpell.AmountInstant, selectedSpell.AmountOverTurns, selectedSpell.Range, selectedSpell.IgnoreObstacles, selectedSpell.Duration, selectedSpell.SFX, selectedSpell.LastsTheEntireBattle);
                             hasSpellToCast = true;
                         }
+                    } else if(spell.Cost > selectedUnitAi.UnitStats.MaxSp) {
+                        unusableSpells.Add(spell);                        
                     }
                 }
             }
+            foreach(Spell spell in unusableSpells)
+                selectedUnitAi.RemoveSpellFromPool(spell);
             return hasSpellToCast;
         }
         private void Move() {
-            if (selectedUnitAi.UnitData.CurrentAp <= 0) { return; } // if has already moved (this turn), return
+            if (selectedUnitAi.CurrentSp <= 0) { return; } // if has already moved (this turn), return
 
             // display path towards player
             AstarPathFinding selectedUnitPF = selectedUnitAi.GetComponent<AstarPathFinding>();
@@ -179,7 +183,7 @@ namespace LUX.LightOfHeaven {
                     //Debug.LogWarning($"an obstacle is on the way of {selectedUnitAi.UnitData.name}");
                 }
                 // subtract 1 AP because it has moved 1 tile
-                selectedUnitAi.UnitData.CurrentAp -= 1;
+                selectedUnitAi.CurrentSp -= 1;
             } else {
                 Debug.LogError("Something is wrong with AI movement behaviour's LOGIC. You probably forgot to set tileLayer's mask");
             }
@@ -206,7 +210,7 @@ namespace LUX.LightOfHeaven {
             selectedUnitAttacked = true;
         }
         private void AttackObstacle() {
-            selectedUnitAi.DestructiblesInRange[0].GetComponent<IDestructible>().Damage(selectedUnitAi.UnitData.AtkDamage);
+            selectedUnitAi.DestructiblesInRange[0].GetComponent<IDestructible>().Damage(selectedUnitAi.UnitStats.PhyDamage.Value);
             selectedUnitAttacked = true;
             //print($"{selectedUnitAi.UnitData.name} attacked an obstacle for {selectedUnitAi.UnitData.AtkDamage}");
         }

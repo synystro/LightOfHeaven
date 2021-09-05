@@ -4,6 +4,7 @@ using Zenject;
 
 namespace LUX.LightOfHeaven {
     public class PlayerController : MonoBehaviour {
+        [SerializeField] private Equippable longSword;
         [SerializeField] private UnitController playerUnitController;
         [SerializeField] private GameObject playerGO;
         [SerializeField] private EffectData selectedEffect;
@@ -16,8 +17,7 @@ namespace LUX.LightOfHeaven {
         public bool HasMovedThisTurn => hasMovedThisTurn;
         public bool HasAttackedThisTurn => hasAttackedThisTurn;
         public EffectData SelectedEffect => selectedEffect;
-        public void SetPlayerUnitController(UnitController playerUnitController) { this.playerUnitController = playerUnitController; }
-        public void SetPlayerGO(GameObject pg) { playerGO = pg; }
+        public void SetPlayerGO(GameObject p) { playerGO = p; GetPlayerComponents(); }
         public void SetHasMovedThisTurn(bool state) { hasMovedThisTurn = state; }
         public void SetHasAttackedThisTurn(bool state) { hasAttackedThisTurn = state; }        
         public void SetSelectedSpellButton(GameObject sbGO) { selectedSpellButton = sbGO; }
@@ -25,6 +25,7 @@ namespace LUX.LightOfHeaven {
 
         private InputMaster inputMaster;
         private SpellsUi spellsUi;
+        private EquipmentSystem equipmentSystem;
 
         [Inject] private GameEventSystem gameEventSystem;
         [Inject] MapManager mapManager;
@@ -39,22 +40,30 @@ namespace LUX.LightOfHeaven {
             inputMaster.Enable();
             gameEventSystem.onTurnEnded += Reset;
             inputMaster.Player.EndTurn.performed += _ => EndTurn();
-            inputMaster.Player.StartBattle.performed += _ => turnManager.Init();
         }
         private void OnDisable() {
             gameEventSystem.onTurnEnded -= Reset;
+            //gameEventSystem.onEquipped -= playerUnitController.UnitData.AddBonus;
             inputMaster.Player.EndTurn.performed -= _ => EndTurn();
-            inputMaster.Player.StartBattle.performed -= _ => turnManager.Init();
             inputMaster.Disable();
+        }
+        private void GetPlayerComponents() {
+            playerUnitController = playerGO.GetComponent<UnitController>();
+            equipmentSystem = playerGO.GetComponent<EquipmentSystem>();
+
+            //gameEventSystem.onEquipped += playerUnitController.UnitData.AddBonus;
         }
         public void Reset() {
             hasMovedThisTurn = false;
             hasAttackedThisTurn = false;
         }
         public void EndTurn() {
-            //print("Player ended their turn");
             spellsUi.CheckIfOutOfSpells();
             turnManager.EndTurn();
+        }
+        public void EquipSword() {
+            equipmentSystem.Equip(longSword, playerUnitController);
+            //equipmentSystem.Equip(longSword);
         }
         public void PlayerToStartingPosition() {
             playerUnitController.Move(mapManager.StartingTiles[0].transform.position, mapManager.StartingTiles[0].gameObject, true);

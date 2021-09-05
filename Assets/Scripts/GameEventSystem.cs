@@ -23,5 +23,7 @@ namespace LUX.LightOfHeaven {
         public void OnNextRoomLoaded() { onNextRoomLoaded?.Invoke(); }
         public event Action onPeacefulRoomLoaded;
         public void OnPeacefulRoomLoaded() { onPeacefulRoomLoaded?.Invoke(); print("entered peaceful room"); }
+        public event Action<Equippable> onEquipped;
+        public void OnEquipped(Equippable equipment) { onEquipped?.Invoke(equipment); }
     }
 }

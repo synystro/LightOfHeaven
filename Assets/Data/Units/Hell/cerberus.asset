@@ -19,24 +19,25 @@ MonoBehaviour:
   charPrefabLeft: {fileID: 4491116610780015743, guid: 81bd55fdd4162304ca73cbfebac05c35,
     type: 3}
   Spells: []
+  ActiveEffects: []
   Flight: 0
-  strength: 0
-  stamina: 0
-  vitality: 0
-  dexterity: 0
-  intelligence: 0
+  Strength: 0
+  Stamina: 0
+  Vitality: 0
+  Dexterity: 0
+  Intelligence: 0
   MaxHp: 20
   BaseHp: 20
   BonusHp: 0
   CurrentHp: 20
-  MaxMp: 20
-  BaseMp: 20
-  BonusMp: 0
-  CurrentMp: 20
-  MaxAp: 1
-  BaseAp: 1
-  BonusAp: 0
-  CurrentAp: 1
+  MaxEp: 0
+  BaseEp: 0
+  BonusEp: 0
+  CurrentEp: 0
+  MaxSp: 0
+  BaseSp: 1
+  BonusSp: 0
+  CurrentSp: 0
   AtkDamage: 0
   BaseAtkDamage: 5
   BonusAtkDamage: 0

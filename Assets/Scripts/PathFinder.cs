@@ -23,7 +23,7 @@ namespace LUX.LightOfHeaven {
         }
         public List<GameObject> GetReachableTiles() {
             reachableTiles.Clear();
-            apsLeft = unitController.UnitData.CurrentAp;
+            apsLeft = unitController.CurrentSp;
 
             currentTile = unitController.CurrentTile.GetComponent<TileController>();
             //currentTile.SetAsReachable();

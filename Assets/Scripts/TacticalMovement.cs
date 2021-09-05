@@ -38,7 +38,7 @@ namespace LUX.LightOfHeaven {
             TileController targetTile = targetTileGO.GetComponent<TileController>();
             // if this is the player consume aps here!
             if(unitController.IsEnemy == false) {
-                unitController.UnitData.CurrentAp = targetTile.MovesLeft;
+                unitController.ConsumeStamina(unitController.CurrentSp - targetTile.MovesLeft);
             }
             // return if the player has already moved an unit this turn
             if(unitController.PlayerController.HasMovedThisTurn == true && ignoreAlreadyMoved == false) { return; }
