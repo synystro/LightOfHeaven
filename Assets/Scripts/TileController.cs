@@ -28,7 +28,7 @@ namespace LUX.LightOfHeaven {
         public TileData TileData => tileData;
         public List<TileController> AdjacentTiles => adjacentTiles;
         public bool HasObstacle() {
-            if (Physics2D.OverlapCircle(this.transform.position, 0.2f, obstacleLayer)) {
+            if (Physics2D.OverlapCircle(this.transform.position + Utilities.SpawnIsoOffset, 0.2f, obstacleLayer)) {
                 return true;
             }
             return false;
@@ -57,13 +57,13 @@ namespace LUX.LightOfHeaven {
         private void Awake() {
             spriteRenderer = this.GetComponent<SpriteRenderer>();            
             tileData = this.GetComponent<TileData>();
-            adjacentFinder = this.GetComponent<AdjacentFinder>();
-
-            SetupAdjacentTiles();
+            adjacentFinder = this.GetComponent<AdjacentFinder>();            
         }
         private void Start() {
             // subscribe to events
             gameEventSystem.onTurnEnded += TurnEndReset;
+            
+            SetupAdjacentTiles();
         }
         private void SetupAdjacentTiles() {
             adjacentTiles = new List<TileController>();

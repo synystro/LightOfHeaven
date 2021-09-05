@@ -175,7 +175,7 @@ namespace LUX.LightOfHeaven {
                 if (FinalPath != null) {
                     foreach (Node node in FinalPath) {
                         Gizmos.color = Color.black;
-                        Gizmos.DrawCube(node.position, Vector3.one * (nodeDiameter - gapBetweenNodes));
+                        Gizmos.DrawCube(node.position.ToIsoPos(), Vector3.one * (nodeDiameter - gapBetweenNodes));
                     }
                 }
             } else {
@@ -192,7 +192,7 @@ namespace LUX.LightOfHeaven {
                                 Gizmos.color = Color.black;
                             }
                         }
-                        Gizmos.DrawCube(node.position, Vector3.one * (nodeDiameter - gapBetweenNodes));
+                        Gizmos.DrawCube(node.position.ToIsoPos(), Vector3.one * (nodeDiameter - gapBetweenNodes));
                     }
                     //if (FinalPath != null) {
                     //  foreach (Node node in FinalPath) {

@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using Zenject;
+using UnityEngine.Tilemaps;
 
 namespace LUX.LightOfHeaven {
     public class UnitManager : MonoBehaviour {
+        [Header("Map")]
+        Tilemap map;        
         [Header("Selection")]
         [SerializeField] private UnitController selectedUnit;
         [Header("Units Data")]
@@ -49,7 +52,7 @@ namespace LUX.LightOfHeaven {
         private void SpawnPlayerUnits() {
             TileController tileToSpawn = mapManager.StartingTiles[0];
 
-            Vector3 tileToSpawnPosition = tileToSpawn.TileData.GetPosition();
+            Vector3 tileToSpawnPosition = tileToSpawn.TileData.GetPosition() + Utilities.SpawnIsoOffset;
             GameObject playerUnitGO = Instantiate(unitPrefab, tileToSpawnPosition, Quaternion.identity);
             UnitController playerUnitController = playerUnitGO.GetComponent<UnitController>();
             playerUnitController.Setup(PlayerUnitSO, tileToSpawn.gameObject, false);
@@ -73,7 +76,7 @@ namespace LUX.LightOfHeaven {
             int tileToSpawnIndex = ((mapManager.GetTileCount() / 2)) + (24) - EnemyUnitsSO.Count;
             foreach (Unit enemyUnit in EnemyUnitsSO) {
                 GameObject tileToSpawnGO = mapManager.GetTileByIndex(tileToSpawnIndex).gameObject;
-                Vector3 tileToSpawnPosition = tileToSpawnGO.GetComponent<TileData>().GetPosition();
+                Vector3 tileToSpawnPosition = tileToSpawnGO.GetComponent<TileData>().GetPosition() + Utilities.SpawnIsoOffset;
                 GameObject unitGO = Instantiate(unitPrefab, tileToSpawnPosition, Quaternion.identity);
                 unitGO.GetComponent<UnitController>().Setup(enemyUnit, tileToSpawnGO, true);
                 EnemyUnits.Add(unitGO);

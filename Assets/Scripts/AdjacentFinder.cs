@@ -6,7 +6,8 @@ using UnityEngine;
 namespace LUX.LightOfHeaven {
     public class AdjacentFinder : MonoBehaviour {        
         [SerializeField] List<GameObject> adjacentObjects;
-        [SerializeField] int distanceOffset = 2;
+        [SerializeField] int offsetX = 2;
+        [SerializeField] int offsetY = 1;
         [SerializeField] LayerMask targetLayer;
 
         private GameObject leftGO;
@@ -20,12 +21,14 @@ namespace LUX.LightOfHeaven {
         public GameObject DownGO => downGO;
 
         private void Awake() {
-            adjacentObjects = new List<GameObject>(); 
+            adjacentObjects = new List<GameObject>();
 
-            Vector2 offsetUp = new Vector2(this.transform.position.x, this.transform.position.y + distanceOffset);
-            Vector2 offsetDown = new Vector2(this.transform.position.x, this.transform.position.y - distanceOffset);            
-            Vector2 offsetLeft = new Vector2(this.transform.position.x - distanceOffset, this.transform.position.y);
-            Vector2 offsetRight = new Vector2(this.transform.position.x + distanceOffset, this.transform.position.y);
+            Vector2 thisPos = this.transform.position + Utilities.SpawnIsoOffset;
+
+            Vector2 offsetUp = new Vector2(thisPos.x - offsetX, thisPos.y + offsetY);
+            Vector2 offsetDown = new Vector2(thisPos.x + offsetX, thisPos.y - offsetY);            
+            Vector2 offsetLeft = new Vector2(thisPos.x - offsetX, thisPos.y - offsetY);
+            Vector2 offsetRight = new Vector2(thisPos.x + offsetX,thisPos.y + offsetY);
 
             Collider2D hitUp = Physics2D.OverlapCircle(offsetUp, 0.2f, targetLayer);
             Collider2D hitDown = Physics2D.OverlapCircle(offsetDown, 0.2f, targetLayer);
