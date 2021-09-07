@@ -10,6 +10,7 @@ namespace LUX.LightOfHeaven {
         [Header("Status")]
         [SerializeField] private UnitController currentUnit;
         [SerializeField] private int movesLeft;
+        [SerializeField] private int moveCost;
         [SerializeField] private int rangeLeft;  
         [SerializeField] private bool isReachable;
         [SerializeField] private bool isInAtkRange;
@@ -40,6 +41,7 @@ namespace LUX.LightOfHeaven {
         public bool IsInAtkRange => isInAtkRange;
         public bool IsInSpellRange => isInSpellRange;
         public int MovesLeft => movesLeft;
+        public int MoveCost => moveCost;
         public int RangeLeft => rangeLeft;
         public UnitController CurrentUnit => currentUnit;
         public TileController LeftTile => leftTile;
@@ -103,6 +105,9 @@ namespace LUX.LightOfHeaven {
         public void SetMovesLeft(int movesLeft) {
             this.movesLeft = movesLeft;
         }
+        public void SetMoveCost(int moveCost) {
+            this.moveCost = moveCost;
+        }
         public void SetRangeLeft(int rangeLeft) {
             this.rangeLeft = rangeLeft;
         }
@@ -112,6 +117,7 @@ namespace LUX.LightOfHeaven {
             isInSpellRange = false;
             isReachable = false;
             movesLeft = 0;
+            moveCost = 0;
             rangeLeft = 0;            
         }
         public void OnPointerEnter(PointerEventData eventData) {

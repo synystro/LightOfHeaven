@@ -13,7 +13,14 @@ namespace LUX.LightOfHeaven {
         protected UnityEngine.GameObject facingLeftModelGO;
         protected UnityEngine.GameObject facingRightModelGO; 
 
+        public PathFinder PathFinder => pathFinder;
         protected PathFinder pathFinder;
+        protected RangeFinder rangeFinder;
+
+        // private void Awake() {
+        //     pathFinder = this.GetComponent<PathFinder>();
+        //     rangeFinder = this.GetComponent<RangeFinder>();    
+        // }
 
         protected void SetFacingDirectionTowardsCoordX(int targetPositionX) {
             if (targetPositionX - this.transform.position.x > 0) {
@@ -32,13 +39,15 @@ namespace LUX.LightOfHeaven {
         }
         protected List<UnityEngine.GameObject> GetReachableTiles() {
             if (hasMovedThisTurn) { return null; }           
-            return pathFinder.GetReachableTiles();
+            return rangeFinder.GetReachableTiles();
         }
         protected void MoveUnit(Vector2 clickPoint, UnityEngine.GameObject targetTileGO, UnitController unitController, bool ignoreAlreadyMoved) {
             TileController targetTile = targetTileGO.GetComponent<TileController>();
-            // if this is the player consume aps here!
+            
             if(unitController.IsEnemy == false) {
                 unitController.ConsumeStamina(unitController.CurrentSp - targetTile.MovesLeft);
+            } else {
+                unitController.ConsumeStamina(1);
             }
             // return if the player has already moved an unit this turn
             if(unitController.PlayerController.HasMovedThisTurn == true && ignoreAlreadyMoved == false) { return; }

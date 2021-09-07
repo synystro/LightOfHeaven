@@ -9,7 +9,9 @@ namespace LUX.LightOfHeaven {
         Tilemap map;        
         [Header("Selection")]
         [SerializeField] private UnitController selectedUnit;
-        [Header("Units Data")]
+        [Header("Units Data")]        
+        [SerializeField] private UnitController player;
+        public UnitController Player => player;
         public Unit PlayerUnitSO;        
         public List<Unit> EnemyUnitsSO;
         [Header("Units Spawned")]
@@ -46,16 +48,16 @@ namespace LUX.LightOfHeaven {
                 gameEventSystem.OnBattleEnded();
         }
         private void Start() {
-            SpawnPlayerUnits();
+            SpawnPlayer();
             SpawnEnemyUnits();
         }
-        private void SpawnPlayerUnits() {
+        private void SpawnPlayer() {
             TileController tileToSpawn = mapManager.StartingTiles[0];
 
             Vector3 tileToSpawnPosition = tileToSpawn.TileData.GetPosition() + Utilities.SpawnIsoOffset;
             GameObject playerUnitGO = Instantiate(unitPrefab, tileToSpawnPosition, Quaternion.identity);
-            UnitController playerUnitController = playerUnitGO.GetComponent<UnitController>();
-            playerUnitController.Setup(PlayerUnitSO, tileToSpawn.gameObject, false);
+            player = playerUnitGO.GetComponent<UnitController>();
+            player.Setup(PlayerUnitSO, tileToSpawn.gameObject, false);
             PlayerUnits.Add(playerUnitGO);
             // set player // in another another later?
             playerController.SetPlayerGO(playerUnitGO);

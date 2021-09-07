@@ -9,21 +9,18 @@ namespace LUX.LightOfHeaven {
         [SerializeField] private Spell selectedSpell;
         [SerializeField] private UnitController selectedSpellTargetUnit;
         private EffectData selectedEffect;
-        [SerializeField] private bool selectedUnitAiValidPath;
         [SerializeField] private LayerMask tileMask;
 
         private bool selectedUnitAttacked;
         private HashSet<TileController> tilesChecked = new HashSet<TileController>();
 
-        private const float unitTurnTime = .1f;
-        private const float attackDelayTime = .1f;
+        private const float unitTurnTime = 1f;
+        private const float attackDelayTime = 0.1f;
 
         [Inject] private GameEventSystem gameEventSystem;
         [Inject] private UnitManager unitManager;
         [Inject] private TurnManager turnManager;
         [Inject] private MapManager mapManager;
-
-        [Inject] PathFindingGrid grid;
 
         private void OnEnable() {
             gameEventSystem.onTurnEnded += Reset;
@@ -52,13 +49,18 @@ namespace LUX.LightOfHeaven {
             } else if (selectedUnitAi.DestructiblesInRange.Count > 0 && selectedUnitAttacked == false) {
                 AttackObstacle();
             }
+            List<TileController> path = selectedUnitAi.PathFinder.GetPathToTargetOnTile(unitManager.Player.CurrentTile);
+            int movedCount = 0;
             // move 
             while (selectedUnitAi.CurrentSp > 0 &&
             selectedUnitAttacked == false &&
-            IsBlockedByObstacle() == false &&
             SelectSpell() == false &&
-            selectedUnitAiValidPath == true) {
-                Move();
+            path.Count > 0
+            ) {
+                if(path[movedCount].HasObstacle())
+                    break;
+                Move(path[movedCount]);
+                movedCount++;
             }
             // try to attack if hasn't already and player unit is in attack range        
             if (selectedSpell != null && selectedUnitAttacked == false) {
@@ -93,12 +95,9 @@ namespace LUX.LightOfHeaven {
         }
         private void StartUnitActionPhase() {
             selectedUnitAi.SetSelection(true);
-            selectedUnitAiValidPath = true;
 
             // try to cast chosen spell if player unit is in cast range
             selectedUnitAttacked = false;
-            //selectedUnitAi.GetEnemiesInRangeOf(selectedUnitAi.UnitData.AtkRange, false, selectedUnitAi.UnitData.Flight);
-            IsBlockedByObstacle();
 
             // if there are no spells left to cast, reset the spells pool
             if (selectedUnitAi.SpellPool.Count <= 0) {
@@ -115,9 +114,6 @@ namespace LUX.LightOfHeaven {
         }
         private bool IsTargetInRange() {
             return selectedUnitAi.EnemiesInRange.Contains(unitManager.PlayerUnits[0]);
-        }
-        private bool IsBlockedByObstacle() {
-            return selectedUnitAi.GetDestructiblesInRangeOf(selectedUnitAi.UnitData.AtkRange, false, selectedUnitAi.UnitData.Flight).Count > 0;
         }
         private bool SelectSpell() {
             int higherDamage = -100;
@@ -149,49 +145,12 @@ namespace LUX.LightOfHeaven {
                 selectedUnitAi.RemoveSpellFromPool(spell);
             return hasSpellToCast;
         }
-        private void Move() {
-            if (selectedUnitAi.CurrentSp <= 0) { return; } // if has already moved (this turn), return
-
-            // display path towards player
-            AstarPathFinding selectedUnitPF = selectedUnitAi.GetComponent<AstarPathFinding>();
-
-            // for detecting "dynamic" obstacles properly (e.g. other units)
-            grid.Generate();
-
-            Vector2 targetPos = unitManager.PlayerUnits[0].transform.position;
-
-            selectedUnitAiValidPath = selectedUnitPF.FindPath(selectedUnitAi.transform.position, targetPos, selectedUnitAi.IsFlying);
-            //selectedUnitPF.FindPath(selectedUnitAi.transform.position, targetPos, true);
-            if (selectedUnitAiValidPath == false || selectedUnitPF.FinalPath.Count <= 0) {
-                selectedUnitPF.FindPath(selectedUnitAi.transform.position, targetPos, true);
-            }
-
-            Vector2 targetNodePos = selectedUnitPF.FinalPath[0].position;
-
-            // get the tile
-            TileController tileToMove;
-            Collider2D tileHit = Physics2D.OverlapCircle(targetNodePos, 0.2f, tileMask);
-            if (tileHit) {
-                tileToMove = tileHit.GetComponent<TileController>();
-            } else {
-                tileToMove = null;
-            }
-            if (tileToMove != null) {
-                if (tileToMove.HasObstacle() == false) {
-                    selectedUnitAi.Move(tileToMove.transform.position, tileToMove.gameObject, false);
-                } else {
-                    //Debug.LogWarning($"an obstacle is on the way of {selectedUnitAi.UnitData.name}");
-                }
-                // subtract 1 AP because it has moved 1 tile
-                selectedUnitAi.CurrentSp -= 1;
-            } else {
-                Debug.LogError("Something is wrong with AI movement behaviour's LOGIC. You probably forgot to set tileLayer's mask");
-            }
+        
+        private void Move(TileController tile) {  
+            selectedUnitAi.Move(tile.transform.position, tile.gameObject, false);
         }
+
         private void Attack() {
-            // select spell to use            
-            //selectedSpell = selectedUnitAi.UnitData.Spells[0];
-            //selectedEffect = new EffectData(selectedUnitAi.UnitData, selectedSpell.EffectType, selectedSpell.DamageType, selectedSpell.AmountInstant, selectedSpell.AmountOverTurns, selectedSpell.Range, selectedSpell.IgnoreObstacles, selectedSpell.Duration, selectedSpell.SFX, selectedSpell.LastsTheEntireBattle); 
             // check the spell's target type
             switch (selectedSpell.TargetType) {
                 case SpellTargetType.NoTarget: break;

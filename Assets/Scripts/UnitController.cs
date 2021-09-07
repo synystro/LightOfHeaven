@@ -10,6 +10,7 @@ namespace LUX.LightOfHeaven {
     [RequireComponent(typeof(Damage))]
     [RequireComponent(typeof(Effect))]
     [RequireComponent(typeof(PathFinder))]
+    [RequireComponent(typeof(RangeFinder))]
     [RequireComponent(typeof(UnitDetailsUi))]
     public class UnitController : TacticalMovement, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler {
         [SerializeField] private List<EffectData> activeEffects;
@@ -72,9 +73,10 @@ namespace LUX.LightOfHeaven {
             spellPool = new List<Spell>();            
             enemiesInRange = new List<GameObject>();
             destructiblesInRange = new List<GameObject>();
-            selectionSR = selectionHighlightGO.GetComponent<SpriteRenderer>(); 
-            pathFinder = this.GetComponent<PathFinder>();           
+            selectionSR = selectionHighlightGO.GetComponent<SpriteRenderer>();                    
             unitDetailsUi = this.GetComponent<UnitDetailsUi>();
+            pathFinder = this.GetComponent<PathFinder>();
+            rangeFinder = this.GetComponent<RangeFinder>();  
             damage = this.GetComponent<Damage>();
             effect = this.GetComponent<Effect>();
             unitStats = this.GetComponent<UnitStats>();
@@ -269,10 +271,7 @@ namespace LUX.LightOfHeaven {
             selectionSR.color = red;
         }
         public List<GameObject> GetEnemiesInRangeOf(int tilesDistance, bool isSpell, bool ignoreObstacles) {
-            return enemiesInRange = pathFinder.GetEnemiesInRangeOf(tilesDistance, ignoreObstacles);
-        }
-        public List<GameObject> GetDestructiblesInRangeOf(int tilesDistance, bool isSpell, bool ignoreObstacles) {
-            return destructiblesInRange = pathFinder.GetDestructiblesInRangeOf(tilesDistance, ignoreObstacles);
+            return enemiesInRange = rangeFinder.GetEnemiesInRangeOf(tilesDistance, ignoreObstacles);
         }
         public void SetSelection(bool state) {
             isSelected = state;  

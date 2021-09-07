@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace LUX.LightOfHeaven {
     [RequireComponent(typeof(UnitController))]
-    public class PathFinder : MonoBehaviour {
+    public class RangeFinder : MonoBehaviour {
         [Header("Tile Setup")]
         [SerializeField] private LayerMask tileLayer;
         [SerializeField] private TileController currentTile;
@@ -103,50 +103,6 @@ namespace LUX.LightOfHeaven {
                 if(tiletoSearch.HasObstacle() == false  || ignoreObstacles)
                     ScanForEnemy(tiletoSearch, ignoreObstacles); 
             }
-
-        }
-        public List<GameObject> GetDestructiblesInRangeOf(int tilesDistance, bool ignoreObstacles) {
-            reachableTiles.Clear();
-            reachableDestructibles.Clear();
-            apsLeft = tilesDistance;
-
-            currentTile = unitController.CurrentTile.GetComponent<TileController>(); 
-            currentTile.SetRangeLeft(apsLeft);  
-            ScanForDestructible(currentTile, ignoreObstacles);
-
-            return reachableDestructibles;          
-        }
-        private void ScanForDestructible(TileController tile, bool ignoreObstacles) { 
-            // return if the tile is out of range
-            if(tile.RangeLeft <= 0) { return; }   
-
-            foreach(TileController t in tile.AdjacentTiles) {
-                // if tile has already been checked, skip to the next one
-                if(t.IsInAtkRange) { continue; }
-                // if tile is free
-                if(t.HasObstacle() == false) {
-                    t.SetRangeLeft(tile.RangeLeft - 1);
-                    t.SetInAtkRange();              
-                    reachableTiles.Add(t.gameObject);                 
-                } else {
-                    // if the obstacle isn't destructible, skip to the next tile
-                    IDestructible destructible = t.GetObstacle().GetComponent<IDestructible>();
-                    if(destructible == null) { continue; }
-
-                    t.SetInAtkRange();
-                    reachableDestructibles.Add(t.GetObstacle());
-                }
-            }
-            reachableTiles.Remove(tile.gameObject);
-
-            // if there are tiles left to search, recursive it
-            if(reachableTiles.Count > 0) {
-                TileController tiletoSearch = reachableTiles[0].GetComponent<TileController>();
-                // only search the tile if the has no obstacle
-                if(tiletoSearch.HasObstacle() == false  || ignoreObstacles)
-                    ScanForEnemy(tiletoSearch, ignoreObstacles); 
-            }
-
         }
     }
 }

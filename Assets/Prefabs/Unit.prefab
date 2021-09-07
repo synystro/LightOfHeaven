@@ -15,11 +15,11 @@ GameObject:
   - component: {fileID: 1174740524353640443}
   - component: {fileID: 5039417875375632708}
   - component: {fileID: 5787367900030719388}
-  - component: {fileID: 2792515533916421474}
-  - component: {fileID: 6939629657831652315}
+  - component: {fileID: 986064121126626286}
   - component: {fileID: 235608404854265372}
   - component: {fileID: 6539270705754049761}
   - component: {fileID: 6007118524152102921}
+  - component: {fileID: 3144400891451001253}
   m_Layer: 9
   m_Name: Unit
   m_TagString: Untagged
@@ -217,6 +217,7 @@ MonoBehaviour:
   currentTile: {fileID: 0}
   isFacingRight: 0
   hasMovedThisTurn: 0
+  activeEffects: []
   CurrentHp: 0
   CurrentEp: 0
   CurrentSp: 0
@@ -237,7 +238,7 @@ MonoBehaviour:
   isStunned: 0
   enemiesInRange: []
   destructiblesInRange: []
---- !u!114 &2792515533916421474
+--- !u!114 &986064121126626286
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -253,19 +254,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   currentTile: {fileID: 0}
---- !u!114 &6939629657831652315
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5787367900030719377}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da5ed928349b3f14b9157e6e204ecf12, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  FinalPath: []
 --- !u!114 &235608404854265372
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -303,6 +291,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 121896025d629cf47a6738bbb7978b0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3144400891451001253
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5787367900030719377}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6c5e7e40dfda8143ad16151ad8bd522, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tileLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  currentTile: {fileID: 0}
 --- !u!1001 &3242821903042855167
 PrefabInstance:
   m_ObjectHideFlags: 0
