@@ -40,8 +40,8 @@ namespace LUX.LightOfHeaven {
             CreateDamageData();
         }
         private void CreateDamageData() {
-            instantDamageData = new DamageData(this.Source, this.AmountInstant, this.DamageType, this.Source.Critical, this.Source.Bash, this.Source.Lethal);
-            overTurnsDamageData = new DamageData(this.Source, this.AmountOverTurns, this.DamageType, this.Source.Critical, this.Source.Bash, this.Source.Lethal);
+            instantDamageData = new DamageData(this.Source, this.AmountInstant, this.DamageType, this.Source.Critical, this.Source.Stun, this.Source.Lethal.Value);
+            overTurnsDamageData = new DamageData(this.Source, this.AmountOverTurns, this.DamageType, this.Source.Critical, this.Source.Stun, this.Source.Lethal.Value);
         }
     }
 }

@@ -33,9 +33,13 @@ namespace LUX.LightOfHeaven {
         public Stat PhyArmor;
         public Stat MagArmor;
         public Stat Poise;
+        [Header("CHANCES")]
+        public Stat Evade;
+        public Stat Crit;
+        public Stat Bash;
         public int Evasion { get { return Stamina.Value; } }
         public int Critical { get { return Dexterity.Value; } }
-        public int Bash { get { return Strength.Value; } }
-        public int Lethal;
+        public int Stun { get { return Strength.Value; } }
+        public Stat Lethal;
     }
 }

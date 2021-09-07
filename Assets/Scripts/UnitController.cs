@@ -324,7 +324,7 @@ namespace LUX.LightOfHeaven {
             // change unit facing direction towards enemy
             SetFacingDirectionTowardsCoordX(Mathf.RoundToInt(attackedUnitPosition.x));
 
-            DamageData attackDamageData = new DamageData(this.unitStats, (this.unitStats.PhyDamage.Value + spellAtkDamage), DamageType.Physical, this.unitStats.Critical, this.unitStats.Bash, this.unitStats.Lethal);
+            DamageData attackDamageData = new DamageData(this.unitStats, (this.unitStats.PhyDamage.Value + spellAtkDamage), DamageType.Physical, this.unitStats.Critical, this.unitStats.Stun, this.unitStats.Lethal.Value);
 
             // attack!
             int damageDealt = attackedUnitController.Damage(attackDamageData);
