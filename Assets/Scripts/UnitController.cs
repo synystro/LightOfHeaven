@@ -288,7 +288,11 @@ namespace LUX.LightOfHeaven {
             DamagePopup damagePopup = damagePreviewGO.GetComponent<DamagePopup>();
             int displayDamage = 0;
             switch(damageData.Type) {
-                case DamageType.Physical: displayDamage = damage.GetPhysicalDamageOnUnit(damageData.Amount + damageData.Source.PhyDamage.Value, this); break;
+                case DamageType.Physical:
+                    var hexesModifiersPercentage = 1 + ((damageData.Source.Potent.Value - damageData.Source.Weak.Value) * .01f);
+                    var previewDamage = Mathf.RoundToInt((damageData.Source.AtkDamage + damageData.Amount) * hexesModifiersPercentage);
+                    displayDamage = damage.GetPhysicalDamageOnUnit(previewDamage, this);                    
+                    break;
                 case DamageType.Magical: displayDamage = damage.GetMagicalDamageOnUnit(damageData.Amount, this); break;
                 case DamageType.Piercing: displayDamage = damageData.Amount; break;
                 default: break;
@@ -322,10 +326,7 @@ namespace LUX.LightOfHeaven {
             Unit attackedUnit = attackedUnitController.UnitData;
 
             // change unit facing direction towards enemy
-            SetFacingDirectionTowardsCoordX(Mathf.RoundToInt(attackedUnitPosition.x));
-
-            var ue =1 + ((this.unitStats.Potent.Value - this.unitStats.Weak.Value) * .01f);
-            var hehe = Mathf.RoundToInt(this.unitStats.AtkDamage + spellAtkDamage) * ue;
+            SetFacingDirectionTowardsCoordX(Mathf.RoundToInt(attackedUnitPosition.x));            
 
             DamageData attackDamageData = new DamageData(
                 this.unitStats,
