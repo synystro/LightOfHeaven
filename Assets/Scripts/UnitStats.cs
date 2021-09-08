@@ -27,6 +27,7 @@ namespace LUX.LightOfHeaven {
         public Stat MagDamage;     
         public Stat AtkRange;
         public Stat AtkAccuracy;
+        public int AtkDamage { get { return PhyDamage.Value + Strength.Value; } }
         [Header("DEFENSE")]
         public Stat PhyShield;
         public Stat MagShield;
@@ -41,5 +42,10 @@ namespace LUX.LightOfHeaven {
         public int Critical { get { return Dexterity.Value; } }
         public int Stun { get { return Strength.Value; } }
         public Stat Lethal;
+        [Header("HEXES")]
+        public Stat Potent;
+        public Stat Weak;
+        public Stat Fortified;
+        public Stat Vulnerable;
     }
 }

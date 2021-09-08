@@ -18,7 +18,8 @@ namespace LUX.LightOfHeaven {
         }
 
         public int DealPhysicalDamageOnUnit(int damage, UnitController unit) {
-            int finalDamage = damage;
+            int finalDamage = Mathf.RoundToInt(damage *
+                (1 + ((unit.UnitStats.Vulnerable.Value - unit.UnitStats.Fortified.Value) * .01f)));
             if (unit.CurrentPhyShield > 0) {
                 int shieldValue = unit.CurrentPhyShield;
                 unit.CurrentPhyShield -= finalDamage;
