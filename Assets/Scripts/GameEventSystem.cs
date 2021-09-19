@@ -3,6 +3,12 @@ using UnityEngine;
 
 namespace LUX.LightOfHeaven {
     public class GameEventSystem : MonoBehaviour {
+        public event Action<Unit> onHeroChosen;
+        public void OnHeroChosen(Unit hero) { onHeroChosen?.Invoke(hero); }
+        public event Action onSkillsUiChanged;
+        public void OnSkillsUiChanged() { onSkillsUiChanged?.Invoke(); }
+        public event Action<Spell> onSkillAdded;
+        public void OnSkillAdded(Spell skill) { onSkillAdded?.Invoke(skill); }
         public event Action onPlayerSpawned;
         public void OnPlayerSpawned() { onPlayerSpawned?.Invoke(); }
         public event Action onBattleStarted;

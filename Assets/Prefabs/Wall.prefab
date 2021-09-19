@@ -10,9 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2009975976087168765}
   - component: {fileID: 6123550396766111919}
-  - component: {fileID: 5922053590363625008}
-  - component: {fileID: 4767997189721085067}
-  - component: {fileID: 122211946797241470}
   - component: {fileID: 8267881219513856986}
   m_Layer: 9
   m_Name: Wall
@@ -86,65 +83,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 2
   m_SpriteSortPoint: 0
---- !u!114 &5922053590363625008
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8267881219513856987}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 175afaf23ed8e1a4d8e87879f42ff216, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &4767997189721085067
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8267881219513856987}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d3355553a0894c448c0839903a3111a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentUnit: {fileID: 0}
-  movesLeft: 0
-  moveCost: 0
-  rangeLeft: 0
-  isReachable: 0
-  isInAtkRange: 0
-  isInSpellRange: 0
-  isMouseOver: 0
-  adjacentTiles: []
-  leftTile: {fileID: 0}
-  rightTile: {fileID: 0}
-  upTile: {fileID: 0}
-  downTile: {fileID: 0}
-  obstacleLayer:
-    serializedVersion: 2
-    m_Bits: 512
-  highlightColor: {r: 0.46226418, g: 0.44700074, b: 0.44700074, a: 1}
---- !u!114 &122211946797241470
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8267881219513856987}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a44d24d59c19e49976fc0508de3104, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  adjacentObjects: []
-  offsetX: 2
-  offsetY: 1
-  targetLayer:
-    serializedVersion: 2
-    m_Bits: 256
 --- !u!60 &8267881219513856986
 PolygonCollider2D:
   m_ObjectHideFlags: 0

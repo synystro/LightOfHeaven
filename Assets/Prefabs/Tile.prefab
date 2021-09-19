@@ -112,6 +112,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentUnit: {fileID: 0}
   movesLeft: 0
+  moveCost: 0
   rangeLeft: 0
   isReachable: 0
   isInAtkRange: 0
@@ -125,7 +126,7 @@ MonoBehaviour:
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 512
-  highlightColor: {r: 0.46226418, g: 0.44700074, b: 0.44700074, a: 1}
+  highlightColor: {r: 0, g: 0.764151, b: 0.26071036, a: 1}
 --- !u!114 &1135870254768670342
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -139,7 +140,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   adjacentObjects: []
-  distanceOffset: 2
+  offsetX: 2
+  offsetY: 1
   targetLayer:
     serializedVersion: 2
     m_Bits: 256

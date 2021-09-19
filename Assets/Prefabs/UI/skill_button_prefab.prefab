@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 3124604555741634381}
   - component: {fileID: 8310625330224535274}
   m_Layer: 5
-  m_Name: spell_button_prefab
+  m_Name: skill_button_prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

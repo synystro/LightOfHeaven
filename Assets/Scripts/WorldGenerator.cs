@@ -4,13 +4,12 @@ using Zenject;
 
 namespace LUX.LightOfHeaven {
     public enum DimensionType { Hell, Purgatory, Heaven }
-    public class WorldGenerator : MonoBehaviour {
+    public class WorldGenerator : MonoBehaviour {   
         [SerializeField] private Dimension[] dimensions;
         [SerializeField] private List<RoomData> rooms;
         public Dimension[] Dimensions => dimensions;
         public List<RoomData> Rooms => rooms;
         [SerializeField] private Portal[] portals;
-        //[SerializeField] private TilePack[] tilePacks;
         // settings
         const int maxRoomsToTravel = 17;
         const int unkown = 10;
@@ -32,9 +31,10 @@ namespace LUX.LightOfHeaven {
         RoomType[] roomsToAdd;
         Stack<RoomType> generatedRooms;
 
+        [Inject] GameManager gameManager;
         [Inject] GameEventSystem gameEventSystem;
 
-        private void Awake() {
+        private void Awake() {            
             roomsToAdd = new RoomType[unkown+minions+champions+uniques+shrines+markets];            
             generatedRooms = new Stack<RoomType>();
         }        
@@ -47,7 +47,7 @@ namespace LUX.LightOfHeaven {
             gameEventSystem.onNextRoomLoaded -= OnNextRoomLoaded;
         }
 
-        public void Init() {   
+        public void Init() {
             AddRooms();
             ShuffleRooms();
             AddRoomsToStack();          
@@ -98,7 +98,7 @@ namespace LUX.LightOfHeaven {
 
         private void ShuffleRooms() {
             // shuffle rooms array
-            System.Random rng = new System.Random();
+            System.Random rng = new System.Random(gameManager.GeneratedSeed);
             Utilities.ShuffleArray<RoomType>(rng, roomsToAdd);
         }
 

@@ -10,18 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4ccb7c81771f7c640b59267ab4d2dba4, type: 3}
-  m_Name: Attack
+  m_Name: Envenom
   m_EditorClassIdentifier: 
-  Image: {fileID: -8963665410922516756, guid: aa7bdf3b00f03b74eb6eb037ac2ae036, type: 3}
-  SFX: {fileID: 8300000, guid: f9517356afb533a41b9e7cb6f155031e, type: 3}
+  Image: {fileID: 21300000, guid: 9e49f2dda3b3b854dad8f5d9f39e9ad4, type: 3}
+  SFX: {fileID: 8300000, guid: 52a0b61c651ac664d84e7804c54c22e0, type: 3}
   TargetType: 2
-  Cost: 1
-  Range: 1
+  Cost: 2
+  Range: 4
   IgnoreObstacles: 0
   AmountInstant: 0
-  AmountOverTurns: 0
-  Duration: 0
+  AmountOverTurns: 5
+  Duration: 3
   LastsTheEntireBattle: 0
   OncePerCombat: 0
   EffectType: 0
-  DamageType: 1
+  DamageType: 2

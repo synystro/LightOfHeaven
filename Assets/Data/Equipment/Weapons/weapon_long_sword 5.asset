@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0b6a97975231f549b1b08c08975defd, type: 3}
+  m_Name: weapon_long_sword 5
+  m_EditorClassIdentifier: 
+  id: 1
+  Name: Long Sword
+  Icon: {fileID: -8963665410922516756, guid: aa7bdf3b00f03b74eb6eb037ac2ae036, type: 3}
+  Description: A sword oh long johson.
+  Type: 0
+  Flight: 0
+  Strength: 3
+  Stamina: 1
+  Vitality: 0
+  Dexterity: 0
+  Intelligence: 0
+  Hp: 0
+  Ep: 0
+  Sp: 0
+  PhyDamage: 10
+  MagDamage: 0
+  AtkRange: 0
+  AtkAccuracy: 0
+  PhyShield: 0
+  MagShield: 0
+  PhyArmor: 0
+  MagArmor: 0
+  Poise: 0
+  Evasion: 0
+  Critical: 0
+  Stun: 0
+  Lethal: 0

@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 482326aef8cab3042b31df468efa4cf8, type: 3}
+  m_Name: equipment_database
+  m_EditorClassIdentifier: 
+  Weapons:
+  - {fileID: 11400000, guid: 72455699466419a42ad3e5aa5c917b92, type: 2}
+  - {fileID: 11400000, guid: 50d62d0427afcf1449ba8684b726434d, type: 2}
+  - {fileID: 11400000, guid: b0aed069339aa2b4caa1ac2ea0917dc8, type: 2}
+  - {fileID: 11400000, guid: 8a8f9f00d756df341ba83ca433ac61f9, type: 2}
+  - {fileID: 11400000, guid: acf3b2d8210db9a478bf18c1fa890518, type: 2}
+  - {fileID: 11400000, guid: 1eae1cfc69ffa4a4ebb9e5719cc406f1, type: 2}
+  Shields: []
+  Helmets: []
+  Armor: []
+  Boots: []

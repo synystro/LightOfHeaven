@@ -19,11 +19,8 @@ MonoBehaviour:
   charPrefabLeft: {fileID: 2284473891057891469, guid: 95e54eb9578128a429a9e196bb96c591,
     type: 3}
   Spells:
-  - {fileID: 11400000, guid: ea8367fff1b090b439e90013edaee9e7, type: 2}
-  - {fileID: 11400000, guid: d5a21d52242eddd40824d1c0467f6c37, type: 2}
-  - {fileID: 11400000, guid: d3beaad8982ed0a4b9295e3b072618da, type: 2}
   - {fileID: 11400000, guid: 5791134acbc0df847b53fe126ec2a90d, type: 2}
-  Flight: 1
+  Flight: 0
   Strength: 1
   Stamina: 1
   Vitality: 1

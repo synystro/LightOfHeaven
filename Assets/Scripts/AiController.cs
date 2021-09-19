@@ -34,6 +34,7 @@ namespace LUX.LightOfHeaven {
                 selectedUnitAi = unitManager.EnemyUnits[i].GetComponent<UnitController>();
                 StartUnitActionPhase();
                 yield return new WaitForSeconds(seconds);
+
                 // unit's end turn
                 OnUnitEndTurn();
                 i++;

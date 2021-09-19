@@ -3,6 +3,7 @@ using UnityEngine;
 namespace LUX.LightOfHeaven {
     public enum EquipmentType {
         Weapon,
+        Shield,
         Helm,
         Armor,
         Boots
