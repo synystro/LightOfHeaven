@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 80a077b39602e3b42aff360e02dd57be, type: 3}
-  m_Name: greevil_1
+  m_Name: greevil_3
   m_EditorClassIdentifier: 
-  name: Greevil 1
+  name: Greevil 3
   icon: {fileID: 0}
   charPrefabRight: {fileID: 2898409787636134312, guid: b4652fdc99cd2074dbca2713e84f7bbf,
     type: 3}
@@ -22,7 +22,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 5791134acbc0df847b53fe126ec2a90d, type: 2}
   Flight: 0
   Strength: 1
-  Stamina: 1
+  Stamina: 2
   Vitality: 1
   Dexterity: 1
   Intelligence: 1

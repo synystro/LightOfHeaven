@@ -15,7 +15,7 @@ namespace LUX.LightOfHeaven {
         private HashSet<TileController> tilesChecked = new HashSet<TileController>();
 
         private const float unitTurnTime = 1f;
-        private const float attackDelayTime = 0.1f;
+        private const float attackDelayTime = 0f;
 
         [Inject] private GameEventSystem gameEventSystem;
         [Inject] private UnitManager unitManager;
@@ -45,17 +45,19 @@ namespace LUX.LightOfHeaven {
         IEnumerator WaitThenAct(float seconds) {
             yield return new WaitForSeconds(seconds);
 
+            SelectSpell(selectedUnitAi.CurrentTile, selectedUnitAi.CurrentSp);
+
             if (selectedSpell != null) {
                 Attack();
             } else if (selectedUnitAi.DestructiblesInRange.Count > 0 && selectedUnitAttacked == false) {
                 AttackObstacle();
             }
-            List<TileController> path = selectedUnitAi.PathFinder.GetPathToTargetOnTile(unitManager.Player.CurrentTile);
+            List<TileController> path = selectedUnitAi.PathFinder.GetPathToTargetOnTile(selectedUnitAi.CurrentTile, unitManager.Player.CurrentTile);
             int movedCount = 0;
             // move 
             while (selectedUnitAi.CurrentSp > 0 &&
             selectedUnitAttacked == false &&
-            SelectSpell() == false &&
+            SelectSpell(selectedUnitAi.CurrentTile, selectedUnitAi.CurrentSp) == false &&
             path.Count > 0
             ) {
                 if(path[movedCount].HasObstacle())
@@ -80,6 +82,7 @@ namespace LUX.LightOfHeaven {
         }
         private void OnUnitEndTurn() {
             mapManager.ResetTiles();
+            PlanUnitNextActionPhase();
             selectedUnitAi.SetSelection(false);
         }
         public void Reset() {
@@ -107,16 +110,62 @@ namespace LUX.LightOfHeaven {
 
             // use buff on self/other enemy?
             // apply debuff to player?            
-            // decide spell to cast on player (longest range first)
-            SelectSpell();
+            // decide spell to cast on player (longest range first)            
 
             Task atkDelayTask = new Task(WaitThenAct(attackDelayTime));
             new Task(KillWait(attackDelayTime, atkDelayTask));
         }
+        private void PlanUnitNextActionPhase() {
+            //selectedUnitAi.SetSelection(true);
+
+            // if there are no spells left to cast, reset the spells pool
+            if (selectedUnitAi.SpellPool.Count <= 0) {
+                selectedUnitAi.ResetSpellsPool();
+            }
+
+            // use buff on self/other enemy?
+            // apply debuff to player?            
+            // decide spell to cast on player (longest range first)            
+
+            PlanUnitAction();
+        }
+        private void PlanUnitAction() {
+            SelectSpell(selectedUnitAi.CurrentTile, selectedUnitAi.UnitStats.MaxSp);
+
+            if (selectedSpell != null) {
+                print($"{selectedUnitAi.UnitData.name} intends to ATTACK this turn");
+                selectedSpell = null;
+                return;
+            }
+
+            List<TileController> path = selectedUnitAi.PathFinder.GetPathToTargetOnTile(selectedUnitAi.CurrentTile, unitManager.Player.CurrentTile);
+            int movedCount = 0;
+            int remainingSp = selectedUnitAi.UnitStats.MaxSp;
+            TileController plannedCurrentTile = selectedUnitAi.CurrentTile;
+            // move 
+            while (remainingSp > 0 &&
+            SelectSpell(plannedCurrentTile, remainingSp) == false &&
+            path.Count > 0
+            ) {
+                if(path[movedCount].HasObstacle())
+                    break;
+                plannedCurrentTile = path[movedCount];
+                remainingSp--;
+                movedCount++;
+            }
+            // try to attack if hasn't already and player unit is in attack range        
+            if (selectedSpell != null) {
+                print($"{selectedUnitAi.UnitData.name} intends to ATTACK this turn");
+                selectedSpell = null;
+            }
+            else {
+                print($"{selectedUnitAi.UnitData.name} intends to MOVE this turn");   
+            }        
+        }
         private bool IsTargetInRange() {
             return selectedUnitAi.EnemiesInRange.Contains(unitManager.PlayerUnits[0]);
         }
-        private bool SelectSpell() {
+        private bool SelectSpell(TileController currentTile, int spLeft) {
             int higherDamage = -100;
             bool hasSpellToCast = false;
             List<Spell> unusableSpells = new List<Spell>();
@@ -124,12 +173,12 @@ namespace LUX.LightOfHeaven {
             foreach (Spell spell in selectedUnitAi.SpellPool) {
                 // reset tiles spell in range props            
                 mapManager.ResetTiles();
-                List<GameObject> spellTargetsInRange = selectedUnitAi.GetEnemiesInRangeOf(spell.Range, true, spell.IgnoreObstacles);
+                List<GameObject> spellTargetsInRange = selectedUnitAi.GetEnemiesInRangeOf(currentTile, spell.Range, true, spell.IgnoreObstacles);
                 if (spellTargetsInRange.Count <= 0) { continue; } // continue if no targets in range
 
                 GameObject selectedSpellTarget = spellTargetsInRange[0];
                 if (selectedSpellTarget != null) {
-                    if (selectedUnitAi.CurrentSp >= spell.Cost) {
+                    if (spLeft >= spell.Cost) {
                         if (spell.AmountInstant > higherDamage) {
                             higherDamage = spell.AmountInstant;
                             selectedSpellTargetUnit = selectedSpellTarget.GetComponent<UnitController>();

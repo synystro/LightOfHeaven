@@ -10,6 +10,7 @@ namespace LUX.LightOfHeaven {
 
         private List<TileController> mappedTiles;
         private List<TileController> tilesLeftToSearch;
+        public List<TileController> Path => path;
         private List<TileController> path;
         private Dictionary<TileController, int> tileCostMap;
 
@@ -22,18 +23,18 @@ namespace LUX.LightOfHeaven {
             path = new List<TileController>();                 
             tileCostMap = new Dictionary<TileController, int>();              
         }
-        public List<TileController> GetPathToTargetOnTile(TileController tile) {
+        public List<TileController> GetPathToTargetOnTile(TileController originTile, TileController targetsTile) {
             mappedTiles.Clear();
             tileCostMap.Clear();
             path.Clear();
 
-            currentTile = unitController.CurrentTile.GetComponent<TileController>();
+            currentTile = originTile;
             currentTile.SetMoveCost(0);
-            mappedTiles.Add(tile);
+            mappedTiles.Add(targetsTile);
             tileCostMap.Add(currentTile, currentTile.MoveCost);
             FindPossibleMovesFrom(currentTile);
 
-            List<TileController> possibleTargetTiles =  tile.AdjacentTiles;
+            List<TileController> possibleTargetTiles =  targetsTile.AdjacentTiles;
             TileController chosenTile = null;
 
             foreach(TileController t in possibleTargetTiles)

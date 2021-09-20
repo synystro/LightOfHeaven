@@ -58,7 +58,7 @@ namespace LUX.LightOfHeaven {
             // change unit facing direction towards target tile
             SetFacingDirectionTowardsCoordX(Mathf.RoundToInt(clickPoint.x));
             // move to target tile
-            this.transform.position = clickPoint + (Vector2)Utilities.SpawnIsoOffset;
+            this.transform.position = clickPoint + (Vector2)Utilities.IsoPosOffset;
             // set target tile to be the current tile
             currentTile = targetTile;
             // occupy it

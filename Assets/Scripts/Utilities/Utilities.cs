@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace LUX.LightOfHeaven {
     public static class Utilities {
-        public static Vector3 SpawnIsoOffset = new Vector3(0,1,0);
+        public static Vector3 IsoPosOffset = new Vector3(0,1,0);
         public static Vector3 ToIsoPos(this Vector3 v) {
             return new Vector3(
                 v.x + v.y,

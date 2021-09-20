@@ -29,7 +29,7 @@ namespace LUX.LightOfHeaven {
         public TileData TileData => tileData;
         public List<TileController> AdjacentTiles => adjacentTiles;
         public bool HasObstacle() {
-            if (Physics2D.OverlapCircle(this.transform.position + Utilities.SpawnIsoOffset, 0.2f, obstacleLayer)) {
+            if (Physics2D.OverlapCircle(this.transform.position + Utilities.IsoPosOffset, 0.2f, obstacleLayer)) {
                 return true;
             }
             return false;

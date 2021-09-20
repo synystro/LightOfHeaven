@@ -60,12 +60,12 @@ namespace LUX.LightOfHeaven {
             }
 
         }
-        public List<GameObject> GetEnemiesInRangeOf(int tilesDistance, bool ignoreObstacles) {
+        public List<GameObject> GetEnemiesInRangeOf(TileController tile, int range, bool ignoreObstacles) {
             reachableTiles.Clear();
             reachableEnemies.Clear();
-            apsLeft = tilesDistance;
+            apsLeft = range;
 
-            currentTile = unitController.CurrentTile.GetComponent<TileController>(); 
+            currentTile = tile;
             currentTile.SetRangeLeft(apsLeft);  
             ScanForEnemy(currentTile, ignoreObstacles);
 

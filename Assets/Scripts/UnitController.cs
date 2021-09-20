@@ -270,8 +270,11 @@ namespace LUX.LightOfHeaven {
             Color red = new Color(.5f,0f,0f,1f);
             selectionSR.color = red;
         }
-        public List<GameObject> GetEnemiesInRangeOf(int tilesDistance, bool isSpell, bool ignoreObstacles) {
-            return enemiesInRange = rangeFinder.GetEnemiesInRangeOf(tilesDistance, ignoreObstacles);
+        public List<GameObject> GetEnemiesInRangeOf(int range, bool isSpell, bool ignoreObstacles) {
+            return enemiesInRange = rangeFinder.GetEnemiesInRangeOf(this.currentTile, range, ignoreObstacles);
+        }
+        public List<GameObject> GetEnemiesInRangeOf(TileController tile, int range, bool isSpell, bool ignoreObstacles) {
+            return enemiesInRange = rangeFinder.GetEnemiesInRangeOf(tile, range, ignoreObstacles);
         }
         public void SetSelection(bool state) {
             isSelected = state;  

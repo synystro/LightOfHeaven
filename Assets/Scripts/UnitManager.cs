@@ -55,7 +55,7 @@ namespace LUX.LightOfHeaven {
         private void SpawnPlayer() {
             TileController tileToSpawn = mapManager.StartingTiles[0];
 
-            Vector3 tileToSpawnPosition = tileToSpawn.TileData.GetPosition() + Utilities.SpawnIsoOffset;
+            Vector3 tileToSpawnPosition = tileToSpawn.TileData.GetPosition();
             GameObject playerUnitGO = Instantiate(unitPrefab, tileToSpawnPosition, Quaternion.identity, this.transform);
             player = playerUnitGO.GetComponent<UnitController>();
             player.Setup(PlayerUnitSO, tileToSpawn.gameObject, false);
@@ -79,7 +79,7 @@ namespace LUX.LightOfHeaven {
             int tileToSpawnIndex = ((mapManager.GetTileCount() / 2)) + (24) - EnemyUnitsSO.Count;
             foreach (Unit enemyUnit in EnemyUnitsSO) {
                 GameObject tileToSpawnGO = mapManager.GetTileByIndex(tileToSpawnIndex).gameObject;
-                Vector3 tileToSpawnPosition = tileToSpawnGO.GetComponent<TileData>().GetPosition() + Utilities.SpawnIsoOffset;
+                Vector3 tileToSpawnPosition = tileToSpawnGO.GetComponent<TileData>().GetPosition();
                 GameObject unitGO = Instantiate(unitPrefab, tileToSpawnPosition, Quaternion.identity, this.transform);
                 unitGO.GetComponent<UnitController>().Setup(enemyUnit, tileToSpawnGO, true);
                 EnemyUnits.Add(unitGO);

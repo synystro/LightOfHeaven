@@ -6945,7 +6945,7 @@ MonoBehaviour:
   EnemyUnitsSO:
   - {fileID: 11400000, guid: f4710a45334980e4ca9a448e26d4cd70, type: 2}
   - {fileID: 11400000, guid: fc7e7c40120b3824495836a8d6c1d23d, type: 2}
-  - {fileID: 11400000, guid: f4710a45334980e4ca9a448e26d4cd70, type: 2}
+  - {fileID: 11400000, guid: c36be32b0ca689c4bb4f6be53950c27b, type: 2}
   PlayerUnits: []
   EnemyUnits: []
   unitPrefab: {fileID: 5787367900030719377, guid: 4e0641b833d3ea74f93fb52b35270bc3,

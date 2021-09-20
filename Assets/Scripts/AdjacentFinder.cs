@@ -23,7 +23,7 @@ namespace LUX.LightOfHeaven {
         private void Awake() {
             adjacentObjects = new List<GameObject>();
 
-            Vector2 thisPos = this.transform.position + Utilities.SpawnIsoOffset;
+            Vector2 thisPos = this.transform.position + Utilities.IsoPosOffset;
 
             Vector2 offsetUp = new Vector2(thisPos.x - offsetX, thisPos.y + offsetY);
             Vector2 offsetDown = new Vector2(thisPos.x + offsetX, thisPos.y - offsetY);            

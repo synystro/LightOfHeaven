@@ -2,6 +2,6 @@
 
 namespace LUX.LightOfHeaven {
 public class TileData : MonoBehaviour {       
-        public Vector3 GetPosition() { return this.transform.position; }               
+        public Vector3 GetPosition() { return this.transform.position + Utilities.IsoPosOffset; }               
     }
 }
