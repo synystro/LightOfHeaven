@@ -102,7 +102,7 @@ namespace LUX.LightOfHeaven {
         public void UntargetEnemyUnits() {
             foreach (GameObject eGO in EnemyUnits) {
                 UnitController e = eGO.GetComponent<UnitController>();
-                e.DisplayDamagePreview(false);
+                e.DisplayIncomingDamagePreview(false);
                 e.SetIsTarget(false);
                 e.Highlight(false);
             }

@@ -75,8 +75,8 @@ namespace LUX.LightOfHeaven {
             List<GameObject> enemiesInRange = playerGO.GetComponent<UnitController>().GetEnemiesInRangeOf(e.Range, true, e.IgnoreObstacles);
             foreach(GameObject enemy in enemiesInRange) {
                 UnitController enemyController = enemy.GetComponent<UnitController>();
-                enemyController.SetSpellPreviewDamage(e.InstantDamageData);
-                enemyController.DisplayDamagePreview(true);
+                enemyController.SetDamagePreview(e.InstantDamageData, true, false);
+                enemyController.DisplayIncomingDamagePreview(true);
                 enemyController.SetIsTarget(true);
                 enemyController.Highlight(true);
             }

@@ -99,6 +99,7 @@ namespace LUX.LightOfHeaven {
         }
         private void StartUnitActionPhase() {
             selectedUnitAi.SetSelection(true);
+            selectedUnitAi.DisplayOutgoingDamagePreview(false);
 
             // try to cast chosen spell if player unit is in cast range
             selectedUnitAttacked = false;
@@ -133,6 +134,8 @@ namespace LUX.LightOfHeaven {
             SelectSpell(selectedUnitAi.CurrentTile, selectedUnitAi.UnitStats.MaxSp);
 
             if (selectedSpell != null) {
+                selectedEffect = new EffectData(selectedUnitAi.UnitStats, selectedSpell.EffectType, selectedSpell.DamageType, selectedSpell.AmountInstant, selectedSpell.AmountOverTurns, selectedSpell.Range, selectedSpell.IgnoreObstacles, selectedSpell.Duration, selectedSpell.SFX, selectedSpell.LastsTheEntireBattle);
+                selectedUnitAi.SetDamagePreview(selectedEffect.InstantDamageData, false, true);
                 print($"{selectedUnitAi.UnitData.name} intends to ATTACK this turn");
                 selectedSpell = null;
                 return;
@@ -155,10 +158,13 @@ namespace LUX.LightOfHeaven {
             }
             // try to attack if hasn't already and player unit is in attack range        
             if (selectedSpell != null) {
+                selectedEffect = new EffectData(selectedUnitAi.UnitStats, selectedSpell.EffectType, selectedSpell.DamageType, selectedSpell.AmountInstant, selectedSpell.AmountOverTurns, selectedSpell.Range, selectedSpell.IgnoreObstacles, selectedSpell.Duration, selectedSpell.SFX, selectedSpell.LastsTheEntireBattle);
+                selectedUnitAi.SetDamagePreview(selectedEffect.InstantDamageData, false, true);
                 print($"{selectedUnitAi.UnitData.name} intends to ATTACK this turn");
                 selectedSpell = null;
             }
             else {
+                selectedUnitAi.SetIntent(IntentType.Move);
                 print($"{selectedUnitAi.UnitData.name} intends to MOVE this turn");   
             }        
         }
@@ -240,7 +246,7 @@ namespace LUX.LightOfHeaven {
             // enemy targetting was disabled here
             foreach (GameObject p in unitManager.PlayerUnits) {
                 UnitController pUC = p.GetComponent<UnitController>();
-                pUC.DisplayDamagePreview(false);
+                pUC.DisplayIncomingDamagePreview(false);
                 pUC.SetIsTarget(false);
                 pUC.Highlight(false);
             }

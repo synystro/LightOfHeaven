@@ -49,53 +49,53 @@ namespace LUX.LightOfHeaven {
             Destroy(this);
         }
 
-        public void Equip(UnitStats us) {
+        public void Equip(UnitStats s) {
             if (Strength != 0)
-                us.Strength.AddModifier(new StatModifier(Strength, StatModType.Flat, this));
+                s.Strength.AddModifier(new StatModifier(Strength, StatModType.Flat, this));
             if (Stamina != 0)
-                us.Stamina.AddModifier(new StatModifier(Stamina, StatModType.Flat, this));
+                s.Stamina.AddModifier(new StatModifier(Stamina, StatModType.Flat, this));
             if (Vitality != 0)
-                us.Vitality.AddModifier(new StatModifier(Vitality, StatModType.Flat, this));
+                s.Vitality.AddModifier(new StatModifier(Vitality, StatModType.Flat, this));
             if (Dexterity != 0)
-                us.Dexterity.AddModifier(new StatModifier(Dexterity, StatModType.Flat, this));
+                s.Dexterity.AddModifier(new StatModifier(Dexterity, StatModType.Flat, this));
             if (Intelligence != 0)
-                us.Intelligence.AddModifier(new StatModifier(Intelligence, StatModType.Flat, this));
+                s.Intelligence.AddModifier(new StatModifier(Intelligence, StatModType.Flat, this));
 
             if (Hp != 0)
-                us.Hp.AddModifier(new StatModifier(Hp, StatModType.Flat, this));
+                s.Hp.AddModifier(new StatModifier(Hp, StatModType.Flat, this));
             if (Ep != 0)
-                us.Ep.AddModifier(new StatModifier(Ep, StatModType.Flat, this));
+                s.Ep.AddModifier(new StatModifier(Ep, StatModType.Flat, this));
             if (Sp != 0)
-                us.Sp.AddModifier(new StatModifier(Sp, StatModType.Flat, this));
+                s.Sp.AddModifier(new StatModifier(Sp, StatModType.Flat, this));
 
             if (PhyDamage != 0)
-                us.PhyDamage.AddModifier(new StatModifier(PhyDamage, StatModType.Flat, this));
+                s.PhyDamage.AddModifier(new StatModifier(PhyDamage, StatModType.Flat, this));
             if (MagDamage != 0)
-                us.MagDamage.AddModifier(new StatModifier(MagDamage, StatModType.Flat, this));
+                s.MagDamage.AddModifier(new StatModifier(MagDamage, StatModType.Flat, this));
             if (AtkRange != 0)
-                us.AtkRange.AddModifier(new StatModifier(AtkRange, StatModType.Flat, this));
+                s.AtkRange.AddModifier(new StatModifier(AtkRange, StatModType.Flat, this));
             if (AtkAccuracy != 0)
-                us.AtkAccuracy.AddModifier(new StatModifier(AtkAccuracy, StatModType.Flat, this));
+                s.AtkAccuracy.AddModifier(new StatModifier(AtkAccuracy, StatModType.Flat, this));
 
             if (PhyShield != 0)
-                us.PhyShield.AddModifier(new StatModifier(PhyShield, StatModType.Flat, this));
+                s.PhyShield.AddModifier(new StatModifier(PhyShield, StatModType.Flat, this));
             if (MagShield != 0)
-                us.MagShield.AddModifier(new StatModifier(MagShield, StatModType.Flat, this));
+                s.MagShield.AddModifier(new StatModifier(MagShield, StatModType.Flat, this));
             if (PhyArmor != 0)
-                us.PhyArmor.AddModifier(new StatModifier(PhyArmor, StatModType.Flat, this));
+                s.PhyArmor.AddModifier(new StatModifier(PhyArmor, StatModType.Flat, this));
             if (MagArmor != 0)
-                us.MagArmor.AddModifier(new StatModifier(MagArmor, StatModType.Flat, this));
+                s.MagArmor.AddModifier(new StatModifier(MagArmor, StatModType.Flat, this));
             if (Poise != 0)
-                us.Poise.AddModifier(new StatModifier(Poise, StatModType.Flat, this));
+                s.Poise.AddModifier(new StatModifier(Poise, StatModType.Flat, this));
             
             if (Evasion != 0)
-                us.Evade.AddModifier(new StatModifier(Evasion, StatModType.Flat, this));
+                s.Evade.AddModifier(new StatModifier(Evasion, StatModType.Flat, this));
             if (Critical != 0)
-                us.Crit.AddModifier(new StatModifier(Critical, StatModType.Flat, this));
+                s.Crit.AddModifier(new StatModifier(Critical, StatModType.Flat, this));
             if (Stun != 0)
-                us.Bash.AddModifier(new StatModifier(Stun, StatModType.Flat, this));
+                s.Bash.AddModifier(new StatModifier(Stun, StatModType.Flat, this));
             if (Lethal != 0)
-                us.Lethal.AddModifier(new StatModifier(Lethal, StatModType.Flat, this));
+                s.Lethal.AddModifier(new StatModifier(Lethal, StatModType.Flat, this));
             
         }
 

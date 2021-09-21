@@ -20,6 +20,7 @@ MonoBehaviour:
     type: 3}
   Spells:
   - {fileID: 11400000, guid: 5791134acbc0df847b53fe126ec2a90d, type: 2}
+  - {fileID: 11400000, guid: d5a21d52242eddd40824d1c0467f6c37, type: 2}
   Flight: 0
   Strength: 1
   Stamina: 1
@@ -29,10 +30,12 @@ MonoBehaviour:
   Hp: 50
   Ep: 20
   Sp: 2
-  PhyDamage: 0
+  PhyDamage: 5
   MagDamage: 0
   AtkRange: 1
   AtkAccuracy: 0
+  PhyShield: 10
+  MagShield: 0
   PhyArmor: 0
   MagArmor: 0
   Poise: 0

@@ -31,6 +31,8 @@ namespace LUX.LightOfHeaven {
         public int AtkRange;
         public int AtkAccuracy;
         [Header("DEFENSE")]
+        public int PhyShield;
+        public int MagShield;
         public int PhyArmor;
         public int MagArmor;
         public int Poise;

@@ -2,8 +2,22 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
 using Zenject;
+using System.Linq;
 
 namespace LUX.LightOfHeaven {
+
+    public enum IntentType {
+        Unkown,
+        Attack,
+        Block,
+        Move,
+        Debuff,
+        Buff,
+        Escape,
+        Sleep,
+        Stun,        
+    }
+
     [RequireComponent(typeof(SpriteRenderer))]
     [RequireComponent(typeof(UnitStats))]
     [RequireComponent(typeof(EquipmentSystem))]
@@ -26,7 +40,9 @@ namespace LUX.LightOfHeaven {
         [Space]
         [SerializeField] private List<Spell> spellPool;
         [SerializeField] private GameObject selectionHighlightGO;
-        [SerializeField] private GameObject damagePreviewGO;
+        [SerializeField] private GameObject intentDisplayGO;
+        [SerializeField] private GameObject incomingDamagePreviewGO;
+        [SerializeField] private GameObject outgoingDamagePreviewGO;
         [SerializeField] private GameObject damagePopupPrefab;
         [Expandable][SerializeField] private Unit unit;
         [SerializeField] private bool isEnemy;             
@@ -61,7 +77,8 @@ namespace LUX.LightOfHeaven {
         [Inject] private UnitManager unitManager;
         [Inject] private MapManager mapManager;
         
-        private SpriteRenderer selectionSR;   
+        private SpriteRenderer selectionSR;
+        private SpriteRenderer intentDisplaySR;
         
         private Damage damage;
         private Effect effect;
@@ -73,7 +90,8 @@ namespace LUX.LightOfHeaven {
             spellPool = new List<Spell>();            
             enemiesInRange = new List<GameObject>();
             destructiblesInRange = new List<GameObject>();
-            selectionSR = selectionHighlightGO.GetComponent<SpriteRenderer>();                    
+            selectionSR = selectionHighlightGO.GetComponent<SpriteRenderer>();  
+            intentDisplaySR = intentDisplayGO.GetComponent<SpriteRenderer>();                  
             unitDetailsUi = this.GetComponent<UnitDetailsUi>();
             pathFinder = this.GetComponent<PathFinder>();
             rangeFinder = this.GetComponent<RangeFinder>();  
@@ -127,7 +145,8 @@ namespace LUX.LightOfHeaven {
             RefreshDetailsUi();            
         }
         public void OnTurnStart() {    
-            print($"{this.gameObject.name}'s turn");        
+            print($"{this.gameObject.name}'s turn");
+            HideIntent();     
             ResetUnitStatus();
             ApplyEffects();
             
@@ -147,7 +166,7 @@ namespace LUX.LightOfHeaven {
             hasTargetInRange = false;
             enemiesInRange.Clear();
             destructiblesInRange.Clear();
-            DisplayDamagePreview(false);            
+            DisplayIncomingDamagePreview(false);      
         }
         public void OnUnitAttacked(bool isEnemyAttack) {
             //RefreshDetails(); // already running inside receive damage function
@@ -202,6 +221,8 @@ namespace LUX.LightOfHeaven {
             unitStats.AtkRange.BaseValue = unit.AtkRange;
             unitStats.AtkAccuracy.BaseValue = unit.AtkAccuracy;
 
+            unitStats.PhyShield.BaseValue = unit.PhyShield;
+            unitStats.MagShield.BaseValue = unit.MagShield;
             unitStats.PhyArmor.BaseValue = unit.PhyArmor;
             unitStats.MagArmor.BaseValue = unit.MagArmor;
             unitStats.Poise.BaseValue = unit.Poise;
@@ -287,25 +308,37 @@ namespace LUX.LightOfHeaven {
             selectionSR.color = Color.white;
             selectionHighlightGO.SetActive(state);
         }
-        public void SetSpellPreviewDamage(DamageData damageData) {
-            DamagePopup damagePopup = damagePreviewGO.GetComponent<DamagePopup>();
-            int displayDamage = 0;
-            switch(damageData.Type) {
-                case DamageType.Physical:
-                    var hexesModifiersPercentage = 1 + ((damageData.Source.Potent.Value - damageData.Source.Weak.Value) * .01f);
-                    var previewDamage = Mathf.RoundToInt((damageData.Source.AtkDamage + damageData.Amount) * hexesModifiersPercentage);
-                    displayDamage = damage.GetPhysicalDamageOnUnit(previewDamage, this);                    
-                    break;
-                case DamageType.Magical: displayDamage = damage.GetMagicalDamageOnUnit(damageData.Amount, this); break;
-                case DamageType.Piercing: displayDamage = damageData.Amount; break;
+        public void SetIntent(IntentType intent) {
+            switch(intent) {
+                case IntentType.Move: DisplayIntent(unitDetailsUi.IntentSprites.Where(i => i.intent == intent).FirstOrDefault().sprite); break;
                 default: break;
             }
+        }
+        public void SetDamagePreview(DamageData damageData, bool incoming, bool ignoreBlock) {
+            GameObject damageDisplayGO = incoming? incomingDamagePreviewGO : outgoingDamagePreviewGO;
+            DamagePopup damagePopup = damageDisplayGO.GetComponent<DamagePopup>();
+            int displayDamage = GetDisplayDamage(damageData, ignoreBlock); 
+
             damagePopup.SetDamageValue(displayDamage);
             damagePopup.SetDamageSpriteByDamageType(damageData.Type);
-            DisplayDamagePreview(true);
+
+            if(incoming)
+                DisplayIncomingDamagePreview(true);
+            else
+                DisplayOutgoingDamagePreview(true);
         }
-        public void DisplayDamagePreview(bool state) {            
-            damagePreviewGO.SetActive(state);
+        public void DisplayIntent(Sprite sprite) {
+            intentDisplaySR.sprite = sprite;
+            intentDisplayGO.SetActive(true);
+        }
+        public void HideIntent() {
+            intentDisplayGO.SetActive(false);
+        }
+        public void DisplayIncomingDamagePreview(bool state) {            
+            incomingDamagePreviewGO.SetActive(state);
+        }
+        public void DisplayOutgoingDamagePreview(bool state) {            
+            outgoingDamagePreviewGO.SetActive(state);
         }
         public void DisplayDamagePopup(int value, DamageType damageType, Vector3 position) {
             GameObject damagePopupGO = Instantiate(damagePopupPrefab, position, Quaternion.identity);
@@ -343,7 +376,7 @@ namespace LUX.LightOfHeaven {
             int damageDealt = attackedUnitController.Damage(attackDamageData);
 
             // remove attacked unit's attack highlight
-            attackedUnitController.DisplayDamagePreview(false);
+            attackedUnitController.DisplayIncomingDamagePreview(false);
 
             // display damage popup 
             //DisplayDamagePopup(damageDealt, attackedUnitPosition);
@@ -387,6 +420,20 @@ namespace LUX.LightOfHeaven {
             DisplayDamagePopup(damageTaken, damageData.Type, this.transform.position);
             RefreshDetailsUi();            
             return damageTaken;                        
+        }
+        private int GetDisplayDamage(DamageData damageData, bool ignoreBlock) {
+            int displayDamage = 0;
+            switch(damageData.Type) {
+                case DamageType.Physical:
+                    float hexesModifiersPercentage = 1 + ((damageData.Source.Potent.Value - damageData.Source.Weak.Value) * .01f);
+                    int previewDamage = Mathf.RoundToInt((damageData.Source.AtkDamage + damageData.Amount) * hexesModifiersPercentage);                    
+                    displayDamage = ignoreBlock ? previewDamage : damage.GetPhysicalDamageOnUnit(previewDamage, this);                    
+                    break;
+                case DamageType.Magical: displayDamage = damage.GetMagicalDamageOnUnit(damageData.Amount, this); break;
+                case DamageType.Piercing: displayDamage = damageData.Amount; break;
+                default: break;
+            }
+            return displayDamage;
         }
         private void ClampDefenseValues() {
             if(CurrentHp <= 0) { CurrentHp = 0; }

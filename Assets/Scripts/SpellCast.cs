@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using Zenject;
 
@@ -77,12 +78,12 @@ namespace LUX.LightOfHeaven {
             // enemy targetting is disabled here
             foreach(GameObject e in unitManager.EnemyUnits) {
                 UnitController eUC = e.GetComponent<UnitController>();
-                eUC.DisplayDamagePreview(false);
+                eUC.DisplayIncomingDamagePreview(false);
                 eUC.SetIsTarget(false);
                 eUC.Highlight(false);
             }
             
-            targetUnitController.DisplayDamagePreview(false);
+            targetUnitController.DisplayIncomingDamagePreview(false);
             targetUnitController.SetIsTarget(false);
             targetUnitController.Highlight(false);
             
@@ -109,7 +110,8 @@ namespace LUX.LightOfHeaven {
         }
 
         public void OnPointerEnter(PointerEventData eventData) {
-            spellDetailsUi.Refresh(spell);     
+            spellDetailsUi.Refresh(spell);
+            spellDetailsUi.transform.position = Mouse.current.position.ReadValue();
             spellDetailsUi.gameObject.SetActive(true);       
         }
 
