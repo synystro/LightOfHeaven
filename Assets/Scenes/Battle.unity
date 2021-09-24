@@ -6328,6 +6328,7 @@ GameObject:
   - component: {fileID: 1433867638}
   - component: {fileID: 1433867637}
   - component: {fileID: 1433867636}
+  - component: {fileID: 1433867639}
   m_Layer: 5
   m_Name: RunInfoCanvas
   m_TagString: Untagged
@@ -6416,6 +6417,19 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 10
   m_TargetDisplay: 0
+--- !u!114 &1433867639
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1433867634}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2837522da9ccd904ea5fbdff2ae15f3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  texts: []
 --- !u!4 &1443808343 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1555319002895315973, guid: cf5738430ac95134eba1f2e7a629463f,
@@ -6635,6 +6649,7 @@ GameObject:
   - component: {fileID: 1460567492}
   - component: {fileID: 1460567494}
   - component: {fileID: 1460567493}
+  - component: {fileID: 1460567495}
   m_Layer: 5
   m_Name: MaxHp
   m_TagString: Untagged
@@ -6758,6 +6773,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1460567491}
   m_CullTransparentMesh: 1
+--- !u!114 &1460567495
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1460567491}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 698b0df1866b9754ba0aa14e9fd33609, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Sid: MaxHp
 --- !u!1 &1462052516
 GameObject:
   m_ObjectHideFlags: 0
@@ -7570,6 +7598,7 @@ GameObject:
   - component: {fileID: 1578665096}
   - component: {fileID: 1578665098}
   - component: {fileID: 1578665097}
+  - component: {fileID: 1578665099}
   m_Layer: 5
   m_Name: CurHp
   m_TagString: Untagged
@@ -7693,6 +7722,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1578665095}
   m_CullTransparentMesh: 1
+--- !u!114 &1578665099
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1578665095}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 698b0df1866b9754ba0aa14e9fd33609, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Sid: CurrentHp
 --- !u!1 &1592994342
 GameObject:
   m_ObjectHideFlags: 0

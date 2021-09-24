@@ -84,7 +84,8 @@ namespace LUX.LightOfHeaven {
         private Effect effect;
         public UnitStats UnitStats => unitStats;
         private UnitStats unitStats;
-        private UnitDetailsUi unitDetailsUi;    
+        private UnitDetailsUi unitDetailsUi;   
+        private bool isPlayer() => this == unitManager.Player; 
 
         private void Awake() {        
             spellPool = new List<Spell>();            
@@ -145,7 +146,7 @@ namespace LUX.LightOfHeaven {
             RefreshDetailsUi();            
         }
         public void OnTurnStart() {    
-            print($"{this.gameObject.name}'s turn");
+            //print($"{this.gameObject.name}'s turn");
             HideIntent();     
             ResetUnitStatus();
             ApplyEffects();
@@ -226,16 +227,30 @@ namespace LUX.LightOfHeaven {
             unitStats.PhyArmor.BaseValue = unit.PhyArmor;
             unitStats.MagArmor.BaseValue = unit.MagArmor;
             unitStats.Poise.BaseValue = unit.Poise;
+
+            if(isPlayer())
+                OnPlayerBaseStatsChangedCallback();
+        }
+
+        private void OnPlayerBaseStatsChangedCallback() {
+            gameEventSystem.OnPlayerMaxHpChanged(unitStats.MaxHp);
         }
 
         private void SetInitialStatus() {
-            CurrentHp = unitStats.MaxHp;
+            CurrentHp = unitStats.MaxHp;                
             CurrentEp = unitStats.MaxEp;
             CurrentSp = unitStats.MaxSp;
             CurrentPhyShield = unitStats.PhyShield.Value;
             CurrentMagShield = unitStats.MagShield.Value;
             CurrentPhyArmor = unitStats.PhyArmor.Value;
             CurrentMagArmor = unitStats.MagArmor.Value;
+
+            if(isPlayer())
+                OnPlayerInitialStatsSetCallback();
+        }
+
+        private void OnPlayerInitialStatsSetCallback() {
+            gameEventSystem.OnPlayerHpChanged(CurrentHp);
         }
 
         private void ResetRestorableStatus() {
@@ -418,8 +433,12 @@ namespace LUX.LightOfHeaven {
             }
             // display damage popup
             DisplayDamagePopup(damageTaken, damageData.Type, this.transform.position);
-            RefreshDetailsUi();            
-            return damageTaken;                        
+            RefreshDetailsUi();
+            // call event
+            if(isPlayer())
+                gameEventSystem.OnPlayerHpChanged(this.CurrentHp);
+
+            return damageTaken;
         }
         private int GetDisplayDamage(DamageData damageData, bool ignoreBlock) {
             int displayDamage = 0;

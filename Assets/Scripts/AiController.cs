@@ -136,7 +136,7 @@ namespace LUX.LightOfHeaven {
             if (selectedSpell != null) {
                 selectedEffect = new EffectData(selectedUnitAi.UnitStats, selectedSpell.EffectType, selectedSpell.DamageType, selectedSpell.AmountInstant, selectedSpell.AmountOverTurns, selectedSpell.Range, selectedSpell.IgnoreObstacles, selectedSpell.Duration, selectedSpell.SFX, selectedSpell.LastsTheEntireBattle);
                 selectedUnitAi.SetDamagePreview(selectedEffect.InstantDamageData, false, true);
-                print($"{selectedUnitAi.UnitData.name} intends to ATTACK this turn");
+                //print($"{selectedUnitAi.UnitData.name} intends to ATTACK this turn");
                 selectedSpell = null;
                 return;
             }
@@ -160,12 +160,12 @@ namespace LUX.LightOfHeaven {
             if (selectedSpell != null) {
                 selectedEffect = new EffectData(selectedUnitAi.UnitStats, selectedSpell.EffectType, selectedSpell.DamageType, selectedSpell.AmountInstant, selectedSpell.AmountOverTurns, selectedSpell.Range, selectedSpell.IgnoreObstacles, selectedSpell.Duration, selectedSpell.SFX, selectedSpell.LastsTheEntireBattle);
                 selectedUnitAi.SetDamagePreview(selectedEffect.InstantDamageData, false, true);
-                print($"{selectedUnitAi.UnitData.name} intends to ATTACK this turn");
+                //print($"{selectedUnitAi.UnitData.name} intends to ATTACK this turn");
                 selectedSpell = null;
             }
             else {
                 selectedUnitAi.SetIntent(IntentType.Move);
-                print($"{selectedUnitAi.UnitData.name} intends to MOVE this turn");   
+                //print($"{selectedUnitAi.UnitData.name} intends to MOVE this turn");   
             }        
         }
         private bool IsTargetInRange() {

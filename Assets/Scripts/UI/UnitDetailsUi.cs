@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 using UnityEngine.InputSystem;
 using System;
@@ -12,6 +13,8 @@ namespace LUX.LightOfHeaven {
     }
     public class UnitDetailsUi : MonoBehaviour {
 
+        public Slider HpSlider => hpSlider;
+        [SerializeField] private Slider hpSlider;
         public List<SpritedIntent> IntentSprites => intentSprites;
         [SerializeField] private List<SpritedIntent> intentSprites;
         [SerializeField] private GameObject detailsCanvasGO; 
@@ -28,6 +31,7 @@ namespace LUX.LightOfHeaven {
             detailsCanvasGO.SetActive(state);
         }
         public void Refresh(UnitController unit) {
+            HpSlider.value = (float)unit.CurrentHp / unit.UnitStats.MaxHp;
             nameText.text = unit.name;
             currentHpText.text = unit.CurrentHp.ToString();
             currentSpText.text = unit.CurrentSp.ToString(); 

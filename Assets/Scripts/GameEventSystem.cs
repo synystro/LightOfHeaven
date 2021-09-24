@@ -21,6 +21,14 @@ namespace LUX.LightOfHeaven {
         public void OnTurnEnded() { onTurnEnded?.Invoke(); }
         public event Action<bool> onUnitMoved;
         public void OnUnitMoved(bool isEnemy) { onUnitMoved?.Invoke(isEnemy); }
+        public event Action<int> onPlayerHpChanged;
+        public void OnPlayerHpChanged(int hp) { print("Player hp changed!"); onPlayerHpChanged?.Invoke(hp); }
+        public event Action<int> onPlayerMaxHpChanged;
+        public void OnPlayerMaxHpChanged(int maxHp) { print("Player max hp changed!"); onPlayerMaxHpChanged?.Invoke(maxHp); }
+        public event Action onPlayerStatChanged;
+        public void OnPlayerStatChanged() { print("Player stat changed!"); onPlayerStatChanged?.Invoke(); }
+        public event Action<UnitController> onUnitDamageReceived;
+        public void OnUnitDamageReceived(UnitController unit) { onUnitDamageReceived?.Invoke(unit); }
         public event Action<bool> onUnitAttacked;
         public void OnUnitAttacked(bool isEnemy) { onUnitAttacked?.Invoke(isEnemy); }
         public event Action<GameObject> onUnitDied;
