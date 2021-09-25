@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80a077b39602e3b42aff360e02dd57be, type: 3}
   m_Name: hero
   m_EditorClassIdentifier: 
-  name: Hero
+  name: The Slayer
   icon: {fileID: 0}
   charPrefabRight: {fileID: 420725749550593119, guid: 35ddad8416963674ebc85999f857f973,
     type: 3}

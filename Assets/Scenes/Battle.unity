@@ -4300,6 +4300,7 @@ GameObject:
   - component: {fileID: 989530643}
   - component: {fileID: 989530645}
   - component: {fileID: 989530644}
+  - component: {fileID: 989530646}
   m_Layer: 5
   m_Name: HeroName
   m_TagString: Untagged
@@ -4423,6 +4424,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 989530642}
   m_CullTransparentMesh: 1
+--- !u!114 &989530646
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 989530642}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 698b0df1866b9754ba0aa14e9fd33609, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Sid: HeroName
 --- !u!1001 &999078746
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10453,6 +10467,7 @@ GameObject:
   - component: {fileID: 2129654451}
   - component: {fileID: 2129654450}
   - component: {fileID: 2129654449}
+  - component: {fileID: 2129654452}
   m_Layer: 5
   m_Name: RunInfo
   m_TagString: Untagged
@@ -10546,6 +10561,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2129654447}
   m_CullTransparentMesh: 1
+--- !u!114 &2129654452
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2129654447}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.09803922}
+  m_EffectDistance: {x: 0, y: -20}
+  m_UseGraphicAlpha: 1
 --- !u!1001 &2138269818
 PrefabInstance:
   m_ObjectHideFlags: 0
