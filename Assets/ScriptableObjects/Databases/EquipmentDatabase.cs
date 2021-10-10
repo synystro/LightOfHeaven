@@ -15,8 +15,5 @@ namespace LUX.LightOfHeaven {
         [Header("ARMOR")]
         [Expandable]
         public Equippable[] Armor;
-        [Header("BOOTS")]
-        [Expandable]
-        public Equippable[] Boots;
     }
 }

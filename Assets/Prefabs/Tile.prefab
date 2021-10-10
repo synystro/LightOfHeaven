@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6655784484433069256}
   - component: {fileID: 5501728355178841715}
   - component: {fileID: 1135870254768670342}
-  - component: {fileID: 8992614015104246049}
+  - component: {fileID: 8412828012530561587}
   m_Layer: 8
   m_Name: Tile
   m_TagString: Untagged
@@ -54,7 +54,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -75,7 +75,7 @@ SpriteRenderer:
   m_SortingLayerID: 1051314955
   m_SortingLayer: 1
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: cb40040e6c69cd44c9d2c29da415ff35, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0da9faf685ea5114482a04b0dd29af92, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -145,7 +145,7 @@ MonoBehaviour:
   targetLayer:
     serializedVersion: 2
     m_Bits: 256
---- !u!60 &8992614015104246049
+--- !u!60 &8412828012530561587
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -170,11 +170,7 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: -0.0042690486, y: 1.8291032}
-      - {x: -0.8503314, y: 1.4378557}
-      - {x: -1.828191, y: 0.96282035}
-      - {x: -0.88982755, y: 0.4866823}
-      - {x: 0.016660228, y: 0.0239515}
-      - {x: 0.92801166, y: 0.44200778}
-      - {x: 1.8336737, y: 0.9746171}
-      - {x: 0.8728711, y: 1.4285167}
+    - - {x: 0.002209954, y: 1.9757359}
+      - {x: -1.9322524, y: 0.93981344}
+      - {x: -0.003490679, y: -0.02001229}
+      - {x: 1.9108025, y: 1.0077016}

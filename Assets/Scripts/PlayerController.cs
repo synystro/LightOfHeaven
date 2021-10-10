@@ -4,7 +4,6 @@ using Zenject;
 
 namespace LUX.LightOfHeaven {
     public class PlayerController : MonoBehaviour {
-        [SerializeField] private Equippable longSword;
         [SerializeField] private UnitController playerUnitController;
         [SerializeField] private GameObject playerGO;
         [SerializeField] private EffectData selectedEffect;
@@ -61,9 +60,8 @@ namespace LUX.LightOfHeaven {
             spellsUi.CheckIfOutOfSpells();
             turnManager.EndTurn();
         }
-        public void EquipSword() {
-            equipmentSystem.Equip(longSword, playerUnitController);
-            //equipmentSystem.Equip(longSword);
+        public void Equip(Equippable equip) {
+            equipmentSystem.Equip(equip, playerUnitController);
         }
         public void PlayerToStartingPosition() {
             playerUnitController.Move(mapManager.StartingTiles[0].transform.position, mapManager.StartingTiles[0].gameObject, true);

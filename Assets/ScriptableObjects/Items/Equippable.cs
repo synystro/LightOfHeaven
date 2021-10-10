@@ -5,8 +5,7 @@ namespace LUX.LightOfHeaven {
         Weapon,
         Shield,
         Helm,
-        Armor,
-        Boots
+        Armor
     }
     [CreateAssetMenu(menuName = "LOH/Equipment", fileName = "New Equipment")]
     public class Equippable : Item {
@@ -105,6 +104,22 @@ namespace LUX.LightOfHeaven {
             us.Vitality.RemoveAllModifiers(this);
             us.Dexterity.RemoveAllModifiers(this);
             us.Intelligence.RemoveAllModifiers(this);
+            us.Hp.RemoveAllModifiers(this);
+            us.Ep.RemoveAllModifiers(this);
+            us.Sp.RemoveAllModifiers(this);
+            us.PhyDamage.RemoveAllModifiers(this);
+            us.MagDamage.RemoveAllModifiers(this);
+            us.AtkRange.RemoveAllModifiers(this);
+            us.AtkAccuracy.RemoveAllModifiers(this);
+            us.PhyShield.RemoveAllModifiers(this);
+            us.MagShield.RemoveAllModifiers(this);
+            us.PhyArmor.RemoveAllModifiers(this);
+            us.MagArmor.RemoveAllModifiers(this);
+            us.Poise.RemoveAllModifiers(this);
+            us.Evade.RemoveAllModifiers(this);
+            us.Crit.RemoveAllModifiers(this);
+            us.Bash.RemoveAllModifiers(this);
+            us.Lethal.RemoveAllModifiers(this);
         }
 
         public override string GetItemType() {

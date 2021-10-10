@@ -7,18 +7,18 @@ namespace LUX.LightOfHeaven {
         [Inject] GameEventSystem gameEventSystem;
         [Expandable][SerializeField] private Equippable weapon;
 
-        public void Equip(Equippable equipment, UnitController owner) {
+        public bool Equip(Equippable equipment, UnitController owner) {
             switch(equipment.Type) {
-                case EquipmentType.Weapon: AddWeapon(equipment, owner); break;
-                default: Debug.LogError("Equipment type unkown?"); break;
+                case EquipmentType.Weapon: return AddWeapon(equipment, owner);
+                default: Debug.LogError("Equipment type unkown?"); return false;
             }
         }
-        private void AddWeapon(Equippable weapon, UnitController owner) {
+        private bool AddWeapon(Equippable weapon, UnitController owner) {
             if(this.weapon)
-                return;     
+                return false;
             this.weapon = weapon;  
-            weapon.Equip(owner.UnitStats);          
-            gameEventSystem.OnEquipped(weapon);
+            weapon.Equip(owner.UnitStats);
+            return true;
         }
     }
 }

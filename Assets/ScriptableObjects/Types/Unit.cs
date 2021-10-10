@@ -9,6 +9,11 @@ namespace LUX.LightOfHeaven {
         public Sprite icon;
         public GameObject charPrefabRight;
         public GameObject charPrefabLeft;
+        [Header("EQUIPMENT")]
+        public Equippable Weapon;
+        public Equippable Shield;
+        public Equippable Helm;
+        public Equippable Armor;
         [Header("SPELLS")]
         public List<Spell> Spells;
         //[Header("EFFECTS")]
@@ -47,6 +52,43 @@ namespace LUX.LightOfHeaven {
             if(Spells.Contains(s)) {
                 Spells.Remove(s);
             }
+        }
+        public bool Equip(Equippable equipment, UnitController owner) {
+            switch(equipment.Type) {
+                case EquipmentType.Weapon: return AddWeapon(equipment, owner);
+                case EquipmentType.Shield: return AddShield(equipment, owner);
+                case EquipmentType.Helm: return AddHelm(equipment, owner);
+                case EquipmentType.Armor: return AddArmor(equipment, owner);
+                default: Debug.LogError("Equipment type unkown?"); return false;
+            }
+        }
+        private bool AddWeapon(Equippable weapon, UnitController owner) {
+            if(this.Weapon)
+                Weapon.Unequip(owner.UnitStats);
+            this.Weapon = weapon;
+            weapon.Equip(owner.UnitStats);
+            return true;
+        }
+        private bool AddShield(Equippable shield, UnitController owner) {
+            if(this.Shield)
+                Shield.Unequip(owner.UnitStats);
+            this.Shield = shield;
+            shield.Equip(owner.UnitStats);
+            return true;
+        }
+        private bool AddHelm(Equippable helm, UnitController owner) {
+            if(this.Helm)
+                Helm.Unequip(owner.UnitStats);
+            this.Helm = helm;
+            helm.Equip(owner.UnitStats);
+            return true;
+        }
+        private bool AddArmor(Equippable armor, UnitController owner) {
+            if(this.Armor)
+                Armor.Unequip(owner.UnitStats);
+            this.Armor = armor;
+            armor.Equip(owner.UnitStats);
+            return true;
         }
     }
 }

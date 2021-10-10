@@ -19,7 +19,24 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8a8f9f00d756df341ba83ca433ac61f9, type: 2}
   - {fileID: 11400000, guid: acf3b2d8210db9a478bf18c1fa890518, type: 2}
   - {fileID: 11400000, guid: 1eae1cfc69ffa4a4ebb9e5719cc406f1, type: 2}
-  Shields: []
-  Helmets: []
-  Armor: []
-  Boots: []
+  Shields:
+  - {fileID: 11400000, guid: 12ae1af5ccd4b934598de4545588d3f2, type: 2}
+  - {fileID: 11400000, guid: 633a19c693f18ab408b10c1cdb545bef, type: 2}
+  - {fileID: 11400000, guid: 07df594b8484a1c4d9bcce4c0ae0633c, type: 2}
+  - {fileID: 11400000, guid: 9170aad7f80e8804a95507575bc01a54, type: 2}
+  - {fileID: 11400000, guid: 837f32c3a03aa204a911901c65559f25, type: 2}
+  - {fileID: 11400000, guid: 44e2dd7e61e22214b9651e150a5bc2cb, type: 2}
+  Helmets:
+  - {fileID: 11400000, guid: d18bf728d993353489b5b3b7420a7d69, type: 2}
+  - {fileID: 11400000, guid: fc9b76f6e016fb947bb283303510e329, type: 2}
+  - {fileID: 11400000, guid: 6202342c28cf8d441a059ea71b53216e, type: 2}
+  - {fileID: 11400000, guid: b05836d444578624887dd6f1b2fd8110, type: 2}
+  - {fileID: 11400000, guid: 3e0dffc3951ffb049a816c7e4dd18e19, type: 2}
+  - {fileID: 11400000, guid: f71ab1c9d2395424aaf2e5836c5ad76c, type: 2}
+  Armor:
+  - {fileID: 11400000, guid: 0411b9b390bdf014b9e7fe2c1760b890, type: 2}
+  - {fileID: 11400000, guid: 055abe2fed5ac3f4b9b0f19f612ff002, type: 2}
+  - {fileID: 11400000, guid: 0383c990a8042cb45a46b224240f6c85, type: 2}
+  - {fileID: 11400000, guid: 21e9c008a34cb7f498181c272bfb8c0e, type: 2}
+  - {fileID: 11400000, guid: 534647c743fa7a640926e3438ddbf769, type: 2}
+  - {fileID: 11400000, guid: af354e67b1e5e204082b756e46ac7339, type: 2}

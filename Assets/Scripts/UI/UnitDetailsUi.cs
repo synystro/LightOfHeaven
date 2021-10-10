@@ -25,9 +25,9 @@ namespace LUX.LightOfHeaven {
         [SerializeField] private TextMeshProUGUI stunText;
 
         public void SetDisplayState(bool state) {
-            //unitDetails.position = Mouse.current.position.ReadValue();
-            Vector3 mousePos = Mouse.current.position.ReadValue();
-            unitDetails.position = Utilities.KeepUiOnScreen(unitDetails, detailsCanvasGO, mousePos);
+            unitDetails.position = Mouse.current.position.ReadValue();
+            //Vector3 mousePos = Mouse.current.position.ReadValue();
+            //unitDetails.position = Utilities.KeepUiOnScreen(unitDetails, detailsCanvasGO, mousePos);
             detailsCanvasGO.SetActive(state);
         }
         public void Refresh(UnitController unit) {

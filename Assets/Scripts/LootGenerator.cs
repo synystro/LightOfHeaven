@@ -17,7 +17,6 @@ namespace LUX.LightOfHeaven {
                 case EquipmentType.Shield: return GetRandomShield();
                 case EquipmentType.Helm: return GetRandomHelm();
                 case EquipmentType.Armor: return GetRandomArmor();
-                case EquipmentType.Boots: return GetRandomBoots();
                 default: Debug.LogError("Unknown equipment type passed trying to get a random equipment!"); return null;
             }
         }
@@ -36,10 +35,6 @@ namespace LUX.LightOfHeaven {
 
         public Equippable GetRandomArmor() {
             return equipment.Armor[Random.Range(0, equipment.Armor.Length)];
-        }
-
-        public Equippable GetRandomBoots() {
-            return equipment.Boots[Random.Range(0, equipment.Boots.Length)];
         }
     }
 }

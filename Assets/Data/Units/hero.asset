@@ -30,7 +30,7 @@ MonoBehaviour:
   Hp: 50
   Ep: 20
   Sp: 2
-  PhyDamage: 5
+  PhyDamage: 0
   MagDamage: 0
   AtkRange: 1
   AtkAccuracy: 0

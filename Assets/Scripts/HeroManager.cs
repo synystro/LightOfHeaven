@@ -7,6 +7,7 @@ namespace LUX.LightOfHeaven {
         [SerializeField] private Unit hero;
 
         [Inject] GameEventSystem gameEventSystem;
+        [Inject] UnitManager unitManager;
 
         private void OnEnable() {
             gameEventSystem.onHeroChosen += OnHeroChosen;
@@ -20,6 +21,11 @@ namespace LUX.LightOfHeaven {
         public void AddSkill(Spell skill) {
             hero.Spells.Add(skill);
             gameEventSystem.OnSkillAdded(skill);
+        }
+        public void AddEquip(Equippable equip) {
+            bool success = hero.Equip(equip, unitManager.Player);
+            if(success)
+                gameEventSystem.OnEquipped(equip);
         }
     }
 }
